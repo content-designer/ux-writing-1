@@ -294,21 +294,27 @@ def run_battle(current: str, category: str, surface: str, thinking: bool, sessio
             pending = set(futures)
             while pending:
                 time.sleep(2)
+                done_now = []
                 for arm in list(pending):
                     if futures[arm].done():
                         results[arm] = futures[arm].result()
                         pending.discard(arm)
+                        done_now.append(arm)
                 elapsed = int(time.time() - t0)
                 if pending:
-                    waiting = ("✍️ One answer in — waiting on the second writer…"
-                               if len(pending) == 1 and any(results.values())
-                               else "Roasting marshmallows… both campers are writing.")
-                    hint = (" ⛺ First battle after a quiet spell wakes the campfire GPU — "
-                            "up to ≈3 minutes." if elapsed > 30 and not any(results.values()) else "")
-                    yield (pretty_card(results[a_is], "🅰 Camper A"),
-                           pretty_card(results[b_is], "🅱 Camper B"),
+                    # ONE message at a time — each state replaces the last.
+                    if any(results.values()):
+                        msg, icon = "✍️ One answer in — waiting on the second writer…", "🪶"
+                    elif elapsed > 30:
+                        msg, icon = ("⛺ Waking the campfire GPU — the first battle after a "
+                                     "quiet spell takes up to ≈3 minutes."), "⛺"
+                    else:
+                        msg, icon = "Roasting marshmallows… both campers are writing.", "🔥"
+                    # Only re-render a card when its writer just finished (less DOM churn).
+                    yield (pretty_card(results[a_is], "🅰 Camper A") if a_is in done_now else gr.update(),
+                           pretty_card(results[b_is], "🅱 Camper B") if b_is in done_now else gr.update(),
                            gr.update(visible=False), None,
-                           banner("info", f"{waiting} <span class='cc-meta'>{elapsed}s</span>{hint}", icon="🔥"))
+                           banner("info", f"{msg} <span class='cc-meta'>{elapsed}s</span>", icon=icon))
 
         battle = {
             "category": category, "surface": surface, "current": current, "thinking": thinking,
@@ -390,6 +396,7 @@ CSS = """
 }
 
 /* ════════ page ════════ */
+html { scrollbar-gutter: stable; } /* stop layout width-flap when the scrollbar appears */
 body, .gradio-container {
   background: var(--parch-200) !important;
   background-image: var(--texture-stripes) !important;
@@ -446,9 +453,18 @@ button[role="tab"][aria-selected="true"] { color: var(--fire-600) !important;
   font-size: 0.875rem !important; color: var(--fire-600) !important;
 }
 .cc-lantern label, .cc-lantern label span {
-  font-family: var(--font-sans) !important; font-weight: 600 !important;
+  font-family: var(--font-sans) !important; font-weight: 700 !important;
   font-size: 1rem !important; color: var(--bark-800) !important;
 }
+.cc-lantern span[data-testid="block-info"], .cc-lantern .info {
+  font-family: var(--font-serif) !important; font-style: italic !important;
+  font-weight: 400 !important; font-size: 0.9rem !important;
+  color: var(--text-muted) !important; margin-top: 2px !important;
+}
+
+/* Gradio's built-in loaders are redundant with our status banner + scribbling cards */
+.progress-bar, .progress-text, .eta-bar, .meta-text, .meta-text-center { display: none !important; }
+.generating { border: none !important; animation: none !important; }
 .cc-brief textarea, .cc-brief input[type="text"], .cc-brief .dropdown input, .cc-brief .wrap-inner {
   font-family: var(--font-sans) !important; font-size: 1rem !important; color: var(--text-strong) !important;
   background: var(--surface-raised) !important;
@@ -608,7 +624,8 @@ with gr.Blocks(theme=gr.themes.Base(), css=CSS, head=FONTS_HEAD, title="⛺ Copy
                     surface_in = gr.Textbox(label="Where it lives (optional)",
                                             placeholder="e.g. checkout, settings page")
                     thinking_in = gr.Checkbox(value=True, elem_classes="cc-lantern",
-                                              label="🔦 Lantern mode — show their thinking (slower)")
+                                              label="🔦 Lantern mode",
+                                              info="Show their thinking — slower, but you see how each writer reasons")
             with gr.Row():
                 battle_btn = gr.Button("🔥 Light the fire", elem_classes="cc-btn", scale=0, min_width=220)
                 smore_btn = gr.Button("🍫 S'more examples", elem_classes="cc-btn-secondary",
@@ -631,14 +648,17 @@ with gr.Blocks(theme=gr.themes.Base(), css=CSS, head=FONTS_HEAD, title="⛺ Copy
     with gr.Tab("🧭 About"):
         gr.HTML(ABOUT_HTML)
 
+    # show_progress="hidden": our status banner + scribbling cards ARE the loading UI
     battle_btn.click(run_battle, [current_in, category_in, surface_in, thinking_in, session_id],
-                     [card_a, card_b, vote_row, battle_state, status_md], concurrency_limit=2)
+                     [card_a, card_b, vote_row, battle_state, status_md],
+                     concurrency_limit=2, show_progress="hidden")
     current_in.submit(run_battle, [current_in, category_in, surface_in, thinking_in, session_id],
-                      [card_a, card_b, vote_row, battle_state, status_md], concurrency_limit=2)
-    smore_btn.click(new_brief, [], [current_in, category_in, surface_in])
+                      [card_a, card_b, vote_row, battle_state, status_md],
+                      concurrency_limit=2, show_progress="hidden")
+    smore_btn.click(new_brief, [], [current_in, category_in, surface_in], show_progress="hidden")
     for btn, choice in ((vote_a, "A"), (vote_b, "B"), (vote_tie, "tie"), (vote_bad, "both_bad")):
         btn.click(vote, [gr.State(choice), battle_state, session_id],
-                  [card_a, card_b, status_md, vote_row, leaderboard_md])
+                  [card_a, card_b, status_md, vote_row, leaderboard_md], show_progress="hidden")
 
 demo.queue(max_size=30)
 
