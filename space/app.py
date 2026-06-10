@@ -346,9 +346,9 @@ def run_battle(current: str, category: str, surface: str, thinking: bool, sessio
                 if pending:
                     # ONE message at a time — each state replaces the last.
                     if any(results.values()):
-                        msg, icon = "✍️ One answer in — waiting on the second writer…", "🪶"
+                        msg, icon = "One answer in — waiting on the second writer…", "✍️"
                     elif elapsed > 30:
-                        msg, icon = ("⛺ Waking the campfire GPU — the first battle after a "
+                        msg, icon = ("Waking the campfire GPU — the first battle after a "
                                      "quiet spell takes up to ≈3 minutes."), "⛺"
                     else:
                         msg, icon = "Roasting marshmallows… both campers are writing.", "🔥"
