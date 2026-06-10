@@ -192,7 +192,12 @@ def tally_md() -> str:
     """Design-system Trail log panel."""
     total = sum(TALLY.values())
     decisive = TALLY["finetune"] + TALLY["base"]
-    rate = f"{TALLY['finetune'] / decisive:.0%}" if decisive else "—"
+    if decisive:
+        hero = (f'<span class="trail__ratenum">{TALLY["finetune"] / decisive:.0%}</span>'
+                '<span class="trail__ratelbl">fine-tune win rate, decisive campfire votes</span>')
+    else:
+        hero = ('<span class="trail__ratelbl">No decisive votes yet — the first 🅰/🅱 '
+                "winner lights this number up.</span>")
     max_votes = max(1, TALLY["finetune"], TALLY["base"], TALLY["tie"], TALLY["both_bad"])
 
     def bar(n: int, color: str) -> str:
@@ -215,8 +220,7 @@ def tally_md() -> str:
     return f"""
 <div class="cc-kicker cc-kicker--fire"><span class="cc-kicker__rule"></span><span>Trail log</span><span class="cc-kicker__rule"></span></div>
 <div class="trail__hero">
-  <div class="trail__rate"><span class="trail__ratenum">{rate}</span>
-  <span class="trail__ratelbl">fine-tune win rate, decisive campfire votes</span></div>
+  <div class="trail__rate">{hero}</div>
 </div>
 <table class="trail__table">{trs}</table>
 <p class="trail__foot">{total} campfire votes so far. Before launch, the author's own blinded
@@ -403,8 +407,13 @@ body, .gradio-container {
   font-family: var(--font-sans) !important;
   color: var(--text-body) !important;
 }
+/* ONE width, owned by the design system: clamp every Gradio wrapper to the 1080px
+   content token so responsive breakpoints can't snap the layout narrow/wide. */
+.gradio-container, .gradio-container > .main, .gradio-container .fillable,
+.gradio-container main, gradio-app > div {
+  max-width: 1080px !important; width: 100% !important; margin-inline: auto !important;
+}
 .gradio-container {
-  max-width: 1080px !important; margin: 0 auto !important;
   /* Re-point Gradio's own theme tokens at the design system (fixes blue checkbox,
      off-brand tab underline, and focus rings at the source). */
   --color-accent: var(--fire-500) !important;
@@ -567,8 +576,10 @@ button.cc-btn-secondary:active { transform: translateY(4px); box-shadow: 0 1px 0
 .trail__ratenum { font-family:var(--font-display); font-weight:900; font-size:64px;
   line-height:1; color:var(--fire-600); display:block; }
 .trail__ratelbl { font-family:var(--font-serif); font-style:italic; font-size:1.125rem; color:var(--text-muted); }
-.trail__table { width:100%; border-collapse:collapse; }
-.trail__table td { padding:11px 8px; border-bottom:1px dashed var(--border-camp); vertical-align:middle; }
+.trail__table { width:100%; border-collapse:collapse; border:none !important; }
+.trail__table tr { border:none !important; background:transparent !important; }
+.trail__table td { padding:11px 8px; border:none !important;
+  border-bottom:1px dashed var(--border-camp) !important; vertical-align:middle; }
 .trail__emoji { font-size:24px; width:36px; text-align:center; }
 .trail__name { width:220px; }
 .trail__name b { display:block; font-family:var(--font-sans); font-weight:800;
@@ -600,7 +611,8 @@ button.cc-btn-secondary:active { transform: translateY(4px); box-shadow: 0 1px 0
 .tabitem, .gap, .block { background: transparent !important; border: none !important; }
 """
 
-with gr.Blocks(theme=gr.themes.Base(), css=CSS, head=FONTS_HEAD, title="⛺ Copy Campfire") as demo:
+with gr.Blocks(theme=gr.themes.Base(), css=CSS, head=FONTS_HEAD, title="⛺ Copy Campfire",
+               fill_width=True) as demo:
     session_id = gr.State(lambda: uuid.uuid4().hex[:12])
     battle_state = gr.State(None)
 
