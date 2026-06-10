@@ -193,30 +193,44 @@ def run_battle(current: str, category: str, surface: str, thinking: bool, sessio
     yield (pretty_card(None, "🅰 Camper A"), pretty_card(None, "🅱 Camper B"),
            gr.update(visible=False), None, status)
 
-    results: dict[str, dict | None] = {a_is: None, b_is: None}
-    with ThreadPoolExecutor(max_workers=2) as pool:
-        futures = {arm: pool.submit(call_arm, arm, category, surface, current, thinking)
-                   for arm in (a_is, b_is)}
-        pending = set(futures)
-        while pending:
-            time.sleep(0.5)
-            for arm in list(pending):
-                if futures[arm].done():
-                    results[arm] = futures[arm].result()
-                    pending.discard(arm)
+    # Heartbeat-yield every ~2s: long silent gaps between yields get the SSE stream
+    # killed by the proxy (surfaces as a bare Gradio "Error"), and the elapsed counter
+    # doubles as honest UX during cold starts.
+    try:
+        results: dict[str, dict | None] = {a_is: None, b_is: None}
+        t0 = time.time()
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futures = {arm: pool.submit(call_arm, arm, category, surface, current, thinking)
+                       for arm in (a_is, b_is)}
+            pending = set(futures)
+            while pending:
+                time.sleep(2)
+                for arm in list(pending):
+                    if futures[arm].done():
+                        results[arm] = futures[arm].result()
+                        pending.discard(arm)
+                elapsed = int(time.time() - t0)
+                if pending:
+                    waiting = ("✍️ One answer in — waiting on the second writer…"
+                               if len(pending) == 1 and any(results.values())
+                               else "🪶 Both writers scribbling…")
+                    hint = (" ⛺ First battle after a quiet spell wakes the campfire GPU — "
+                            "up to ≈3 minutes." if elapsed > 30 and not any(results.values()) else "")
                     yield (pretty_card(results[a_is], "🅰 Camper A"),
                            pretty_card(results[b_is], "🅱 Camper B"),
-                           gr.update(visible=False), None,
-                           "✍️ One answer in — waiting on the second writer…" if pending else "")
+                           gr.update(visible=False), None, f"{waiting} {elapsed}s{hint}")
 
-    battle = {
-        "category": category, "surface": surface, "current": current, "thinking": thinking,
-        "a_is": a_is,
-        "text_a": (results[a_is] or {}).get("text", ""),
-        "text_b": (results[b_is] or {}).get("text", ""),
-    }
-    yield (pretty_card(results[a_is], "🅰 Camper A"), pretty_card(results[b_is], "🅱 Camper B"),
-           gr.update(visible=True), battle, "🪵 Cast your vote to see who's who.")
+        battle = {
+            "category": category, "surface": surface, "current": current, "thinking": thinking,
+            "a_is": a_is,
+            "text_a": (results[a_is] or {}).get("text", ""),
+            "text_b": (results[b_is] or {}).get("text", ""),
+        }
+        yield (pretty_card(results[a_is], "🅰 Camper A"), pretty_card(results[b_is], "🅱 Camper B"),
+               gr.update(visible=True), battle, "🪵 Cast your vote to see who's who.")
+    except Exception as exc:  # never surface a bare Gradio "Error" chip
+        yield (gr.update(), gr.update(), gr.update(visible=False), None,
+               f"⚠️ The fire sputtered: `{str(exc)[:160]}` — try another battle.")
 
 
 def vote(choice: str, battle: dict | None, session_id: str):
