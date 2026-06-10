@@ -48,6 +48,23 @@ def convert():
     print("[1/5] download merged model")
     src = snapshot_download(MERGED_REPO)
 
+    # transformers drops Qwen3.6's multi-token-prediction draft layer when loading via
+    # AutoModelForImageTextToText, so the merged checkpoint has no MTP tensors — but
+    # config.json still declares one, making llama.cpp expect a phantom blk.64. Standard
+    # (non-MTP) GGUFs exclude it; patch the config to match the tensors we actually have.
+    import json
+
+    cfg_path = os.path.join(src, "config.json")
+    with open(cfg_path) as fh:
+        cfg = json.load(fh)
+    sub = cfg.get("text_config", cfg)
+    if sub.get("mtp_num_hidden_layers"):
+        sub["mtp_num_hidden_layers"] = 0
+        os.remove(cfg_path)  # break the snapshot symlink; don't mutate the blob store
+        with open(cfg_path, "w") as fh:
+            json.dump(cfg, fh, indent=2)
+        print("patched config: mtp_num_hidden_layers -> 0")
+
     print("[2/5] convert -> f16 gguf")
     os.makedirs("/out", exist_ok=True)
     f16 = "/out/ux-writing-1-F16.gguf"
