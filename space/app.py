@@ -396,7 +396,21 @@ body, .gradio-container {
   font-family: var(--font-sans) !important;
   color: var(--text-body) !important;
 }
-.gradio-container { max-width: 1080px !important; margin: 0 auto !important; }
+.gradio-container {
+  max-width: 1080px !important; margin: 0 auto !important;
+  /* Re-point Gradio's own theme tokens at the design system (fixes blue checkbox,
+     off-brand tab underline, and focus rings at the source). */
+  --color-accent: var(--fire-500) !important;
+  --color-accent-soft: var(--fire-100) !important;
+  --checkbox-background-color-selected: var(--fire-500) !important;
+  --checkbox-border-color-selected: var(--fire-500) !important;
+  --checkbox-border-color-focus: var(--fire-400) !important;
+  --checkbox-border-color: var(--bark-600) !important;
+  --input-border-color-focus: var(--fire-500) !important;
+  --body-text-color: var(--bark-800) !important;
+  --block-label-text-color: var(--fire-600) !important;
+  --loader-color: var(--fire-500) !important;
+}
 footer { visibility: hidden; }
 .cc-meta { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: .04em; color: var(--text-muted); }
 
@@ -426,9 +440,14 @@ button[role="tab"][aria-selected="true"] { color: var(--fire-600) !important;
   padding: 18px !important; gap: 12px !important;
 }
 .cc-brief .block, .cc-brief .form { background: transparent !important; border: none !important; box-shadow: none !important; }
-.cc-brief label span, .cc-brief .label-wrap span {
+/* Field labels only (Gradio marks them with block-info) — NOT checkbox/body labels */
+.cc-brief span[data-testid="block-info"] {
   font-family: var(--font-sans) !important; font-weight: 700 !important;
   font-size: 0.875rem !important; color: var(--fire-600) !important;
+}
+.cc-lantern label, .cc-lantern label span {
+  font-family: var(--font-sans) !important; font-weight: 600 !important;
+  font-size: 1rem !important; color: var(--bark-800) !important;
 }
 .cc-brief textarea, .cc-brief input[type="text"], .cc-brief .dropdown input, .cc-brief .wrap-inner {
   font-family: var(--font-sans) !important; font-size: 1rem !important; color: var(--text-strong) !important;
@@ -445,11 +464,12 @@ button.cc-btn {
   font-family: var(--font-sans) !important; font-weight: 800 !important; font-size: 1rem !important;
   line-height: 1 !important; color: #fff !important;
   background: var(--primary) !important; border: none !important; border-radius: var(--radius-md) !important;
-  padding: 14px 24px !important;
+  padding: 14px 24px !important; white-space: nowrap !important;
   box-shadow: 0 var(--tactile-depth) 0 var(--primary-edge), 0 9px 10px rgba(39,26,15,.20) !important;
   transform: translateY(0); transition: transform var(--dur-fast) var(--ease-out),
     box-shadow var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
 }
+button.cc-btn-secondary { white-space: nowrap !important; }
 button.cc-btn:hover { background: var(--primary-hover) !important; }
 button.cc-btn:active { transform: translateY(4px);
   box-shadow: 0 1px 0 var(--primary-edge), 0 2px 4px rgba(39,26,15,.18) !important; }
@@ -580,18 +600,19 @@ with gr.Blocks(theme=gr.themes.Base(), css=CSS, head=FONTS_HEAD, title="⛺ Copy
             gr.HTML('<div class="cc-kicker cc-kicker--fire">'
                     '<span class="cc-kicker__rule"></span><span>The brief</span>'
                     '<span class="cc-kicker__rule"></span></div>')
-            with gr.Row():
-                current_in = gr.Textbox(label="UI copy on trial", scale=3, lines=2,
+            with gr.Row(equal_height=False):
+                current_in = gr.Textbox(label="UI copy on trial", scale=3, lines=5,
                                         placeholder="Paste a button label, error message, empty state…")
                 with gr.Column(scale=2):
                     category_in = gr.Dropdown(CATEGORIES, value="button", label="Content type")
                     surface_in = gr.Textbox(label="Where it lives (optional)",
-                                            placeholder="e.g. checkout, settings page, mobile signup")
+                                            placeholder="e.g. checkout, settings page")
+                    thinking_in = gr.Checkbox(value=True, elem_classes="cc-lantern",
+                                              label="🔦 Lantern mode — show their thinking (slower)")
             with gr.Row():
-                battle_btn = gr.Button("🔥 Light the fire", elem_classes="cc-btn", scale=2)
-                smore_btn = gr.Button("🍫 S'more examples", elem_classes="cc-btn-secondary", scale=1)
-                thinking_in = gr.Checkbox(value=True, scale=2,
-                                          label="🔦 Lantern mode — show their thinking (slower)")
+                battle_btn = gr.Button("🔥 Light the fire", elem_classes="cc-btn", scale=0, min_width=220)
+                smore_btn = gr.Button("🍫 S'more examples", elem_classes="cc-btn-secondary",
+                                      scale=0, min_width=200)
         status_md = gr.HTML("")
         with gr.Row():
             card_a = gr.HTML()
