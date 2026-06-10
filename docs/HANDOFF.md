@@ -1,17 +1,18 @@
-# HANDOFF — ux-writing-1 release (2026-06-10)
+# HANDOFF — ux-writing-1 release (updated 2026-06-10, post-launch)
 
-State of the project for the next working session. Everything below is built, tested,
-committed, and pushed; the only un-executed action is the **public flip** (owner-gated).
+State of the project for the next working session. **LAUNCHED**: everything public,
+submitted-in-place for the hackathon. Remaining human steps: demo video + social post,
+dropped via the **Gradio Discord** by **2026-06-15**.
 
 ## One-paragraph status
 
 `ux-writing-1` (QLoRA fine-tune of Qwen3.6-27B for UX writing review) is trained,
 **blind-validated at 83%** preference over fair-prompted base (65/78 decisive, 90
-held-out items, owner-judged), merged, quantized to GGUF, and served live behind the
-⛺ **Copy Campfire** arena Space with anti-bias voting that feeds a private preference
-dataset for a future DPO round. Measured economics: **$0.31/1K strings batched** on one
-A100 (100% valid JSON). Built for the HF Build Small hackathon (**submission deadline
-2026-06-15**: Space + demo video + social post; video outline ready).
+held-out items, owner-judged), merged, quantized to GGUF, **public**, and live behind the
+⛺ **Copy Campfire** arena — hosted at **`build-small-hackathon/copy-campfire`** (org
+hosting is the eligibility requirement), fully restyled with the owner's Claude Design
+system, with anti-bias voting feeding a private preference dataset for a future DPO
+round. Measured economics: **$0.31/1K strings batched** on one A100 (100% valid JSON).
 
 ## Artifacts
 
@@ -20,7 +21,8 @@ A100 (100% valid JSON). Built for the HF Build Small hackathon (**submission dea
 | Merged flagship (54.7 GB, verified ≡ adapter) | `gr33r/ux-writing-1` | **public** (launched 2026-06-10) |
 | LoRA adapter (the validated 1a) | `gr33r/ux-writing-1-lora` | **public** (launched 2026-06-10) |
 | GGUF (Q4_K_M 16.6 GB, Q8_0 28.6 GB) | `gr33r/ux-writing-1-GGUF` | **public** (launched 2026-06-10) |
-| ⛺ Copy Campfire arena | `build-small-hackathon/copy-campfire` (Space) | **public** (launched 2026-06-10) |
+| ⛺ Copy Campfire arena (SUBMISSION) | `build-small-hackathon/copy-campfire` (Space) | **public** (launched 2026-06-10) |
+| Campfire personal copy (kept in sync) | `gr33r/copy-campfire` (Space) | private (avoid split votes) |
 | Code (pipeline, CLI, evals, Space src) | github.com/content-designer/ux-writing-1 | **public** |
 | Training dataset (unified, zero-leakage) | `gr33r/ux-writing-sft` | private, stays |
 | Votes / DPO corpus (168 seeded + live) | `gr33r/ux-writing-arena-votes` | private, stays |
@@ -66,8 +68,16 @@ revert after ($2.50/h while pinned).
   - Token also at `~/.uxw1_arena_token` (local) and in the Space's secrets.
   - Volume `qwen36-27b-weights` caches base weights (don't delete — saves 10 min/run).
   - Other apps: train (`modal_app/train.py`, spawn+detach), `uxw1-gguf`, `uxw1-bench`.
-- **Space secrets**: `BATTLE_URL`, `AUTH_TOKEN`, `HF_TOKEN`, `VOTES_DATASET`.
-- **HF auth**: cached token (account `gr33r`); Modal secret `hf-token`.
+- **Space secrets** (both copies): `BATTLE_URL`, `AUTH_TOKEN`, `HF_TOKEN`, `VOTES_DATASET`.
+  The ORG copy's `HF_TOKEN` = fine-grained token "campfire-votes-only" (votes dataset +
+  org repos write; local copy at `~/.campfire_votes_token`). **Post-hackathon cleanup:
+  remove its org permission at settings/tokens.**
+- **HF auth**: the CLI's cached token ("Claude Code", fine-grained, user-scope only —
+  it CANNOT write to the hackathon org; use `HfApi(token=<campfire_votes_token>)` for
+  any update/restart of `build-small-hackathon/copy-campfire`). Modal secret `hf-token`.
+- **Design system**: the Claude Design handoff bundle lives at
+  `~/Downloads/Copy Campfire Design System-handoff.zip` (tokens, components, UI kit) —
+  the source of truth for any future Campfire UI work; implemented in `space/app.py`.
 - **GitHub**: `content-designer/ux-writing-1`, branch `main`.
 
 ## Hard-won gotchas (read before touching anything)
@@ -89,12 +99,21 @@ revert after ($2.50/h while pinned).
    Gradio theme tokens re-pointed at the design system in CSS.
 6. **Arena integrity**: pre-vote cards hide reason/chips/thinking (length fingerprints
    the base model); forensics render post-vote. Keep it that way or votes degrade.
-7. This-machine quirks: background shells reset cwd (use absolute paths + PYTHONPATH);
+7. **Unfinished thinking**: in lantern mode the model may never emit `</think>` — the
+   server treats that as thinking-only (empty answer → budget-exhausted card), and the
+   card extracts the LAST parseable flat `{…}` with a `rewrite` (a greedy first-to-last
+   brace regex renders leaked reasoning as the answer). Same scan in `review_repo`.
+8. **Two Space copies**: ship every `space/app.py` change to BOTH
+   `build-small-hackathon/copy-campfire` (canonical, needs the campfire-votes token) and
+   `gr33r/copy-campfire` (private mirror), then restart the org one.
+9. This-machine quirks: background shells reset cwd (use absolute paths + PYTHONPATH);
    stock python urllib needs certifi (handled in `uxft/review_repo.py`).
 
 ## Deferred work (in priority order)
 
-1. **Video + social post** (owner): beats + verified numbers in docs/VIDEO_OUTLINE.md.
+1. **Video + social post** (owner, by 2026-06-15): beats + verified numbers in
+   docs/VIDEO_OUTLINE.md; **submission drop happens via the Gradio Discord**. For the
+   recording window, pin a warm GPU (`min_containers=1`, see flip section above).
 2. **DPO v2** once ≥~300 campfire votes: corpus = `ux-writing-arena-votes` (seed rows
    tagged `source=author_blind_review`, live rows `copy_campfire`). TRL `DPOTrainer` on
    the same Modal pipeline; ~$10–20 reserved. Re-validate blind before shipping.
