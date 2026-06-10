@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+
+# OS
+.DS_Store
+
+# Secrets / env
+.env
+*.token
+
+# Data + model artifacts live on the HF Hub, never in git
+data/
+checkpoints/
+ux-writing-*/
+*.safetensors
+*.bin
+
+# Images / screens never in git (they live in the Hub dataset)
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.pdf
+
+# Modal / Trackio local state
+.modal/
+trackio/

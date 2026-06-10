@@ -1,0 +1,657 @@
+[
+{
+"category": "button",
+"surface": "B2B admin dashboard, billing settings",
+"current": "OK"
+},
+{
+"category": "button",
+"surface": "consumer mobile app, file uploader",
+"current": "Choose"
+},
+{
+"category": "inline_error",
+"surface": "signup form, email field",
+"current": "Invalid"
+},
+{
+"category": "system_error",
+"surface": "settings save during a connection issue",
+"current": "An error occurred while processing your request."
+},
+{
+"category": "empty_state",
+"surface": "messages inbox, first time",
+"current": "Nothing to see here."
+},
+{
+"category": "notification",
+"surface": "document sharing, share sent",
+"current": "Success!"
+},
+{
+"category": "onboarding",
+"surface": "analytics dashboard, first visit",
+"current": "Welcome to our powerful reporting experience."
+},
+{
+"category": "destructive_confirmation",
+"surface": "account settings, deleting account",
+"current": "Are you sure?"
+},
+{
+"category": "accessibility_label",
+"surface": "icon-only close button on a modal",
+"current": "X"
+},
+{
+"category": "form_label",
+"surface": "checkout, entering card details",
+"current": "Put number"
+},
+{
+"category": "tooltip",
+"surface": "analytics dashboard, hovering a metric",
+"current": "MAU"
+},
+{
+"category": "tooltip",
+"surface": "subscription billing, hovering a term",
+"current": "APR"
+},
+{
+"category": "tooltip",
+"surface": "observability tool, hovering a chart",
+"current": "p95 latency"
+},
+{
+"category": "tooltip",
+"surface": "payments API console, hovering a field",
+"current": "Idempotency key"
+},
+{
+"category": "tooltip",
+"surface": "growth dashboard, hovering a metric",
+"current": "Churn"
+},
+{
+"category": "tooltip",
+"surface": "developer settings, hovering a label",
+"current": "Webhook"
+},
+{
+"category": "error_page",
+"surface": "consumer app, hit a dead link",
+"current": "Error 404 :("
+},
+{
+"category": "error_page",
+"surface": "docs site, broken bookmark",
+"current": "This page is gone"
+},
+{
+"category": "error_page",
+"surface": "SaaS dashboard, stale link",
+"current": "Nothing here (404)"
+},
+{
+"category": "error_page",
+"surface": "marketing site, mistyped URL",
+"current": "Broken link"
+},
+{
+"category": "error_page",
+"surface": "mobile app, dead deep link",
+"current": "Whoops, lost?"
+},
+{
+"category": "error_page",
+"surface": "government portal, removed page",
+"current": "HTTP 404 — Not Found"
+},
+{
+"category": "interstitial",
+"surface": "social app, long session",
+"current": "Stop scrolling."
+},
+{
+"category": "interstitial",
+"surface": "wellbeing reminder, late night",
+"current": "Go outside."
+},
+{
+"category": "interstitial",
+"surface": "news app, heavy session",
+"current": "Enough for today."
+},
+{
+"category": "interstitial",
+"surface": "game, long play session",
+"current": "Put the phone down."
+},
+{
+"category": "interstitial",
+"surface": "video app, autoplay marathon",
+"current": "Time is up!"
+},
+{
+"category": "interstitial",
+"surface": "dating app, endless swiping",
+"current": "You again?"
+},
+{
+"category": "settings_toggle",
+"surface": "appearance settings",
+"current": "Dark mode"
+},
+{
+"category": "settings_toggle",
+"surface": "security settings",
+"current": "2FA"
+},
+{
+"category": "settings_toggle",
+"surface": "sound settings",
+"current": "Sounds"
+},
+{
+"category": "settings_toggle",
+"surface": "subscription settings",
+"current": "Auto-renew"
+},
+{
+"category": "settings_toggle",
+"surface": "messaging privacy",
+"current": "Read receipts"
+},
+{
+"category": "settings_toggle",
+"surface": "privacy settings",
+"current": "Location"
+},
+{
+"category": "accessibility_label",
+"surface": "consumer mobile app",
+"current": "Menu"
+},
+{
+"category": "inline_error",
+"surface": "consumer mobile app",
+"current": "Invalid username."
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Can't continue."
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "Proceed with submission"
+},
+{
+"category": "empty_state",
+"surface": "consumer mobile app",
+"current": "Too much text."
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "Post"
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Resource limit exceeded."
+},
+{
+"category": "inline_error",
+"surface": "consumer mobile app",
+"current": "Wrong"
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Explore."
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "Max"
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "Thing name"
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Verification exception."
+},
+{
+"category": "accessibility_label",
+"surface": "consumer mobile app",
+"current": "Click the dots"
+},
+{
+"category": "accessibility_label",
+"surface": "consumer mobile app",
+"current": "Go"
+},
+{
+"category": "inline_error",
+"surface": "consumer mobile app",
+"current": "Bad URL"
+},
+{
+"category": "destructive_confirmation",
+"surface": "consumer mobile app",
+"current": "Ready to clean up?"
+},
+{
+"category": "notification",
+"surface": "consumer mobile app",
+"current": "Users missed it."
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "Goals"
+},
+{
+"category": "notification",
+"surface": "consumer mobile app",
+"current": "Grab a weekend escape."
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "Do it"
+},
+{
+"category": "destructive_confirmation",
+"surface": "consumer mobile app",
+"current": "Remove?"
+},
+{
+"category": "accessibility_label",
+"surface": "consumer mobile app",
+"current": "Image"
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Out of stock error."
+},
+{
+"category": "notification",
+"surface": "consumer mobile app",
+"current": "It worked"
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Make your access thing."
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "Let's seal the deal"
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Configure additional metadata."
+},
+{
+"category": "notification",
+"surface": "consumer mobile app",
+"current": "Almost full."
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "Score"
+},
+{
+"category": "empty_state",
+"surface": "consumer mobile app",
+"current": "Nothing here."
+},
+{
+"category": "inline_error",
+"surface": "consumer mobile app",
+"current": "Bad password"
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Initialize."
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Could not complete operation."
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Access error."
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Consent required."
+},
+{
+"category": "empty_state",
+"surface": "consumer mobile app",
+"current": "You have no stuff."
+},
+{
+"category": "inline_error",
+"surface": "consumer mobile app",
+"current": "Invalid characters"
+},
+{
+"category": "notification",
+"surface": "consumer mobile app",
+"current": "Shipped."
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "name@example.com"
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "The requested operation could not be completed."
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Configure objectives."
+},
+{
+"category": "empty_state",
+"surface": "consumer mobile app",
+"current": "Nothing."
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "ZIP code"
+},
+{
+"category": "accessibility_label",
+"surface": "consumer mobile app",
+"current": "Download"
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "System failure 503."
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Upload exception."
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Add account."
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "See it"
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Configure your operational parameters."
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Set everything up now."
+},
+{
+"category": "inline_error",
+"surface": "consumer mobile app",
+"current": "Not allowed"
+},
+{
+"category": "accessibility_label",
+"surface": "consumer mobile app",
+"current": "Bar chart"
+},
+{
+"category": "accessibility_label",
+"surface": "consumer mobile app",
+"current": "Play"
+},
+{
+"category": "destructive_confirmation",
+"surface": "consumer mobile app",
+"current": "Delete?"
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "Permissions"
+},
+{
+"category": "inline_error",
+"surface": "consumer mobile app",
+"current": "Invalid code"
+},
+{
+"category": "destructive_confirmation",
+"surface": "consumer mobile app",
+"current": "Cancel now?"
+},
+{
+"category": "notification",
+"surface": "consumer mobile app",
+"current": "Your Profile Has Been Updated!"
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "Generate"
+},
+{
+"category": "destructive_confirmation",
+"surface": "consumer mobile app",
+"current": "Remove user?"
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "Preferred pronouns"
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "Exp"
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "Trash"
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "More info"
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Oopsie! We hit a snag."
+},
+{
+"category": "notification",
+"surface": "consumer mobile app",
+"current": "There are several rows in the imported file that may require additional review before they can be used."
+},
+{
+"category": "notification",
+"surface": "consumer mobile app",
+"current": "Reminder."
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "Confusing."
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Complete configuration to proceed."
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "SIN"
+},
+{
+"category": "destructive_confirmation",
+"surface": "consumer mobile app",
+"current": "Proceed"
+},
+{
+"category": "form_label",
+"surface": "consumer mobile app",
+"current": "Code?"
+},
+{
+"category": "system_error",
+"surface": "consumer mobile app",
+"current": "There was a problem."
+},
+{
+"category": "notification",
+"surface": "consumer mobile app",
+"current": "Working..."
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "Get data"
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "More"
+},
+{
+"category": "inline_error",
+"surface": "consumer mobile app",
+"current": "Missing."
+},
+{
+"category": "empty_state",
+"surface": "consumer mobile app",
+"current": "404"
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "Activate functionality"
+},
+{
+"category": "onboarding",
+"surface": "consumer mobile app",
+"current": "Enter your personal info."
+},
+{
+"category": "empty_state",
+"surface": "consumer mobile app",
+"current": "Empty log."
+},
+{
+"category": "empty_state",
+"surface": "consumer mobile app",
+"current": "No order entities."
+},
+{
+"category": "button",
+"surface": "consumer mobile app",
+"current": "Plans"
+},
+{
+"category": "accessibility_label",
+"surface": "consumer mobile app",
+"current": "Click here"
+},
+{
+"category": "inline_error",
+"surface": "consumer mobile app",
+"current": "Bad card"
+},
+{
+"category": "error_page",
+"surface": "consumer mobile app",
+"current": "404 Error Page"
+},
+{
+"category": "tooltip",
+"surface": "consumer mobile app",
+"current": "Critical path"
+},
+{
+"category": "interstitial",
+"surface": "consumer mobile app",
+"current": "Pause the book."
+},
+{
+"category": "settings_toggle",
+"surface": "consumer mobile app",
+"current": "Autoplay"
+},
+{
+"category": "error_page",
+"surface": "consumer mobile app",
+"current": "Listing not found (404)"
+},
+{
+"category": "tooltip",
+"surface": "consumer mobile app",
+"current": "Available balance"
+},
+{
+"category": "settings_toggle",
+"surface": "consumer mobile app",
+"current": "Account emails"
+},
+{
+"category": "interstitial",
+"surface": "consumer mobile app",
+"current": "Just say yes and let's gooo! 🚀"
+},
+{
+"category": "tooltip",
+"surface": "consumer mobile app",
+"current": "Seat"
+},
+{
+"category": "error_page",
+"surface": "consumer mobile app",
+"current": "Page missing"
+},
+{
+"category": "settings_toggle",
+"surface": "consumer mobile app",
+"current": "Reduce motion"
+},
+{
+"category": "interstitial",
+"surface": "consumer mobile app",
+"current": "Enough news for you."
+}
+]

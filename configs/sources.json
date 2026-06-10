@@ -1,0 +1,41 @@
+{
+  "policy_sources": [
+    {
+      "id": "local-ux-writing-skill",
+      "url": "file:///Users/christophergreer/.codex/skills/ux-writing-skill/SKILL.md",
+      "license_note": "Personal/local skill material. Keep derived dataset private unless cleared.",
+      "extraction_type": "local_markdown"
+    },
+    {
+      "id": "intuit-basics",
+      "url": "https://contentdesign.intuit.com/foundations/basics-of-good-content/",
+      "license_note": "Public reference. Use for non-verbatim derived principles only.",
+      "extraction_type": "firecrawl_markdown"
+    },
+    {
+      "id": "intuit-principles",
+      "url": "https://contentdesign.intuit.com/style-and-usage/our-principles/",
+      "license_note": "Public reference. Use for non-verbatim derived principles only.",
+      "extraction_type": "firecrawl_markdown"
+    },
+    {
+      "id": "atlassian-content",
+      "url": "https://atlassian.design/foundations/content",
+      "license_note": "Public reference. Use for non-verbatim derived principles only.",
+      "extraction_type": "firecrawl_markdown"
+    },
+    {
+      "id": "microsoft-fluent-content",
+      "url": "https://fluent2.microsoft.design/content-design",
+      "license_note": "Public reference. Use for non-verbatim derived principles only.",
+      "extraction_type": "firecrawl_markdown"
+    },
+    {
+      "id": "shopify-polaris-foundations",
+      "url": "https://polaris-react.shopify.com/foundations",
+      "license_note": "Public reference. Use for non-verbatim derived principles only.",
+      "extraction_type": "firecrawl_markdown"
+    }
+  ]
+}
+

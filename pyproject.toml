@@ -1,0 +1,28 @@
+[project]
+name = "ux-writing-fine-tune"
+version = "2.0.0"
+description = "Fine-tune Qwen3.6-27B (QLoRA on Modal) to review UX writing across codebases and screenshots, at a fraction of frontier-model cost."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "content-designer" }]
+
+# Local orchestration deps only. Heavy training/inference deps (torch, transformers,
+# trl, peft, bitsandbytes, accelerate) run *inside* the Modal image — see modal_app/common.py.
+dependencies = [
+  "modal>=0.64",
+  "datasets>=2.18.0",
+  "huggingface_hub>=0.34.0",
+  "pillow>=10.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

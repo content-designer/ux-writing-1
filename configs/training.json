@@ -1,0 +1,59 @@
+{
+  "base_model": "Qwen/Qwen3.6-27B",
+  "dataset_repo": "gr33r/ux-writing-sft",
+  "trackio_project": "ux-writing-finetune",
+  "compute": {
+    "provider": "modal",
+    "gpu": "A100-80GB",
+    "timeout_hours": 6,
+    "weights_volume": "qwen36-27b-weights",
+    "hf_secret": "hf-token"
+  },
+  "quantization": {
+    "load_in_4bit": true,
+    "bnb_4bit_quant_type": "nf4",
+    "bnb_4bit_use_double_quant": true,
+    "bnb_4bit_compute_dtype": "bfloat16"
+  },
+  "lora": {
+    "r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "bias": "none",
+    "task_type": "CAUSAL_LM",
+    "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+    "_note": "target_modules are confirmed/overridden by the Step-2 arch sanity check (modal_app/arch_check.py)."
+  },
+  "common": {
+    "per_device_train_batch_size": 1,
+    "gradient_accumulation_steps": 16,
+    "gradient_checkpointing": true,
+    "optim": "paged_adamw_8bit",
+    "weight_decay": 0.01,
+    "warmup_ratio": 0.1,
+    "lr_scheduler_type": "cosine",
+    "logging_steps": 5,
+    "save_strategy": "epoch",
+    "save_total_limit": 2,
+    "bf16": true
+  },
+  "runs": {
+    "1a_text": {
+      "run_mode": "text",
+      "filter_task": "rewrite",
+      "hub_model_id": "gr33r/ux-writing-2.0-rewrite-qwen36",
+      "learning_rate": 0.0002,
+      "num_train_epochs": 3,
+      "max_length": 2048
+    },
+    "1b_combined": {
+      "run_mode": "combined",
+      "filter_task": null,
+      "hub_model_id": "gr33r/ux-writing-2.0-combined-qwen36",
+      "learning_rate": 0.0001,
+      "num_train_epochs": 3,
+      "max_length": null,
+      "image_long_side": 1792
+    }
+  }
+}
