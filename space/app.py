@@ -87,8 +87,14 @@ def banner(tone: str, body_html: str, icon: str | None = None) -> str:
 
 
 def pretty_card(result: dict | None, label: str, reveal: str | None = None,
-                winner: bool = False) -> str:
-    """Design-system WriterCard."""
+                winner: bool = False, full: bool = False) -> str:
+    """Design-system WriterCard.
+
+    Anti-bias rule: before the vote (full=False) the card shows ONLY the copy. Anything
+    that could fingerprint a writer — reasoning length, token counts, latency — sits in
+    one uniform collapsed "Field notes" disclosure, identical on both sides. After the
+    vote (full=True) the forensics unfurl with the reveal.
+    """
     cls = "cc-writer cc-writer--winner" if winner else "cc-writer"
     head = f'<div class="cc-writer__head"><span class="cc-writer__label">{label}</span>'
     body = ""
@@ -103,15 +109,16 @@ def pretty_card(result: dict | None, label: str, reveal: str | None = None,
                 f'<code>{esc(result["error"])}</code></div>')
     else:
         secs = result.get("ms", 0) / 1000
-        head += (f'<span class="cc-writer__meta">'
-                 f'<span class="cc-writer__chip">{result.get("tokens", 0)} tokens</span>'
-                 f'<span class="cc-writer__chip">{secs:.1f}s</span></span></div>')
+        if full:  # chips are a tell (base thinks 10x longer) — post-vote only
+            head += (f'<span class="cc-writer__meta">'
+                     f'<span class="cc-writer__chip">{result.get("tokens", 0)} tokens</span>'
+                     f'<span class="cc-writer__chip">{secs:.1f}s</span></span>')
+        head += "</div>"
         text = result.get("text", "")
         if not text.strip():
             body = (f'<p class="cc-writer__reason">🪵 This writer spent the whole token '
-                    f"budget thinking and never answered ({result.get('tokens', 0)} tokens, "
-                    f"{secs:.0f}s). That counts as a quality signal — vote accordingly, or "
-                    f"turn off lantern mode for direct answers.</p>")
+                    f"budget thinking and never answered. That counts as a quality signal — "
+                    f"vote accordingly, or turn off lantern mode for direct answers.</p>")
         else:
             rewrite, reason, risk = text, "", ""
             m = re.search(r"\{.*\}", text, re.DOTALL)
@@ -123,17 +130,31 @@ def pretty_card(result: dict | None, label: str, reveal: str | None = None,
                     risk = obj.get("risk", "")
                 except json.JSONDecodeError:
                     pass
-            body = f'<p class="cc-writer__quote">{esc(rewrite)}</p>'
-            if reason:
-                body += f'<p class="cc-writer__reason">{esc(reason)}</p>'
-            if risk:
-                body += (f'<div class="cc-writer__risk"><span aria-hidden="true">⚠️</span>'
-                         f"<span><b>Risk:</b> {esc(risk)}</span></div>")
             thinking = (result.get("thinking") or "").strip()
-            if thinking:
-                preview = thinking if len(thinking) < 2400 else thinking[:2400] + " …"
-                body += (f'<details class="cc-writer__think"><summary>see their thinking'
-                         f"</summary><p>{esc(preview)}</p></details>")
+            if len(thinking) > 2400:
+                thinking = thinking[:2400] + " …"
+
+            body = f'<p class="cc-writer__quote">{esc(rewrite)}</p>'
+            if full:
+                if reason:
+                    body += f'<p class="cc-writer__reason">{esc(reason)}</p>'
+                if risk:
+                    body += (f'<div class="cc-writer__risk"><span aria-hidden="true">⚠️</span>'
+                             f"<span><b>Risk:</b> {esc(risk)}</span></div>")
+                if thinking:
+                    body += (f'<details class="cc-writer__think"><summary>see their thinking'
+                             f"</summary><p>{esc(thinking)}</p></details>")
+            elif reason or risk or thinking:
+                notes = ""
+                if reason:
+                    notes += f'<p class="cc-writer__reason">{esc(reason)}</p>'
+                if risk:
+                    notes += (f'<div class="cc-writer__risk"><span aria-hidden="true">⚠️</span>'
+                              f"<span><b>Risk:</b> {esc(risk)}</span></div>")
+                if thinking:
+                    notes += f'<p class="cc-writer__thinkraw">{esc(thinking)}</p>'
+                body += (f'<details class="cc-writer__notes"><summary>field notes — the '
+                         f"why, peeking may bias you</summary>{notes}</details>")
 
     reveal_html = f'<div class="cc-writer__reveal">{reveal}</div>' if reveal else ""
     return f'<div class="{cls}">{head}{body}{reveal_html}</div>'
@@ -247,8 +268,10 @@ ABOUT_HTML = f"""
   <div class="cc-card cc-card--dashed about__panel">
     <h3 class="about__panelh">🔦 Fair-fight settings</h3>
     <p>Both writers get the identical prompt, greedy decoding, and the same token budget
-    (1536 with lantern mode, 256 without). Qwen3.6 is a reasoning model — lantern mode lets
-    both think out loud; watch the token counters to see who needs fewer words.</p>
+    (1536 with lantern mode, 256 without). And because anything that fingerprints a writer
+    would bias your vote — one of them reasons at much greater length — explanations, token
+    counts, and timings stay tucked into identical "field notes" until <i>after</i> you vote.
+    Judge the copy; the forensics come with the reveal.</p>
   </div>
   <div class="cc-card cc-card--dashed about__panel">
     <h3 class="about__panelh">🏕️ Take it home</h3>
@@ -349,9 +372,9 @@ def vote(choice: str, battle: dict | None, session_id: str):
                 else "🌲 Qwen3.6-27B — the base model")
 
     b_is = "base" if battle["a_is"] == "finetune" else "finetune"
-    card_a = pretty_card(battle.get("result_a"), "🅰 Camper A",
+    card_a = pretty_card(battle.get("result_a"), "🅰 Camper A", full=True,
                          reveal=reveal_for(battle["a_is"]), winner=(winner == battle["a_is"] and choice == "A"))
-    card_b = pretty_card(battle.get("result_b"), "🅱 Camper B",
+    card_b = pretty_card(battle.get("result_b"), "🅱 Camper B", full=True,
                          reveal=reveal_for(b_is), winner=(winner == b_is and choice == "B"))
     fine_slot = "🅰" if battle["a_is"] == "finetune" else "🅱"
     status = banner("good", f"<b>The reveal:</b> {fine_slot} was <b>ux-writing-1</b> (the "
@@ -556,6 +579,16 @@ button.cc-btn-secondary:active { transform: translateY(4px); box-shadow: 0 1px 0
 .cc-writer__think summary::-webkit-details-marker { display:none; }
 .cc-writer__think summary::before { content:"🔦 "; }
 .cc-writer__think p { font-family:var(--font-mono); font-size:0.75rem; line-height:1.65;
+  color:var(--text-muted); background:var(--surface-sunken); border-radius:var(--radius-sm);
+  padding:10px 12px; margin-top:8px; max-height:160px; overflow:auto; }
+/* Pre-vote uniform disclosure: identical on both cards so nothing fingerprints a writer */
+.cc-writer__notes summary { font-family:var(--font-serif); font-style:italic; font-size:0.9rem;
+  color:var(--text-faint); cursor:pointer; list-style:none; }
+.cc-writer__notes summary::-webkit-details-marker { display:none; }
+.cc-writer__notes summary::before { content:"🗒️ "; }
+.cc-writer__notes[open] summary { color:var(--text-muted); }
+.cc-writer__notes .cc-writer__reason { margin-top:8px; }
+.cc-writer__thinkraw { font-family:var(--font-mono); font-size:0.75rem; line-height:1.65;
   color:var(--text-muted); background:var(--surface-sunken); border-radius:var(--radius-sm);
   padding:10px 12px; margin-top:8px; max-height:160px; overflow:auto; }
 .cc-writer__reveal { font-family:var(--font-mono); font-size:0.75rem; letter-spacing:.04em;
