@@ -41,8 +41,8 @@ scans UX writing across large codebases at a fraction of frontier-model cost.
 
 - Method: QLoRA (4-bit NF4, double-quant, bf16), LoRA r=16 α=32 on the LM projections
   (`q,k,v,o,gate,up,down`); vision tower frozen.
-- Data: ~1,392 rewrite rows from [gr33r/ux-writing-sft](https://huggingface.co/datasets/gr33r/ux-writing-sft) (derived-only, no verbatim source text).
-- 2 epochs on one A100-80GB (Modal). Base is a hybrid Gated-DeltaNet + full-attention model (~27.8B, ~248K vocab).
+- Data: ≈1,392 rewrite rows from [gr33r/ux-writing-sft](https://huggingface.co/datasets/gr33r/ux-writing-sft) (derived-only, no verbatim source text).
+- 2 epochs on one A100-80GB (Modal). Base is a hybrid Gated-DeltaNet + full-attention model (≈27.8B, ≈248K vocab).
 
 ## Limitations
 

@@ -49,8 +49,8 @@ Parse `messages_json` back into the chat list in your collator; image bytes live
 
 | split | rewrite | consistency | notes |
 |---|---:|---:|---|
-| train | ~1,392 | 156 | rewrite synthetic-derived; consistency synthetic screens |
-| validation | ~60 | 24 | rewrite held out by `input_key`; consistency synthetic held-out |
+| train | ≈1,392 | 156 | rewrite synthetic-derived; consistency synthetic screens |
+| validation | ≈60 | 24 | rewrite held out by `input_key`; consistency synthetic held-out |
 | test | 90 | (added separately) | rewrite hand-authored gold benchmark; real-screenshot consistency test is appended by the eval-annotation step |
 
 ## Zero-leakage guarantees

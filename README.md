@@ -1,10 +1,10 @@
 # UX-Writing Fine-Tune v2 — Qwen3.6-27B (QLoRA on Modal)
 
-A fine-tuned, open-weights UX-writing reviewer that flags and rewrites interface copy across
+A fine-tuned, open-weights UX writing reviewer that flags and rewrites interface copy across
 **codebases** (text) and **screenshots** (vision), at a fraction of the cost of frontier models.
 Built for the Hugging Face [Build Small hackathon](https://huggingface.co/build-small-hackathon).
 
-- **Base model:** [`Qwen/Qwen3.6-27B`](https://huggingface.co/Qwen/Qwen3.6-27B) — dense ~27.8B, vision-capable, Apache-2.0.
+- **Base model:** [`Qwen/Qwen3.6-27B`](https://huggingface.co/Qwen/Qwen3.6-27B) — dense ≈27.8B, vision-capable, Apache-2.0.
 - **Method:** QLoRA (4-bit NF4) via TRL `SFTTrainer` + PEFT, trained on **Modal** GPUs.
 - **Storage:** datasets + adapters on the Hugging Face Hub (`gr33r/*`). **Monitoring:** Trackio.
 
@@ -14,7 +14,7 @@ We have two distinct tasks, not one corpus in two modalities:
 
 | Task | Modality | Input → Output | Data |
 |---|---|---|---|
-| **rewrite** | text | UI string + code context → `{rewrite, reason, risk}` | ~1,490 rows |
+| **rewrite** | text | UI string + code context → `{rewrite, reason, risk}` | ≈1,490 rows |
 | **consistency** | vision | screenshot → `{inventory, issues}` | 156 synthetic screens |
 
 Merging both into a single first run would change the base model (4B→27B), the scale, **and** the
@@ -51,7 +51,7 @@ modal secret create hf-token HF_TOKEN=$(cat ~/.cache/huggingface/token)
 modal run modal_app/arch_check.py                   # 2. confirm qwen3_5 module names for LoRA targets
 python data_build/build_unified_dataset.py          # 4. build + push gr33r/ux-writing-sft
 modal run modal_app/common.py::download_weights     # 6. cache base weights to a Volume
-modal run modal_app/train.py --run-mode combined --max-steps 8 --no-push   # 7. SMOKE TEST (~$1)
+modal run modal_app/train.py --run-mode combined --max-steps 8 --no-push   # 7. SMOKE TEST (≈$1)
 
 modal run modal_app/train.py --run-mode text        # 8.  Run 1a
 modal run modal_app/train.py --run-mode combined    # 10. Run 1b
@@ -59,13 +59,13 @@ modal run modal_app/eval_rewrite.py                 # rewrite benchmark (1a + 1b
 modal run modal_app/eval_consistency.py             # real-screenshot consistency (1b vs base)
 ```
 
-Estimated total compute: **~$9–15** of the $250 hackathon credit (A100-80GB @ $2.50/h).
+Estimated total compute: **≈$9–15** of the $250 hackathon credit (A100-80GB @ $2.50/h).
 
 ## Fine-tune it on your style guide
 
-The model learns your product's voice from before/after pairs — ~100–500 examples and
-**one HF Jobs command** (~$2–6 on an A100), starting from `gr33r/ux-writing-1` so you
-keep the UX-writing tune and add your voice on top. The repo also ships the blinded
+The model learns your product's voice from before/after pairs — ≈100–500 examples and
+**one HF Jobs command** (≈$2–6 on an A100), starting from `gr33r/ux-writing-1` so you
+keep the UX writing tune and add your voice on top. The repo also ships the blinded
 A/B review tooling to *prove* your tune is better before you ship it.
 
 → **[docs/FINETUNE_GUIDE.md](docs/FINETUNE_GUIDE.md)** · ready-to-run script: [scripts/train_on_your_styleguide.py](scripts/train_on_your_styleguide.py)
@@ -89,7 +89,7 @@ Reasoning-model note: `Qwen3.6` thinks by default — use `enable_thinking=False
 | Quantized (llama.cpp / LM Studio / Ollama) | [`gr33r/ux-writing-1-GGUF`](https://huggingface.co/gr33r/ux-writing-1-GGUF) |
 | ⛺ Copy Campfire arena | [`gr33r/copy-campfire`](https://huggingface.co/spaces/gr33r/copy-campfire) |
 
-Measured economics: **~7,950 strings/hour, ~$0.31 per 1K strings** on one A100, 100%
+Measured economics: **≈7,950 strings/hour, ≈$0.31 per 1K strings** on one A100, 100%
 valid JSON ([docs/COST_NOTES.md](docs/COST_NOTES.md)). Real-codebase demo:
 [docs/demo/](docs/demo/) (Cal.com — 13/200 changes suggested, the rest kept as-is).
 

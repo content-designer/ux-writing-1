@@ -17,7 +17,7 @@ pairs. Three good sources:
 1. **Real edits**: every time your content team rewrote a string in review, that's a pair.
 2. **Style-guide rules, instantiated**: for each rule ("avoid 'please'", "sentence case
    buttons", "name the object"), write 5–10 concrete before/afters that demonstrate it.
-3. **Strings your team would keep**: include ~20% "already good" examples where the
+3. **Strings your team would keep**: include ≈20% "already good" examples where the
    rewrite equals the input — this teaches restraint (our model returns copy verbatim
    when it's already right, and says so).
 
@@ -73,8 +73,8 @@ hf jobs uv run --detach \
 
 What it does (the exact recipe that produced ux-writing-1): QLoRA — 4-bit NF4 base,
 LoRA r=16 α=32 on the LM projections — starting from **`gr33r/ux-writing-1`** so you
-inherit the UX-writing tune and add your voice on top. With 100–500 pairs expect
-**~20–60 min on one A100 (≈$2–6)**. Defaults that matter:
+inherit the UX writing tune and add your voice on top. With 100–500 pairs expect
+**≈20–60 min on one A100 (≈$2–6)**. Defaults that matter:
 
 | knob | value | why |
 |---|---|---|

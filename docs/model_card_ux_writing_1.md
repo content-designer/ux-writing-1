@@ -14,17 +14,17 @@ tags:
 
 # ux-writing-1
 
-**An open UX-writing reviewer you can run on your own infrastructure.** Give it a UI
+**An open UX writing reviewer you can run on your own infrastructure.** Give it a UI
 string and its code context; it returns compact JSON — `{"rewrite", "reason", "risk"}` —
 that is purposeful, concise, conversational, clear, and accessible. It preserves product
-intent, keeps `{{ variables }}` and locale terms intact, and never weakens
+intent, keeps `{{ variables }}` and locale terms intact, and is trained not to weaken
 safety-critical (destructive / payment / privacy / security) copy.
 
 Built to scan UX writing across **massive codebases** at a fraction of frontier-API cost
 — private, unlimited-reuse, and yours to fine-tune further. Created for the Hugging Face
-**Build Small** hackathon (*small models, big adventure*) on ~$40 of compute.
+**Build Small** hackathon (*small models, big adventure*) on ≈$40 of compute.
 
-- **Base:** [`Qwen/Qwen3.6-27B`](https://huggingface.co/Qwen/Qwen3.6-27B) (Apache-2.0, ~27.8B dense, hybrid linear+full attention, reasoning model)
+- **Base:** [`Qwen/Qwen3.6-27B`](https://huggingface.co/Qwen/Qwen3.6-27B) (Apache-2.0, ≈27.8B dense, hybrid linear+full attention, reasoning model)
 - **Method:** QLoRA (4-bit NF4) · LoRA r=16 α=32 on LM projections · 2 epochs · one A100-80GB
 - **Adapter:** [`gr33r/ux-writing-1-lora`](https://huggingface.co/gr33r/ux-writing-1-lora) · **Quantized:** [`gr33r/ux-writing-1-GGUF`](https://huggingface.co/gr33r/ux-writing-1-GGUF)
 - **Try it / judge it:** [⛺ Copy Campfire arena](https://huggingface.co/spaces/gr33r/copy-campfire) · **Code:** [content-designer/ux-writing-1](https://github.com/content-designer/ux-writing-1)
@@ -52,7 +52,7 @@ repo — reproduce them.
 
 The fine-tune is also **leaner at inference**: it answers the contract directly with
 brief reasoning, where the base model tends to reason at length (in our spot checks,
-~2× fewer output tokens for the same quality answer — that's your serving bill).
+≈2× fewer output tokens for the same quality answer — that's your serving bill).
 
 ## Usage
 
@@ -107,8 +107,8 @@ destructive/payment/privacy/security copy.
 
 ## Fine-tune it further
 
-Teams should tune this to their own voice — ~100–500 before/after pairs from your style
-guide and **one HF Jobs command** (~$2–6 on an A100), starting from this model. Full
+Teams should tune this to their own voice — ≈100–500 before/after pairs from your style
+guide and **one HF Jobs command** (≈$2–6 on an A100), starting from this model. Full
 walkthrough, dataset recipe, ready-to-run script, and the blinded A/B tooling to verify
 your tune actually wins:
 [**FINETUNE_GUIDE.md**](https://github.com/content-designer/ux-writing-1/blob/main/docs/FINETUNE_GUIDE.md).
@@ -117,7 +117,7 @@ A preference round (DPO) using arena-style votes is the v2 roadmap; vote at the
 
 ## Training data
 
-~1,400 owner-authored / derived synthetic rewrite pairs (no verbatim text from any style
+≈1,400 owner-authored / derived synthetic rewrite pairs (no verbatim text from any style
 guide), plus permissively-licensed (MIT) real microcopy. Validation/test splits share no
 UI string with training (`input_key` dedup). The dataset itself is private; the schema,
 builders, and validators are open in the repo.

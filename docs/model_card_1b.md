@@ -33,7 +33,7 @@ both scan code for copy issues and review rendered screens.
 
 ## Intended use
 
-- A single model for UX-writing review across code **and** screenshots. For bulk text-only
+- A single model for UX writing review across code **and** screenshots. For bulk text-only
   scanning where cost is paramount, the text specialist `gr33r/ux-writing-2.0-rewrite-qwen36`
   is marginally better and cheaper; use 1b when you also need screen-level consistency review.
 - Reasoning model — set `enable_thinking=False` for direct structured output.
@@ -41,11 +41,11 @@ both scan code for copy issues and review rendered screens.
 ## Training
 
 - QLoRA (4-bit NF4, bf16), LoRA r=16 α=32 on LM projections; vision tower frozen.
-- Mixed-modality SFT: ~1,392 rewrite (text) + 156 consistency (synthetic screenshots) rows
+- Mixed-modality SFT: ≈1,392 rewrite (text) + 156 consistency (synthetic screenshots) rows
   from [gr33r/ux-writing-sft](https://huggingface.co/datasets/gr33r/ux-writing-sft);
   custom collator handles text-only and image+text rows in one run (per-device batch 1).
 - 2 epochs on one A100-80GB (Modal). In-training eval disabled (full-logits eval over the
-  ~248K vocab on long vision rows OOMs 80GB); evaluation is done separately on held-out sets.
+  ≈248K vocab on long vision rows OOMs 80GB); evaluation is done separately on held-out sets.
 
 ## Limitations
 

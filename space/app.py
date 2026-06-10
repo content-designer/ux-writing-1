@@ -72,6 +72,12 @@ def pretty_card(result: dict | None, label: str) -> str:
     if result.get("error"):
         return f"### {label}\n\n⚠️ The fire sputtered: `{result['error']}`"
     text = result.get("text", "")
+    if not text.strip():
+        secs = result.get("ms", 0) / 1000
+        return (f"### {label}\n\n🪵 _This writer spent the whole token budget thinking and "
+                f"never answered ({result.get('tokens', 0)} tokens, {secs:.0f}s). "
+                f"That happens — it counts as a quality signal. Vote accordingly, or turn "
+                f"off lantern mode for direct answers._")
     rewrite, reason, risk = text, "", ""
     m = re.search(r"\{.*\}", text, re.DOTALL)
     if m:
@@ -183,7 +189,7 @@ def run_battle(current: str, category: str, surface: str, thinking: bool, sessio
     b_is = "base" if a_is == "finetune" else "finetune"
     status = ("🔦 Lantern mode is on — both writers think out loud (can take a minute or two). "
               "First answer appears as soon as it's ready." if thinking
-              else "🔥 Fast mode — answers in ~10–30 seconds each.")
+              else "🔥 Fast mode — answers in ≈10–30 seconds each.")
     yield (pretty_card(None, "🅰 Camper A"), pretty_card(None, "🅱 Camper B"),
            gr.update(visible=False), None, status)
 
@@ -244,7 +250,7 @@ with gr.Blocks(theme=theme, css=CSS, title="⛺ Copy Campfire") as demo:
     battle_state = gr.State(None)
 
     gr.HTML('<div class="campfire-header"><h1>⛺ Copy Campfire</h1>'
-            "<p>Two writers by the fire — one went to training camp. You judge the copy.</p></div>")
+            "<p>Two UX writers by the fire — one went to training camp. You judge the copy.</p></div>")
 
     with gr.Tab("🔥 The fire"):
         with gr.Row():
@@ -277,10 +283,10 @@ with gr.Blocks(theme=theme, css=CSS, title="⛺ Copy Campfire") as demo:
         gr.Markdown(f"""
 ### What is this?
 
-A blind taste test for UX writing. Each battle sends your copy to **two writers**:
+A blind taste test for UX writing. Each battle sends your copy to **two UX writers**:
 
-- 🌲 **{BASE_NAME}** — Apache-2.0, vision-capable, ~27.8B parameters
-- 🔥 **{FINETUNE_NAME}** — the same model after a QLoRA fine-tune on a hand-built UX-writing dataset
+- 🌲 **{BASE_NAME}** — Apache-2.0, vision-capable, ≈27.8B parameters
+- 🔥 **{FINETUNE_NAME}** — the same model after a QLoRA fine-tune on a hand-built UX writing dataset
 
 Sides are shuffled every round; you vote before the reveal. Votes are stored privately
 as preference data for the next training run (DPO) — **your vote literally trains v2**.

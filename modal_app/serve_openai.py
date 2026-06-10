@@ -79,7 +79,9 @@ def split_think(text: str) -> tuple[str, str]:
     secrets=[hf_secret, auth_secret],
     timeout=15 * 60,
     scaledown_window=300,   # idle 5 min -> scale to zero (cost guard)
-    max_containers=2,
+    # ONE container: a second container means a second 2-3 min cold load of 56GB for the
+    # parallel battle arm — far worse than queueing ~40s behind the warm one.
+    max_containers=1,
 )
 class UXWriting1:
     @modal.enter()
@@ -123,12 +125,15 @@ class UXWriting1:
         new = out[0][enc["input_ids"].shape[1]:]
         raw = self.tok.decode(new, skip_special_tokens=True).strip()
         thinking_text, answer = split_think(raw)
-        return {
+        result = {
             "text": answer,
             "thinking": thinking_text,
             "tokens": int(new.shape[0]),
             "ms": int((time.time() - t0) * 1000),
         }
+        print(f"[gen] adapter={adapter} thinking={thinking} tokens={result['tokens']} "
+              f"ms={result['ms']} answered={bool(answer)}")
+        return result
 
     @modal.fastapi_endpoint(method="POST")
     def chat(self, payload: dict) -> dict:

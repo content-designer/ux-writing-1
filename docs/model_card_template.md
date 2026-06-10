@@ -72,7 +72,7 @@ base** (same model, adapter off):
 | precision / F1 | 0.05 / 0.08 | **0.33 / 0.29** |
 | over-flags on 15 clean real screens | **16** | **1** |
 
-The headline is **restraint**: at equal recall the model is **~16× quieter** than base on
+The headline is **restraint**: at equal recall the model is **≈16× quieter** than base on
 well-written screens (base "matches" recall only by spraying 6 issue types onto clean screens).
 It caught a real empty-state duplication exactly.
 
@@ -98,6 +98,6 @@ triages its flags. It is **not** validated for strict autonomous production. Use
 ## Training data & provenance
 
 Diversified synthetic consistency screens (HTML→headless-Chrome render, exact planted-bug gold,
-~25% clean negatives) + 9 real Cal.com screens (MIT) as real-layout negatives. Held-out eval =
+≈25% clean negatives) + 9 real Cal.com screens (MIT) as real-layout negatives. Held-out eval =
 real Cal.com + Ghost screens (MIT, business email redacted). Base is Apache-2.0; all training/eval
 sources are permissively licensed — **commercial-use clean**. ~minutes of A10G/L40S compute.

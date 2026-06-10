@@ -1,12 +1,12 @@
 # Demo artifact: reviewing Cal.com's UI copy with ux-writing-1
 
 A real run against [Cal.com](https://github.com/calcom/cal.com) (open-source scheduling
-app, ~7,700 files), June 10 2026 — the workflow from the video, unedited:
+app, ≈7,700 files), June 10 2026 — the workflow from the video, unedited:
 
 ```bash
 python -m uxft.scan /path/to/cal.com --limit 200 --out candidates.jsonl     # seconds
 python -m uxft.review_repo /path/to/cal.com --limit 200 --workers 8 \
-  --endpoint $UXW1_ENDPOINT --api-key $TOKEN --out review.jsonl             # ~10 min, ~$0.40
+  --endpoint $UXW1_ENDPOINT --api-key $TOKEN --out review.jsonl             # ≈10 min, ≈$0.40
 ```
 
 Two passes, 200 strings each: the monorepo root ([calcom_review.jsonl](calcom_review.jsonl))

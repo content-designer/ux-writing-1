@@ -1,6 +1,6 @@
 # Evaluation results — UX-Writing Fine-Tune v2 (Qwen3.6-27B)
 
-Base model: `Qwen/Qwen3.6-27B` (dense ~27.8B, hybrid Gated-DeltaNet + full-attention, ~248K vocab, reasoning model).
+Base model: `Qwen/Qwen3.6-27B` (dense ≈27.8B, hybrid Gated-DeltaNet + full-attention, ≈248K vocab, reasoning model).
 Adapters (QLoRA, private): `gr33r/ux-writing-2.0-rewrite-qwen36` (1a, text), `gr33r/ux-writing-2.0-combined-qwen36` (1b, text+vision).
 Held-out rewrite benchmark: 90 hand-authored gold items (`benchmark.jsonl`), zero training overlap.
 
@@ -21,7 +21,7 @@ Held-out rewrite benchmark: 90 hand-authored gold items (`benchmark.jsonl`), zer
 - 1a wins in every category; strongest in inline_error (9–0), destructive_confirmation (7–0), accessibility_label (6–0), button (10–1), system_error (11–3).
 - Clears the project bar (≥30% more accepted rewrites than prompt-only baseline) by a wide margin.
 
-**Takeaway:** heuristics said base≈1a; blinded human judgment says 1a wins ~83%. The fine-tune's value is real and large on human-judged quality — invisible to the crude heuristics.
+**Takeaway:** heuristics said base≈1a; blinded human judgment says 1a wins ≈83%. The fine-tune's value is real and large on human-judged quality — invisible to the crude heuristics.
 
 ## 3. 1b vs 1a — combined did NOT meaningfully regress text
 - Heuristic overall: 0.929 (1b) vs 0.928 (1a) — indistinguishable.
@@ -33,7 +33,7 @@ Held-out rewrite benchmark: 90 hand-authored gold items (`benchmark.jsonl`), zer
 
 ## 4. Scenario-improvement opportunities (from reviewer notes)
 Feedback to improve the **benchmark/training scenarios** in the next data rev:
-- **Trivial duplicates (low signal):** ~11 items where base and 1a produced identical text (e.g. "Go", "ZIP code", "Preferred pronouns", "Get data"). Replace with harder, more discriminative cases.
+- **Trivial duplicates (low signal):** ≈11 items where base and 1a produced identical text (e.g. "Go", "ZIP code", "Preferred pronouns", "Get data"). Replace with harder, more discriminative cases.
 - **Ambiguous content-type/context:** several items don't make clear whether the string is alt text, UI copy, or review feedback ("Menu" → "Assuming this is alt text"; "Too much text." → "review feedback not UI copy"). Add explicit `content_type`/surface context.
 - **Flawed gold/scenario logic:** form label phrased as a question ("Score" → "Form labels shouldn't be questions"); out-of-stock error suggesting "choose another quantity" ("wouldn't make sense if totally out of stock"). Fix the expected behavior.
 - **Hallucination on vague inputs:** models invent specifics for under-specified inputs ("Image" → "Hallucinated details, but better as alt text"; "Max" → "reasonable but possibly inaccurate jump to 'seats'"). Add anti-hallucination signal / more context.
