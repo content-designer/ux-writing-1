@@ -27,7 +27,7 @@ Built to scan UX writing across **massive codebases** at a fraction of frontier-
 - **Base:** [`Qwen/Qwen3.6-27B`](https://huggingface.co/Qwen/Qwen3.6-27B) (Apache-2.0, ≈27.8B dense, hybrid linear+full attention, reasoning model)
 - **Method:** QLoRA (4-bit NF4) · LoRA r=16 α=32 on LM projections · 2 epochs · one A100-80GB
 - **Adapter:** [`gr33r/ux-writing-1-lora`](https://huggingface.co/gr33r/ux-writing-1-lora) · **Quantized:** [`gr33r/ux-writing-1-GGUF`](https://huggingface.co/gr33r/ux-writing-1-GGUF)
-- **Try it / judge it:** [⛺ Copy Campfire arena](https://huggingface.co/spaces/gr33r/copy-campfire) · **Code:** [content-designer/ux-writing-1](https://github.com/content-designer/ux-writing-1)
+- **Try it / judge it:** [⛺ Copy Campfire arena](https://huggingface.co/spaces/build-small-hackathon/copy-campfire) · **Code:** [content-designer/ux-writing-1](https://github.com/content-designer/ux-writing-1)
 
 ## Does the fine-tune actually beat the base model?
 
@@ -113,7 +113,7 @@ walkthrough, dataset recipe, ready-to-run script, and the blinded A/B tooling to
 your tune actually wins:
 [**FINETUNE_GUIDE.md**](https://github.com/content-designer/ux-writing-1/blob/main/docs/FINETUNE_GUIDE.md).
 A preference round (DPO) using arena-style votes is the v2 roadmap; vote at the
-[Copy Campfire](https://huggingface.co/spaces/gr33r/copy-campfire) to contribute.
+[Copy Campfire](https://huggingface.co/spaces/build-small-hackathon/copy-campfire) to contribute.
 
 ## Training data
 

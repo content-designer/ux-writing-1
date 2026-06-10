@@ -87,7 +87,7 @@ Reasoning-model note: `Qwen3.6` thinks by default — use `enable_thinking=False
 | Merged model (flagship) | [`gr33r/ux-writing-1`](https://huggingface.co/gr33r/ux-writing-1) |
 | LoRA adapter | [`gr33r/ux-writing-1-lora`](https://huggingface.co/gr33r/ux-writing-1-lora) |
 | Quantized (llama.cpp / LM Studio / Ollama) | [`gr33r/ux-writing-1-GGUF`](https://huggingface.co/gr33r/ux-writing-1-GGUF) |
-| ⛺ Copy Campfire arena | [`gr33r/copy-campfire`](https://huggingface.co/spaces/gr33r/copy-campfire) |
+| ⛺ Copy Campfire arena | [`build-small-hackathon/copy-campfire`](https://huggingface.co/spaces/build-small-hackathon/copy-campfire) |
 
 Measured economics: **≈7,950 strings/hour, ≈$0.31 per 1K strings** on one A100, 100%
 valid JSON ([docs/COST_NOTES.md](docs/COST_NOTES.md)). Real-codebase demo:

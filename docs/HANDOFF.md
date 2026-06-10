@@ -17,10 +17,10 @@ A100 (100% valid JSON). Built for the HF Build Small hackathon (**submission dea
 
 | artifact | where | visibility |
 |---|---|---|
-| Merged flagship (54.7 GB, verified ≡ adapter) | `gr33r/ux-writing-1` | private → flip |
-| LoRA adapter (the validated 1a) | `gr33r/ux-writing-1-lora` | private → flip |
-| GGUF (Q4_K_M 16.6 GB, Q8_0 28.6 GB) | `gr33r/ux-writing-1-GGUF` | private → flip |
-| ⛺ Copy Campfire arena | `gr33r/copy-campfire` (Space) | private → flip |
+| Merged flagship (54.7 GB, verified ≡ adapter) | `gr33r/ux-writing-1` | **public** (launched 2026-06-10) |
+| LoRA adapter (the validated 1a) | `gr33r/ux-writing-1-lora` | **public** (launched 2026-06-10) |
+| GGUF (Q4_K_M 16.6 GB, Q8_0 28.6 GB) | `gr33r/ux-writing-1-GGUF` | **public** (launched 2026-06-10) |
+| ⛺ Copy Campfire arena | `build-small-hackathon/copy-campfire` (Space) | **public** (launched 2026-06-10) |
 | Code (pipeline, CLI, evals, Space src) | github.com/content-designer/ux-writing-1 | **public** |
 | Training dataset (unified, zero-leakage) | `gr33r/ux-writing-sft` | private, stays |
 | Votes / DPO corpus (168 seeded + live) | `gr33r/ux-writing-arena-votes` | private, stays |
@@ -37,16 +37,20 @@ A100 (100% valid JSON). Built for the HF Build Small hackathon (**submission dea
 - Live tell from serving logs: lantern-mode base = 1,020 thinking tokens/145 s vs
   fine-tune 79 tokens/15 s for the same brief.
 
-## The public flip (the one remaining action)
+## The public flip (EXECUTED 2026-06-10 — kept for reference)
 
-After the owner's final proofread of the model card / README / Space copy:
+The submission Space lives in the hackathon org (`build-small-hackathon/copy-campfire`,
+required for eligibility); the owner's personal copy (`gr33r/copy-campfire`) is private
+to avoid splitting traffic/votes. The org Space's HF_TOKEN is a fine-grained token
+("campfire-votes-only") scoped to the votes dataset + org repos — **post-hackathon
+cleanup: remove its org permission** at settings/tokens.
 
 ```python
 from huggingface_hub import HfApi
 api = HfApi()
 for repo in ["gr33r/ux-writing-1", "gr33r/ux-writing-1-lora", "gr33r/ux-writing-1-GGUF"]:
     api.update_repo_settings(repo, private=False)
-api.update_repo_settings("gr33r/copy-campfire", private=False, repo_type="space")
+api.update_repo_settings("build-small-hackathon/copy-campfire", private=False, repo_type="space")
 ```
 
 For launch/video windows, keep the GPU warm (skips the ≈3-min cold start):

@@ -110,5 +110,5 @@ loses nothing on safety-critical categories (destructive/payment/privacy/securit
 
 If your tune isn't proprietary, publish the adapter with a model card noting the lineage
 (`base_model: gr33r/ux-writing-1`) — and tell us at the
-[Copy Campfire](https://huggingface.co/spaces/gr33r/copy-campfire) discussion tab.
+[Copy Campfire](https://huggingface.co/spaces/build-small-hackathon/copy-campfire) discussion tab.
 Apache-2.0 all the way down.
