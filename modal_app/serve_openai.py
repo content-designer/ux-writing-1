@@ -125,6 +125,10 @@ class UXWriting1:
         new = out[0][enc["input_ids"].shape[1]:]
         raw = self.tok.decode(new, skip_special_tokens=True).strip()
         thinking_text, answer = split_think(raw)
+        # Unfinished thinking: in thinking mode the completion IS reasoning until </think>;
+        # if the budget ran out before the close tag, everything is thinking, not an answer.
+        if thinking and "</think>" not in raw:
+            thinking_text, answer = raw, ""
         result = {
             "text": answer,
             "thinking": thinking_text,

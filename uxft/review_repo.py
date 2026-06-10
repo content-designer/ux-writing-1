@@ -59,15 +59,16 @@ def extract_contract_json(text: str) -> dict | None:
     if not isinstance(text, str):
         return None
     tail = text.rsplit("</think>", 1)[-1]
-    start, end = tail.find("{"), tail.rfind("}")
-    if start == -1 or end <= start:
-        return None
-    try:
-        obj = json.loads(tail[start:end + 1])
-    except json.JSONDecodeError:
-        return None
-    if isinstance(obj, dict) and isinstance(obj.get("rewrite"), str):
-        return obj
+    # The contract JSON is flat: scan {…} candidates and keep the LAST parseable one with
+    # a rewrite — a greedy first-{…last-} span grabs draft JSON inside leaked reasoning.
+    import re
+    for candidate in reversed(re.findall(r"\{[^{}]*\}", tail, re.DOTALL)):
+        try:
+            obj = json.loads(candidate)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(obj, dict) and isinstance(obj.get("rewrite"), str):
+            return obj
     return None
 
 

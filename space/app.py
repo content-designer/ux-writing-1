@@ -115,21 +115,36 @@ def pretty_card(result: dict | None, label: str, reveal: str | None = None,
                      f'<span class="cc-writer__chip">{secs:.1f}s</span></span>')
         head += "</div>"
         text = result.get("text", "")
-        if not text.strip():
+        # The contract JSON is flat: scan {…} candidates and keep the LAST parseable one
+        # with a rewrite — a greedy first-{…last-} regex grabs reasoning if it ever leaks.
+        parsed = None
+        for candidate in reversed(re.findall(r"\{[^{}]*\}", text, re.DOTALL)):
+            try:
+                obj = json.loads(candidate)
+                if isinstance(obj, dict) and isinstance(obj.get("rewrite"), str):
+                    parsed = obj
+                    break
+            except json.JSONDecodeError:
+                continue
+        # No answer, or a wall of un-JSON text (leaked reasoning) = didn't finish cleanly.
+        if not text.strip() or (parsed is None and len(text) > 180):
             body = (f'<p class="cc-writer__reason">🪵 This writer spent the whole token '
-                    f"budget thinking and never answered. That counts as a quality signal — "
-                    f"vote accordingly, or turn off lantern mode for direct answers.</p>")
+                    f"budget thinking and never settled on an answer. That counts as a "
+                    f"quality signal — vote accordingly, or turn off lantern mode for "
+                    f"direct answers.</p>")
+            leaked = (result.get("thinking") or text or "").strip()
+            if leaked:
+                if len(leaked) > 2400:
+                    leaked = leaked[:2400] + " …"
+                body += (f'<details class="cc-writer__notes"><summary>the unfinished '
+                         f"draft</summary><p class='cc-writer__thinkraw'>{esc(leaked)}</p></details>")
         else:
-            rewrite, reason, risk = text, "", ""
-            m = re.search(r"\{.*\}", text, re.DOTALL)
-            if m:
-                try:
-                    obj = json.loads(m.group(0))
-                    rewrite = obj.get("rewrite", text) or "(kept silent)"
-                    reason = obj.get("reason", "")
-                    risk = obj.get("risk", "")
-                except json.JSONDecodeError:
-                    pass
+            if parsed is not None:
+                rewrite = parsed.get("rewrite") or "(kept silent)"
+                reason = parsed.get("reason", "")
+                risk = parsed.get("risk", "")
+            else:  # short plain-text answer — show as-is
+                rewrite, reason, risk = text, "", ""
             thinking = (result.get("thinking") or "").strip()
             if len(thinking) > 2400:
                 thinking = thinking[:2400] + " …"
