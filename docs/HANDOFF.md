@@ -23,6 +23,7 @@ round. Measured economics: **$0.31/1K strings batched** on one A100 (100% valid 
 | GGUF (Q4_K_M 16.6 GB, Q8_0 28.6 GB) | `gr33r/ux-writing-1-GGUF` | **public** (launched 2026-06-10) |
 | ⛺ Copy Campfire arena (SUBMISSION) | `build-small-hackathon/copy-campfire` (Space) | **public** (launched 2026-06-10) |
 | Campfire personal copy (kept in sync) | `gr33r/copy-campfire` (Space) | private (avoid split votes) |
+| Adapter mirror (org Models-tab visibility) | `build-small-hackathon/ux-writing-1-lora` | **public** (canonical = gr33r) |
 | Code (pipeline, CLI, evals, Space src) | github.com/content-designer/ux-writing-1 | **public** |
 | Training dataset (unified, zero-leakage) | `gr33r/ux-writing-sft` | private, stays |
 | Votes / DPO corpus (168 seeded + live) | `gr33r/ux-writing-arena-votes` | private, stays |
