@@ -53,23 +53,32 @@ def prompt_for(candidate: Candidate) -> str:
 def extract_contract_json(text: str) -> dict | None:
     """Pull the {rewrite, reason, risk} object out of a possibly reasoning-prefixed reply.
 
-    Qwen3.6 is a thinking model: take the text after the last </think>, then parse the
-    trailing {...} object. Returns None when no valid object with a string rewrite exists.
+    Qwen3.6 is a thinking model: take the text after the last </think>, then keep the
+    LAST parseable JSON object that has a string rewrite — a greedy first-{…last-} span
+    grabs draft JSON inside leaked reasoning. Scans with json.JSONDecoder().raw_decode
+    rather than a flat {…} regex: rewrites that correctly keep {{ variables }} contain
+    braces, which a brace regex can never match (such outputs were mis-flagged as
+    non-JSON and dropped). Returns None when no valid object exists.
     """
     if not isinstance(text, str):
         return None
     tail = text.rsplit("</think>", 1)[-1]
-    # The contract JSON is flat: scan {…} candidates and keep the LAST parseable one with
-    # a rewrite — a greedy first-{…last-} span grabs draft JSON inside leaked reasoning.
-    import re
-    for candidate in reversed(re.findall(r"\{[^{}]*\}", tail, re.DOTALL)):
+    decoder = json.JSONDecoder()
+    parsed: dict | None = None
+    index = 0
+    while True:
+        start = tail.find("{", index)
+        if start == -1:
+            break
         try:
-            obj = json.loads(candidate)
+            obj, consumed = decoder.raw_decode(tail[start:])
         except json.JSONDecodeError:
+            index = start + 1
             continue
         if isinstance(obj, dict) and isinstance(obj.get("rewrite"), str):
-            return obj
-    return None
+            parsed = obj
+        index = start + max(consumed, 1)
+    return parsed
 
 
 def call_openai_compatible(endpoint: str, model: str, candidate: Candidate,

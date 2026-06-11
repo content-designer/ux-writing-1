@@ -18,7 +18,6 @@ import html as html_lib
 import json
 import os
 import random
-import re
 import threading
 import time
 import uuid
@@ -115,17 +114,25 @@ def pretty_card(result: dict | None, label: str, reveal: str | None = None,
                      f'<span class="cc-writer__chip">{secs:.1f}s</span></span>')
         head += "</div>"
         text = result.get("text", "")
-        # The contract JSON is flat: scan {…} candidates and keep the LAST parseable one
-        # with a rewrite — a greedy first-{…last-} regex grabs reasoning if it ever leaks.
+        # Keep the LAST parseable JSON object with a string rewrite — a greedy
+        # first-{…last-} regex grabs reasoning if it ever leaks. Scanned with
+        # raw_decode, not a flat {…} regex: rewrites that correctly keep
+        # {{ variables }} contain braces, which a brace regex can never match.
         parsed = None
-        for candidate in reversed(re.findall(r"\{[^{}]*\}", text, re.DOTALL)):
+        _decoder = json.JSONDecoder()
+        _from = 0
+        while True:
+            _start = text.find("{", _from)
+            if _start == -1:
+                break
             try:
-                obj = json.loads(candidate)
-                if isinstance(obj, dict) and isinstance(obj.get("rewrite"), str):
-                    parsed = obj
-                    break
+                _obj, _consumed = _decoder.raw_decode(text[_start:])
             except json.JSONDecodeError:
+                _from = _start + 1
                 continue
+            if isinstance(_obj, dict) and isinstance(_obj.get("rewrite"), str):
+                parsed = _obj
+            _from = _start + max(_consumed, 1)
         # No answer, or a wall of un-JSON text (leaked reasoning) = didn't finish cleanly.
         if not text.strip() or (parsed is None and len(text) > 180):
             body = (f'<p class="cc-writer__reason">🪵 This writer spent the whole token '
