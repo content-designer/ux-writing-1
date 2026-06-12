@@ -31,14 +31,18 @@ On screen: the blinded review spreadsheet, then the reveal moment.
   quality answer). "That difference is your serving bill."
 - "Every vote is preference data — the campfire literally trains v2."
 
-**5. Live demo 2 — scan a real codebase (≈40s)**
-- `python -m uxft.scan` on Cal.com (open-source scheduling app): 200 strings extracted
-  in seconds.
-- `python -m uxft.review_repo` → diff-friendly JSONL of suggestions; show the highlights
-  table (docs/demo/) — and the restraint stat: **187 of 200 strings kept as-is**.
-- The honest cost line (measured, COST_NOTES.md): "**≈8,000 strings an hour** on one
-  rented A100 — about **31 cents per thousand strings** — private, on hardware you
-  control, with **100% valid JSON** output."
+**5. The PostHog showcase (≈45s) — graphics over real artifacts**
+- "We pointed it at PostHog — all of it. 152,713 strings scanned, 10,000 reviewed."
+- Screen-record `docs/video_assets/before_after.html`: real rewrites with file:line
+  ("Invalid" → "Invalid API key"; "Done" → "Save changes"). Click to deal new hands.
+- Then `cost_compare.html` — the bill ladder animates: "**$3.22, 77 minutes**, one rented
+  GPU. The same tokens at GPT-5.5 list prices: **$27** — at Opus list prices: **$26**.
+  About **8× the bill** — and that's before their hidden reasoning tokens." (Estimates
+  labeled on-frame; honest-math footnote is part of the graphic.)
+- The restraint stat: **9,006 of 10,000 strings kept as-is** — "restraint is trained,
+  not hoped for." JSON contract held **9,999 times out of 10,000**.
+- Optional zero-cost b-roll: the local `python -m uxft.scan` run (it's free and takes
+  seconds), but the graphics carry the beat.
 
 **6. Take it home + CTA (≈25s)**
 - Apache-2.0: merged model, LoRA adapter, GGUF for your laptop (LM Studio/Ollama).
@@ -59,16 +63,24 @@ On screen: the blinded review spreadsheet, then the reveal moment.
 | Training cost | ≈$30 of a $250 Modal credit | Modal dashboard |
 | Throughput (batched, A100) | **7,951 strings/hour, $0.31/1K, 100% valid JSON** | docs/COST_NOTES.md (measured) |
 | Unbatched endpoint run | 200 Cal.com strings in 9.9 min (≈$2/1K) | docs/COST_NOTES.md (measured) |
-| vs Opus list price | ≈8–15× cheaper batched (estimate, labeled) | docs/COST_NOTES.md |
 | Cal.com demo | 200 strings → 13 changes, 187 kept (restraint) | docs/demo/ |
+| **PostHog at scale** | **10,000 strings, 77.2 min, $3.22 ($0.32/1K)** | docs/demo/posthog_cost_report.json (measured) |
+| PostHog JSON contract | 9,999/10,000 valid (99.99%) | same artifact (measured) |
+| PostHog restraint | 994 changed, 9,006 kept as-is | same artifact (measured) |
+| Same tokens at list price | Opus 4.8 ≈8×, GPT-5.5 ≈8.5× the measured bill | same artifact (**labeled estimate** — measured tokens × list price) |
+| LoRA fingerprint | MLPs adapted on all 64 layers; late gate_proj hottest | docs/video_assets/adapter_deltas.json (computed from released adapter) |
 
-**Don't claim:** a specific multiple vs Opus pricing (depends on batching + their list
-price changes); anything about screenshot/vision review (unreleased).
+**Don't claim:** that the 8×/8.5× figures are measured frontier runs (they're our
+measured tokens × their list prices — say "at list prices"); 100% JSON on PostHog (it
+was 9,999/10,000); anything about screenshot/vision review (unreleased).
 
 ## Social post draft (submission requirement)
 
 > I fine-tuned a 27B open model on UX writing for ≈$30 — then blind-tested it against
 > its own base model. I picked the fine-tune 83% of the time.
+>
+> Then I pointed it at PostHog: 10,000 UI strings reviewed in 77 min for $3.22 on one
+> rented GPU. The same tokens at frontier list prices: ~$26–27.
 >
 > ⛺ Copy Campfire: paste your worst error message, judge the blind rewrite battle, and
 > your vote trains v2: [space link]
@@ -80,6 +92,14 @@ price changes); anything about screenshot/vision review (unreleased).
 - [ ] Blinded spreadsheet scroll + the unblind tally moment
 - [ ] Campfire battle: paste → two cards → vote → reveal
 - [ ] Lantern mode token counters side by side
-- [ ] Terminal: scan + review commands on Cal.com, JSONL scrolling
+- [ ] `docs/video_assets/before_after.html` — deal 2–3 hands of real PostHog rewrites
+- [ ] `docs/video_assets/cost_compare.html` — bill ladder animating (click to retake)
+- [ ] `docs/video_assets/weights_heatmap.html` — slow hover across cells; the inspector
+      dock narrates each weight in plain language (flash this at beat 3 when QLoRA comes up)
+- [ ] `docs/video_assets/stats_banner.html` — stat cards for cutaways
 - [ ] Model card + GGUF page in LM Studio/Ollama
 - [ ] Trail log tab showing community votes accumulating
+
+All four asset pages are 1920×1080 stages: open locally, click anywhere to replay the
+animation between takes; numbers are injected from run artifacts by
+`scripts/build_video_assets.py` (never hand-typed).

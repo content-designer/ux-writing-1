@@ -1,9 +1,44 @@
 # Cost notes — what reviewing UX copy with ux-writing-1 actually costs
 
-All first-party numbers below are **measured** (June 10, 2026), reproducible with
-[modal_app/bench_throughput.py](../modal_app/bench_throughput.py); the raw result JSON is
-archived at `gr33r/ux-writing-sft · eval_preds/throughput.json`. Frontier-API figures are
-**list-price estimates**, labeled as such.
+All first-party numbers below are **measured** (June 10–12, 2026), reproducible with
+[modal_app/bench_throughput.py](../modal_app/bench_throughput.py) and
+[modal_app/review_posthog.py](../modal_app/review_posthog.py); raw result JSON is archived
+at `gr33r/ux-writing-sft · eval_preds/`. Frontier-API figures are **list-price
+estimates**, labeled as such.
+
+## Measured: PostHog at codebase scale (June 12, 2026)
+
+The headline run: a 10,000-string review of [PostHog](https://github.com/PostHog/posthog)
+(MIT) pinned at `e30273b` — 152,713 raw strings scanned from `frontend/` + `products/`,
+26,061 after UI-copy filters, 10,000 reviewed (seeded sample; provenance in
+[demo/posthog_scan_meta.json](demo/posthog_scan_meta.json)). Same serving config as the
+throughput bench below; per-request token accounting.
+
+| metric | value |
+|---|---|
+| Strings reviewed | **10,000** |
+| Wall-clock | **77.2 min** (76.3 review + 0.9 model load) on one A100-80GB |
+| **Measured cost** | **$3.22** ($0.32 per 1,000 strings, GPU @ $2.50/h list) |
+| Throughput | 7,865 strings/hour |
+| Tokens | 3,590,383 prompt + 313,293 completion |
+| Valid JSON contract | **9,999 / 10,000 (99.99%)** |
+| Restraint | **994 changed, 9,006 kept as-is** |
+
+**The same tokens at API list prices** (pulled 2026-06-12, sources in
+[demo/llm_api_prices.json](demo/llm_api_prices.json)) — estimates, not measured runs:
+
+| model | same-workload bill | per 1K strings | vs measured |
+|---|---|---|---|
+| Qwen3.6-27B via DeepInfra (the base model, rented) | $2.15 | $0.21 | 0.7× |
+| Claude Opus 4.8 | $25.78 | $2.58 | **≈8×** |
+| GPT-5.5 | $27.35 | $2.73 | **≈8.5×** |
+
+Caveats (also embedded in [demo/posthog_cost_report.json](demo/posthog_cost_report.json)):
+token counts use the Qwen3.6 tokenizer (others differ ±~15%); reasoning-mode APIs bill
+hidden thinking tokens as output, which would raise the frontier bills; **no quality
+comparison vs frontier models is claimed** — the quality claim remains 83% blinded human
+preference vs this model's own base ([EVAL_RESULTS.md](EVAL_RESULTS.md)). This measured
+run supersedes the ~450-token assumption in the older estimate section below.
 
 ## Measured: batched review on one rented A100-80GB
 
