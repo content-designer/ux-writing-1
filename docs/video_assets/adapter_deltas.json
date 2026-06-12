@@ -1,0 +1,1552 @@
+{
+  "adapter": "gr33r/ux-writing-1-lora",
+  "metric": "Frobenius norm of B@A per (layer, module)",
+  "layers": 64,
+  "modules": [
+    "down_proj",
+    "gate_proj",
+    "k_proj",
+    "o_proj",
+    "q_proj",
+    "up_proj",
+    "v_proj"
+  ],
+  "deltas": [
+    {
+      "layer": 0,
+      "module": "down_proj",
+      "norm": 0.2419,
+      "intensity": 0.1604
+    },
+    {
+      "layer": 0,
+      "module": "gate_proj",
+      "norm": 0.4133,
+      "intensity": 0.274
+    },
+    {
+      "layer": 0,
+      "module": "up_proj",
+      "norm": 0.3961,
+      "intensity": 0.2626
+    },
+    {
+      "layer": 1,
+      "module": "down_proj",
+      "norm": 0.2335,
+      "intensity": 0.1548
+    },
+    {
+      "layer": 1,
+      "module": "gate_proj",
+      "norm": 0.416,
+      "intensity": 0.2758
+    },
+    {
+      "layer": 1,
+      "module": "up_proj",
+      "norm": 0.418,
+      "intensity": 0.2771
+    },
+    {
+      "layer": 2,
+      "module": "down_proj",
+      "norm": 0.2981,
+      "intensity": 0.1976
+    },
+    {
+      "layer": 2,
+      "module": "gate_proj",
+      "norm": 0.4161,
+      "intensity": 0.2759
+    },
+    {
+      "layer": 2,
+      "module": "up_proj",
+      "norm": 0.4046,
+      "intensity": 0.2682
+    },
+    {
+      "layer": 3,
+      "module": "down_proj",
+      "norm": 0.2164,
+      "intensity": 0.1435
+    },
+    {
+      "layer": 3,
+      "module": "gate_proj",
+      "norm": 0.4035,
+      "intensity": 0.2675
+    },
+    {
+      "layer": 3,
+      "module": "k_proj",
+      "norm": 0.0982,
+      "intensity": 0.0651
+    },
+    {
+      "layer": 3,
+      "module": "o_proj",
+      "norm": 0.2543,
+      "intensity": 0.1686
+    },
+    {
+      "layer": 3,
+      "module": "q_proj",
+      "norm": 0.3642,
+      "intensity": 0.2415
+    },
+    {
+      "layer": 3,
+      "module": "up_proj",
+      "norm": 0.3963,
+      "intensity": 0.2627
+    },
+    {
+      "layer": 3,
+      "module": "v_proj",
+      "norm": 0.1285,
+      "intensity": 0.0852
+    },
+    {
+      "layer": 4,
+      "module": "down_proj",
+      "norm": 0.2287,
+      "intensity": 0.1516
+    },
+    {
+      "layer": 4,
+      "module": "gate_proj",
+      "norm": 0.4234,
+      "intensity": 0.2807
+    },
+    {
+      "layer": 4,
+      "module": "up_proj",
+      "norm": 0.4143,
+      "intensity": 0.2747
+    },
+    {
+      "layer": 5,
+      "module": "down_proj",
+      "norm": 0.2302,
+      "intensity": 0.1526
+    },
+    {
+      "layer": 5,
+      "module": "gate_proj",
+      "norm": 0.4188,
+      "intensity": 0.2777
+    },
+    {
+      "layer": 5,
+      "module": "up_proj",
+      "norm": 0.4202,
+      "intensity": 0.2786
+    },
+    {
+      "layer": 6,
+      "module": "down_proj",
+      "norm": 0.2281,
+      "intensity": 0.1512
+    },
+    {
+      "layer": 6,
+      "module": "gate_proj",
+      "norm": 0.5234,
+      "intensity": 0.347
+    },
+    {
+      "layer": 6,
+      "module": "up_proj",
+      "norm": 0.4592,
+      "intensity": 0.3044
+    },
+    {
+      "layer": 7,
+      "module": "down_proj",
+      "norm": 0.2372,
+      "intensity": 0.1573
+    },
+    {
+      "layer": 7,
+      "module": "gate_proj",
+      "norm": 0.4376,
+      "intensity": 0.2901
+    },
+    {
+      "layer": 7,
+      "module": "k_proj",
+      "norm": 0.1041,
+      "intensity": 0.069
+    },
+    {
+      "layer": 7,
+      "module": "o_proj",
+      "norm": 0.2361,
+      "intensity": 0.1565
+    },
+    {
+      "layer": 7,
+      "module": "q_proj",
+      "norm": 0.4477,
+      "intensity": 0.2968
+    },
+    {
+      "layer": 7,
+      "module": "up_proj",
+      "norm": 0.4193,
+      "intensity": 0.278
+    },
+    {
+      "layer": 7,
+      "module": "v_proj",
+      "norm": 0.1435,
+      "intensity": 0.0951
+    },
+    {
+      "layer": 8,
+      "module": "down_proj",
+      "norm": 0.2416,
+      "intensity": 0.1602
+    },
+    {
+      "layer": 8,
+      "module": "gate_proj",
+      "norm": 0.4169,
+      "intensity": 0.2764
+    },
+    {
+      "layer": 8,
+      "module": "up_proj",
+      "norm": 0.4454,
+      "intensity": 0.2953
+    },
+    {
+      "layer": 9,
+      "module": "down_proj",
+      "norm": 0.2302,
+      "intensity": 0.1526
+    },
+    {
+      "layer": 9,
+      "module": "gate_proj",
+      "norm": 0.4306,
+      "intensity": 0.2855
+    },
+    {
+      "layer": 9,
+      "module": "up_proj",
+      "norm": 0.4089,
+      "intensity": 0.2711
+    },
+    {
+      "layer": 10,
+      "module": "down_proj",
+      "norm": 0.2366,
+      "intensity": 0.1569
+    },
+    {
+      "layer": 10,
+      "module": "gate_proj",
+      "norm": 0.4157,
+      "intensity": 0.2756
+    },
+    {
+      "layer": 10,
+      "module": "up_proj",
+      "norm": 0.4348,
+      "intensity": 0.2883
+    },
+    {
+      "layer": 11,
+      "module": "down_proj",
+      "norm": 0.2281,
+      "intensity": 0.1512
+    },
+    {
+      "layer": 11,
+      "module": "gate_proj",
+      "norm": 0.4196,
+      "intensity": 0.2782
+    },
+    {
+      "layer": 11,
+      "module": "k_proj",
+      "norm": 0.1103,
+      "intensity": 0.0731
+    },
+    {
+      "layer": 11,
+      "module": "o_proj",
+      "norm": 0.3168,
+      "intensity": 0.21
+    },
+    {
+      "layer": 11,
+      "module": "q_proj",
+      "norm": 0.4067,
+      "intensity": 0.2696
+    },
+    {
+      "layer": 11,
+      "module": "up_proj",
+      "norm": 0.4251,
+      "intensity": 0.2818
+    },
+    {
+      "layer": 11,
+      "module": "v_proj",
+      "norm": 0.1291,
+      "intensity": 0.0856
+    },
+    {
+      "layer": 12,
+      "module": "down_proj",
+      "norm": 0.2331,
+      "intensity": 0.1545
+    },
+    {
+      "layer": 12,
+      "module": "gate_proj",
+      "norm": 0.4484,
+      "intensity": 0.2973
+    },
+    {
+      "layer": 12,
+      "module": "up_proj",
+      "norm": 0.4036,
+      "intensity": 0.2676
+    },
+    {
+      "layer": 13,
+      "module": "down_proj",
+      "norm": 0.2302,
+      "intensity": 0.1526
+    },
+    {
+      "layer": 13,
+      "module": "gate_proj",
+      "norm": 0.4156,
+      "intensity": 0.2755
+    },
+    {
+      "layer": 13,
+      "module": "up_proj",
+      "norm": 0.4336,
+      "intensity": 0.2875
+    },
+    {
+      "layer": 14,
+      "module": "down_proj",
+      "norm": 0.2316,
+      "intensity": 0.1535
+    },
+    {
+      "layer": 14,
+      "module": "gate_proj",
+      "norm": 0.399,
+      "intensity": 0.2645
+    },
+    {
+      "layer": 14,
+      "module": "up_proj",
+      "norm": 0.4058,
+      "intensity": 0.269
+    },
+    {
+      "layer": 15,
+      "module": "down_proj",
+      "norm": 0.2469,
+      "intensity": 0.1637
+    },
+    {
+      "layer": 15,
+      "module": "gate_proj",
+      "norm": 0.4342,
+      "intensity": 0.2879
+    },
+    {
+      "layer": 15,
+      "module": "k_proj",
+      "norm": 0.0951,
+      "intensity": 0.063
+    },
+    {
+      "layer": 15,
+      "module": "o_proj",
+      "norm": 0.2671,
+      "intensity": 0.1771
+    },
+    {
+      "layer": 15,
+      "module": "q_proj",
+      "norm": 0.4932,
+      "intensity": 0.327
+    },
+    {
+      "layer": 15,
+      "module": "up_proj",
+      "norm": 0.4233,
+      "intensity": 0.2806
+    },
+    {
+      "layer": 15,
+      "module": "v_proj",
+      "norm": 0.148,
+      "intensity": 0.0981
+    },
+    {
+      "layer": 16,
+      "module": "down_proj",
+      "norm": 0.2577,
+      "intensity": 0.1708
+    },
+    {
+      "layer": 16,
+      "module": "gate_proj",
+      "norm": 0.4197,
+      "intensity": 0.2782
+    },
+    {
+      "layer": 16,
+      "module": "up_proj",
+      "norm": 0.4219,
+      "intensity": 0.2797
+    },
+    {
+      "layer": 17,
+      "module": "down_proj",
+      "norm": 0.2426,
+      "intensity": 0.1608
+    },
+    {
+      "layer": 17,
+      "module": "gate_proj",
+      "norm": 0.4363,
+      "intensity": 0.2893
+    },
+    {
+      "layer": 17,
+      "module": "up_proj",
+      "norm": 0.4145,
+      "intensity": 0.2748
+    },
+    {
+      "layer": 18,
+      "module": "down_proj",
+      "norm": 0.242,
+      "intensity": 0.1604
+    },
+    {
+      "layer": 18,
+      "module": "gate_proj",
+      "norm": 0.4384,
+      "intensity": 0.2906
+    },
+    {
+      "layer": 18,
+      "module": "up_proj",
+      "norm": 0.4436,
+      "intensity": 0.2941
+    },
+    {
+      "layer": 19,
+      "module": "down_proj",
+      "norm": 0.2568,
+      "intensity": 0.1702
+    },
+    {
+      "layer": 19,
+      "module": "gate_proj",
+      "norm": 0.4378,
+      "intensity": 0.2902
+    },
+    {
+      "layer": 19,
+      "module": "k_proj",
+      "norm": 0.1129,
+      "intensity": 0.0748
+    },
+    {
+      "layer": 19,
+      "module": "o_proj",
+      "norm": 0.2575,
+      "intensity": 0.1707
+    },
+    {
+      "layer": 19,
+      "module": "q_proj",
+      "norm": 0.4738,
+      "intensity": 0.3141
+    },
+    {
+      "layer": 19,
+      "module": "up_proj",
+      "norm": 0.446,
+      "intensity": 0.2957
+    },
+    {
+      "layer": 19,
+      "module": "v_proj",
+      "norm": 0.1169,
+      "intensity": 0.0775
+    },
+    {
+      "layer": 20,
+      "module": "down_proj",
+      "norm": 0.2492,
+      "intensity": 0.1652
+    },
+    {
+      "layer": 20,
+      "module": "gate_proj",
+      "norm": 0.4525,
+      "intensity": 0.3
+    },
+    {
+      "layer": 20,
+      "module": "up_proj",
+      "norm": 0.4386,
+      "intensity": 0.2908
+    },
+    {
+      "layer": 21,
+      "module": "down_proj",
+      "norm": 0.2595,
+      "intensity": 0.172
+    },
+    {
+      "layer": 21,
+      "module": "gate_proj",
+      "norm": 0.4471,
+      "intensity": 0.2964
+    },
+    {
+      "layer": 21,
+      "module": "up_proj",
+      "norm": 0.4401,
+      "intensity": 0.2918
+    },
+    {
+      "layer": 22,
+      "module": "down_proj",
+      "norm": 0.2603,
+      "intensity": 0.1726
+    },
+    {
+      "layer": 22,
+      "module": "gate_proj",
+      "norm": 0.4451,
+      "intensity": 0.2951
+    },
+    {
+      "layer": 22,
+      "module": "up_proj",
+      "norm": 0.4422,
+      "intensity": 0.2932
+    },
+    {
+      "layer": 23,
+      "module": "down_proj",
+      "norm": 0.2492,
+      "intensity": 0.1652
+    },
+    {
+      "layer": 23,
+      "module": "gate_proj",
+      "norm": 0.4435,
+      "intensity": 0.294
+    },
+    {
+      "layer": 23,
+      "module": "k_proj",
+      "norm": 0.1051,
+      "intensity": 0.0697
+    },
+    {
+      "layer": 23,
+      "module": "o_proj",
+      "norm": 0.2582,
+      "intensity": 0.1712
+    },
+    {
+      "layer": 23,
+      "module": "q_proj",
+      "norm": 0.4026,
+      "intensity": 0.2669
+    },
+    {
+      "layer": 23,
+      "module": "up_proj",
+      "norm": 0.4454,
+      "intensity": 0.2953
+    },
+    {
+      "layer": 23,
+      "module": "v_proj",
+      "norm": 0.1166,
+      "intensity": 0.0773
+    },
+    {
+      "layer": 24,
+      "module": "down_proj",
+      "norm": 0.2715,
+      "intensity": 0.18
+    },
+    {
+      "layer": 24,
+      "module": "gate_proj",
+      "norm": 0.4726,
+      "intensity": 0.3133
+    },
+    {
+      "layer": 24,
+      "module": "up_proj",
+      "norm": 0.4576,
+      "intensity": 0.3034
+    },
+    {
+      "layer": 25,
+      "module": "down_proj",
+      "norm": 0.273,
+      "intensity": 0.181
+    },
+    {
+      "layer": 25,
+      "module": "gate_proj",
+      "norm": 0.4957,
+      "intensity": 0.3286
+    },
+    {
+      "layer": 25,
+      "module": "up_proj",
+      "norm": 0.464,
+      "intensity": 0.3076
+    },
+    {
+      "layer": 26,
+      "module": "down_proj",
+      "norm": 0.2672,
+      "intensity": 0.1771
+    },
+    {
+      "layer": 26,
+      "module": "gate_proj",
+      "norm": 0.4913,
+      "intensity": 0.3257
+    },
+    {
+      "layer": 26,
+      "module": "up_proj",
+      "norm": 0.4767,
+      "intensity": 0.316
+    },
+    {
+      "layer": 27,
+      "module": "down_proj",
+      "norm": 0.2774,
+      "intensity": 0.1839
+    },
+    {
+      "layer": 27,
+      "module": "gate_proj",
+      "norm": 0.4929,
+      "intensity": 0.3268
+    },
+    {
+      "layer": 27,
+      "module": "k_proj",
+      "norm": 0.1239,
+      "intensity": 0.0821
+    },
+    {
+      "layer": 27,
+      "module": "o_proj",
+      "norm": 0.3038,
+      "intensity": 0.2014
+    },
+    {
+      "layer": 27,
+      "module": "q_proj",
+      "norm": 0.4239,
+      "intensity": 0.281
+    },
+    {
+      "layer": 27,
+      "module": "up_proj",
+      "norm": 0.506,
+      "intensity": 0.3355
+    },
+    {
+      "layer": 27,
+      "module": "v_proj",
+      "norm": 0.1415,
+      "intensity": 0.0938
+    },
+    {
+      "layer": 28,
+      "module": "down_proj",
+      "norm": 0.3042,
+      "intensity": 0.2017
+    },
+    {
+      "layer": 28,
+      "module": "gate_proj",
+      "norm": 0.5545,
+      "intensity": 0.3676
+    },
+    {
+      "layer": 28,
+      "module": "up_proj",
+      "norm": 0.5035,
+      "intensity": 0.3338
+    },
+    {
+      "layer": 29,
+      "module": "down_proj",
+      "norm": 0.2887,
+      "intensity": 0.1914
+    },
+    {
+      "layer": 29,
+      "module": "gate_proj",
+      "norm": 0.5743,
+      "intensity": 0.3807
+    },
+    {
+      "layer": 29,
+      "module": "up_proj",
+      "norm": 0.5138,
+      "intensity": 0.3406
+    },
+    {
+      "layer": 30,
+      "module": "down_proj",
+      "norm": 0.3077,
+      "intensity": 0.204
+    },
+    {
+      "layer": 30,
+      "module": "gate_proj",
+      "norm": 0.5643,
+      "intensity": 0.3741
+    },
+    {
+      "layer": 30,
+      "module": "up_proj",
+      "norm": 0.5226,
+      "intensity": 0.3465
+    },
+    {
+      "layer": 31,
+      "module": "down_proj",
+      "norm": 0.3139,
+      "intensity": 0.2081
+    },
+    {
+      "layer": 31,
+      "module": "gate_proj",
+      "norm": 0.5396,
+      "intensity": 0.3577
+    },
+    {
+      "layer": 31,
+      "module": "k_proj",
+      "norm": 0.1205,
+      "intensity": 0.0799
+    },
+    {
+      "layer": 31,
+      "module": "o_proj",
+      "norm": 0.3038,
+      "intensity": 0.2014
+    },
+    {
+      "layer": 31,
+      "module": "q_proj",
+      "norm": 0.5534,
+      "intensity": 0.3669
+    },
+    {
+      "layer": 31,
+      "module": "up_proj",
+      "norm": 0.5256,
+      "intensity": 0.3485
+    },
+    {
+      "layer": 31,
+      "module": "v_proj",
+      "norm": 0.1477,
+      "intensity": 0.0979
+    },
+    {
+      "layer": 32,
+      "module": "down_proj",
+      "norm": 0.3346,
+      "intensity": 0.2218
+    },
+    {
+      "layer": 32,
+      "module": "gate_proj",
+      "norm": 0.623,
+      "intensity": 0.413
+    },
+    {
+      "layer": 32,
+      "module": "up_proj",
+      "norm": 0.535,
+      "intensity": 0.3547
+    },
+    {
+      "layer": 33,
+      "module": "down_proj",
+      "norm": 0.3431,
+      "intensity": 0.2275
+    },
+    {
+      "layer": 33,
+      "module": "gate_proj",
+      "norm": 0.6245,
+      "intensity": 0.414
+    },
+    {
+      "layer": 33,
+      "module": "up_proj",
+      "norm": 0.5523,
+      "intensity": 0.3662
+    },
+    {
+      "layer": 34,
+      "module": "down_proj",
+      "norm": 0.3438,
+      "intensity": 0.2279
+    },
+    {
+      "layer": 34,
+      "module": "gate_proj",
+      "norm": 0.6558,
+      "intensity": 0.4348
+    },
+    {
+      "layer": 34,
+      "module": "up_proj",
+      "norm": 0.6092,
+      "intensity": 0.4039
+    },
+    {
+      "layer": 35,
+      "module": "down_proj",
+      "norm": 0.3531,
+      "intensity": 0.2341
+    },
+    {
+      "layer": 35,
+      "module": "gate_proj",
+      "norm": 0.7586,
+      "intensity": 0.5029
+    },
+    {
+      "layer": 35,
+      "module": "k_proj",
+      "norm": 0.1514,
+      "intensity": 0.1004
+    },
+    {
+      "layer": 35,
+      "module": "o_proj",
+      "norm": 0.3395,
+      "intensity": 0.2251
+    },
+    {
+      "layer": 35,
+      "module": "q_proj",
+      "norm": 0.5608,
+      "intensity": 0.3718
+    },
+    {
+      "layer": 35,
+      "module": "up_proj",
+      "norm": 0.5645,
+      "intensity": 0.3742
+    },
+    {
+      "layer": 35,
+      "module": "v_proj",
+      "norm": 0.1446,
+      "intensity": 0.0959
+    },
+    {
+      "layer": 36,
+      "module": "down_proj",
+      "norm": 0.3622,
+      "intensity": 0.2401
+    },
+    {
+      "layer": 36,
+      "module": "gate_proj",
+      "norm": 0.6666,
+      "intensity": 0.4419
+    },
+    {
+      "layer": 36,
+      "module": "up_proj",
+      "norm": 0.6011,
+      "intensity": 0.3985
+    },
+    {
+      "layer": 37,
+      "module": "down_proj",
+      "norm": 0.3348,
+      "intensity": 0.222
+    },
+    {
+      "layer": 37,
+      "module": "gate_proj",
+      "norm": 0.6705,
+      "intensity": 0.4445
+    },
+    {
+      "layer": 37,
+      "module": "up_proj",
+      "norm": 0.5945,
+      "intensity": 0.3941
+    },
+    {
+      "layer": 38,
+      "module": "down_proj",
+      "norm": 0.3221,
+      "intensity": 0.2135
+    },
+    {
+      "layer": 38,
+      "module": "gate_proj",
+      "norm": 0.719,
+      "intensity": 0.4767
+    },
+    {
+      "layer": 38,
+      "module": "up_proj",
+      "norm": 0.6234,
+      "intensity": 0.4133
+    },
+    {
+      "layer": 39,
+      "module": "down_proj",
+      "norm": 0.3169,
+      "intensity": 0.2101
+    },
+    {
+      "layer": 39,
+      "module": "gate_proj",
+      "norm": 0.6494,
+      "intensity": 0.4305
+    },
+    {
+      "layer": 39,
+      "module": "k_proj",
+      "norm": 0.1394,
+      "intensity": 0.0924
+    },
+    {
+      "layer": 39,
+      "module": "o_proj",
+      "norm": 0.3548,
+      "intensity": 0.2352
+    },
+    {
+      "layer": 39,
+      "module": "q_proj",
+      "norm": 0.6363,
+      "intensity": 0.4218
+    },
+    {
+      "layer": 39,
+      "module": "up_proj",
+      "norm": 0.5633,
+      "intensity": 0.3734
+    },
+    {
+      "layer": 39,
+      "module": "v_proj",
+      "norm": 0.1589,
+      "intensity": 0.1053
+    },
+    {
+      "layer": 40,
+      "module": "down_proj",
+      "norm": 0.3396,
+      "intensity": 0.2251
+    },
+    {
+      "layer": 40,
+      "module": "gate_proj",
+      "norm": 0.6882,
+      "intensity": 0.4563
+    },
+    {
+      "layer": 40,
+      "module": "up_proj",
+      "norm": 0.5822,
+      "intensity": 0.386
+    },
+    {
+      "layer": 41,
+      "module": "down_proj",
+      "norm": 0.345,
+      "intensity": 0.2287
+    },
+    {
+      "layer": 41,
+      "module": "gate_proj",
+      "norm": 0.683,
+      "intensity": 0.4528
+    },
+    {
+      "layer": 41,
+      "module": "up_proj",
+      "norm": 0.5711,
+      "intensity": 0.3786
+    },
+    {
+      "layer": 42,
+      "module": "down_proj",
+      "norm": 0.3388,
+      "intensity": 0.2246
+    },
+    {
+      "layer": 42,
+      "module": "gate_proj",
+      "norm": 0.6536,
+      "intensity": 0.4333
+    },
+    {
+      "layer": 42,
+      "module": "up_proj",
+      "norm": 0.629,
+      "intensity": 0.417
+    },
+    {
+      "layer": 43,
+      "module": "down_proj",
+      "norm": 0.371,
+      "intensity": 0.246
+    },
+    {
+      "layer": 43,
+      "module": "gate_proj",
+      "norm": 0.7309,
+      "intensity": 0.4846
+    },
+    {
+      "layer": 43,
+      "module": "k_proj",
+      "norm": 0.1607,
+      "intensity": 0.1065
+    },
+    {
+      "layer": 43,
+      "module": "o_proj",
+      "norm": 0.3551,
+      "intensity": 0.2354
+    },
+    {
+      "layer": 43,
+      "module": "q_proj",
+      "norm": 0.65,
+      "intensity": 0.4309
+    },
+    {
+      "layer": 43,
+      "module": "up_proj",
+      "norm": 0.6267,
+      "intensity": 0.4155
+    },
+    {
+      "layer": 43,
+      "module": "v_proj",
+      "norm": 0.1587,
+      "intensity": 0.1052
+    },
+    {
+      "layer": 44,
+      "module": "down_proj",
+      "norm": 0.3558,
+      "intensity": 0.2359
+    },
+    {
+      "layer": 44,
+      "module": "gate_proj",
+      "norm": 0.7575,
+      "intensity": 0.5022
+    },
+    {
+      "layer": 44,
+      "module": "up_proj",
+      "norm": 0.6162,
+      "intensity": 0.4085
+    },
+    {
+      "layer": 45,
+      "module": "down_proj",
+      "norm": 0.3511,
+      "intensity": 0.2328
+    },
+    {
+      "layer": 45,
+      "module": "gate_proj",
+      "norm": 0.7782,
+      "intensity": 0.5159
+    },
+    {
+      "layer": 45,
+      "module": "up_proj",
+      "norm": 0.6275,
+      "intensity": 0.416
+    },
+    {
+      "layer": 46,
+      "module": "down_proj",
+      "norm": 0.3603,
+      "intensity": 0.2389
+    },
+    {
+      "layer": 46,
+      "module": "gate_proj",
+      "norm": 0.7639,
+      "intensity": 0.5064
+    },
+    {
+      "layer": 46,
+      "module": "up_proj",
+      "norm": 0.6624,
+      "intensity": 0.4391
+    },
+    {
+      "layer": 47,
+      "module": "down_proj",
+      "norm": 0.3585,
+      "intensity": 0.2377
+    },
+    {
+      "layer": 47,
+      "module": "gate_proj",
+      "norm": 0.7825,
+      "intensity": 0.5188
+    },
+    {
+      "layer": 47,
+      "module": "k_proj",
+      "norm": 0.1522,
+      "intensity": 0.1009
+    },
+    {
+      "layer": 47,
+      "module": "o_proj",
+      "norm": 0.3292,
+      "intensity": 0.2182
+    },
+    {
+      "layer": 47,
+      "module": "q_proj",
+      "norm": 0.6828,
+      "intensity": 0.4527
+    },
+    {
+      "layer": 47,
+      "module": "up_proj",
+      "norm": 0.6585,
+      "intensity": 0.4366
+    },
+    {
+      "layer": 47,
+      "module": "v_proj",
+      "norm": 0.1513,
+      "intensity": 0.1003
+    },
+    {
+      "layer": 48,
+      "module": "down_proj",
+      "norm": 0.3603,
+      "intensity": 0.2389
+    },
+    {
+      "layer": 48,
+      "module": "gate_proj",
+      "norm": 0.9199,
+      "intensity": 0.6099
+    },
+    {
+      "layer": 48,
+      "module": "up_proj",
+      "norm": 0.7204,
+      "intensity": 0.4776
+    },
+    {
+      "layer": 49,
+      "module": "down_proj",
+      "norm": 0.3848,
+      "intensity": 0.2551
+    },
+    {
+      "layer": 49,
+      "module": "gate_proj",
+      "norm": 0.947,
+      "intensity": 0.6278
+    },
+    {
+      "layer": 49,
+      "module": "up_proj",
+      "norm": 0.787,
+      "intensity": 0.5218
+    },
+    {
+      "layer": 50,
+      "module": "down_proj",
+      "norm": 0.422,
+      "intensity": 0.2798
+    },
+    {
+      "layer": 50,
+      "module": "gate_proj",
+      "norm": 1.0613,
+      "intensity": 0.7036
+    },
+    {
+      "layer": 50,
+      "module": "up_proj",
+      "norm": 0.7753,
+      "intensity": 0.514
+    },
+    {
+      "layer": 51,
+      "module": "down_proj",
+      "norm": 0.4381,
+      "intensity": 0.2904
+    },
+    {
+      "layer": 51,
+      "module": "gate_proj",
+      "norm": 0.9644,
+      "intensity": 0.6394
+    },
+    {
+      "layer": 51,
+      "module": "k_proj",
+      "norm": 0.1688,
+      "intensity": 0.1119
+    },
+    {
+      "layer": 51,
+      "module": "o_proj",
+      "norm": 0.354,
+      "intensity": 0.2347
+    },
+    {
+      "layer": 51,
+      "module": "q_proj",
+      "norm": 0.7864,
+      "intensity": 0.5214
+    },
+    {
+      "layer": 51,
+      "module": "up_proj",
+      "norm": 0.7426,
+      "intensity": 0.4923
+    },
+    {
+      "layer": 51,
+      "module": "v_proj",
+      "norm": 0.1676,
+      "intensity": 0.1111
+    },
+    {
+      "layer": 52,
+      "module": "down_proj",
+      "norm": 0.4312,
+      "intensity": 0.2859
+    },
+    {
+      "layer": 52,
+      "module": "gate_proj",
+      "norm": 0.9704,
+      "intensity": 0.6433
+    },
+    {
+      "layer": 52,
+      "module": "up_proj",
+      "norm": 0.768,
+      "intensity": 0.5092
+    },
+    {
+      "layer": 53,
+      "module": "down_proj",
+      "norm": 0.3974,
+      "intensity": 0.2635
+    },
+    {
+      "layer": 53,
+      "module": "gate_proj",
+      "norm": 1.0062,
+      "intensity": 0.6671
+    },
+    {
+      "layer": 53,
+      "module": "up_proj",
+      "norm": 0.8196,
+      "intensity": 0.5434
+    },
+    {
+      "layer": 54,
+      "module": "down_proj",
+      "norm": 0.4216,
+      "intensity": 0.2795
+    },
+    {
+      "layer": 54,
+      "module": "gate_proj",
+      "norm": 1.1421,
+      "intensity": 0.7572
+    },
+    {
+      "layer": 54,
+      "module": "up_proj",
+      "norm": 0.8465,
+      "intensity": 0.5612
+    },
+    {
+      "layer": 55,
+      "module": "down_proj",
+      "norm": 0.3946,
+      "intensity": 0.2616
+    },
+    {
+      "layer": 55,
+      "module": "gate_proj",
+      "norm": 1.0427,
+      "intensity": 0.6913
+    },
+    {
+      "layer": 55,
+      "module": "k_proj",
+      "norm": 0.1676,
+      "intensity": 0.1111
+    },
+    {
+      "layer": 55,
+      "module": "o_proj",
+      "norm": 0.3499,
+      "intensity": 0.232
+    },
+    {
+      "layer": 55,
+      "module": "q_proj",
+      "norm": 0.6836,
+      "intensity": 0.4532
+    },
+    {
+      "layer": 55,
+      "module": "up_proj",
+      "norm": 0.7705,
+      "intensity": 0.5108
+    },
+    {
+      "layer": 55,
+      "module": "v_proj",
+      "norm": 0.1691,
+      "intensity": 0.1121
+    },
+    {
+      "layer": 56,
+      "module": "down_proj",
+      "norm": 0.4085,
+      "intensity": 0.2708
+    },
+    {
+      "layer": 56,
+      "module": "gate_proj",
+      "norm": 1.1107,
+      "intensity": 0.7364
+    },
+    {
+      "layer": 56,
+      "module": "up_proj",
+      "norm": 0.8431,
+      "intensity": 0.5589
+    },
+    {
+      "layer": 57,
+      "module": "down_proj",
+      "norm": 0.4564,
+      "intensity": 0.3026
+    },
+    {
+      "layer": 57,
+      "module": "gate_proj",
+      "norm": 1.2052,
+      "intensity": 0.799
+    },
+    {
+      "layer": 57,
+      "module": "up_proj",
+      "norm": 0.8863,
+      "intensity": 0.5876
+    },
+    {
+      "layer": 58,
+      "module": "down_proj",
+      "norm": 0.4248,
+      "intensity": 0.2816
+    },
+    {
+      "layer": 58,
+      "module": "gate_proj",
+      "norm": 1.2323,
+      "intensity": 0.817
+    },
+    {
+      "layer": 58,
+      "module": "up_proj",
+      "norm": 0.8388,
+      "intensity": 0.5561
+    },
+    {
+      "layer": 59,
+      "module": "down_proj",
+      "norm": 0.4571,
+      "intensity": 0.303
+    },
+    {
+      "layer": 59,
+      "module": "gate_proj",
+      "norm": 1.4024,
+      "intensity": 0.9297
+    },
+    {
+      "layer": 59,
+      "module": "k_proj",
+      "norm": 0.1397,
+      "intensity": 0.0926
+    },
+    {
+      "layer": 59,
+      "module": "o_proj",
+      "norm": 0.3888,
+      "intensity": 0.2578
+    },
+    {
+      "layer": 59,
+      "module": "q_proj",
+      "norm": 0.6088,
+      "intensity": 0.4036
+    },
+    {
+      "layer": 59,
+      "module": "up_proj",
+      "norm": 0.8763,
+      "intensity": 0.581
+    },
+    {
+      "layer": 59,
+      "module": "v_proj",
+      "norm": 0.1679,
+      "intensity": 0.1113
+    },
+    {
+      "layer": 60,
+      "module": "down_proj",
+      "norm": 0.4655,
+      "intensity": 0.3086
+    },
+    {
+      "layer": 60,
+      "module": "gate_proj",
+      "norm": 1.5084,
+      "intensity": 1.0
+    },
+    {
+      "layer": 60,
+      "module": "up_proj",
+      "norm": 0.9213,
+      "intensity": 0.6108
+    },
+    {
+      "layer": 61,
+      "module": "down_proj",
+      "norm": 0.4494,
+      "intensity": 0.2979
+    },
+    {
+      "layer": 61,
+      "module": "gate_proj",
+      "norm": 1.3011,
+      "intensity": 0.8626
+    },
+    {
+      "layer": 61,
+      "module": "up_proj",
+      "norm": 0.7882,
+      "intensity": 0.5226
+    },
+    {
+      "layer": 62,
+      "module": "down_proj",
+      "norm": 0.5011,
+      "intensity": 0.3322
+    },
+    {
+      "layer": 62,
+      "module": "gate_proj",
+      "norm": 1.4447,
+      "intensity": 0.9578
+    },
+    {
+      "layer": 62,
+      "module": "up_proj",
+      "norm": 0.8828,
+      "intensity": 0.5853
+    },
+    {
+      "layer": 63,
+      "module": "down_proj",
+      "norm": 0.5558,
+      "intensity": 0.3685
+    },
+    {
+      "layer": 63,
+      "module": "gate_proj",
+      "norm": 1.3205,
+      "intensity": 0.8754
+    },
+    {
+      "layer": 63,
+      "module": "k_proj",
+      "norm": 0.1386,
+      "intensity": 0.0919
+    },
+    {
+      "layer": 63,
+      "module": "o_proj",
+      "norm": 0.3949,
+      "intensity": 0.2618
+    },
+    {
+      "layer": 63,
+      "module": "q_proj",
+      "norm": 0.8027,
+      "intensity": 0.5322
+    },
+    {
+      "layer": 63,
+      "module": "up_proj",
+      "norm": 1.1291,
+      "intensity": 0.7486
+    },
+    {
+      "layer": 63,
+      "module": "v_proj",
+      "norm": 0.1767,
+      "intensity": 0.1171
+    }
+  ]
+}
