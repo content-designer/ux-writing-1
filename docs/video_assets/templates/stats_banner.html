@@ -74,13 +74,13 @@ function build() {
 }
 
 function animate() {
-  document.querySelectorAll(".card").forEach(c => c.classList.remove("on"));
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    document.querySelectorAll(".card").forEach((c, i) => {
-      c.style.transitionDelay = (i * 0.18) + "s";
-      c.classList.add("on");
-    });
-  }));
+  const cards = document.querySelectorAll(".card");
+  cards.forEach(c => c.classList.remove("on"));
+  void document.getElementById("cards").offsetWidth; // flush layout so transitions run
+  cards.forEach((c, i) => {
+    c.style.transitionDelay = (i * 0.18) + "s";
+    c.classList.add("on");
+  });
 }
 
 function fit() {

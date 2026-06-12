@@ -9,11 +9,11 @@
 /*__CAMPFIRE_CSS__*/
 
 .content { position: absolute; left: 90px; right: 90px; top: 110px; }
-.headline { font-size: 84px; margin-top: 10px; }
+.headline { font-size: 70px; margin-top: 10px; white-space: nowrap; }
 .subline { font-family: var(--font-sans); font-size: 30px; color: var(--text-muted); margin-top: 18px; }
 .subline b { color: var(--bark-700); font-weight: 800; }
 
-.ladder { margin-top: 72px; display: flex; flex-direction: column; gap: 44px; }
+.ladder { margin-top: 56px; display: flex; flex-direction: column; gap: 40px; }
 .row { display: grid; grid-template-columns: 430px 1fr 300px; align-items: center; gap: 36px; }
 .row .who { text-align: right; }
 .row .who .name { font-family: var(--font-display); font-weight: 900; font-size: 34px; color: var(--text-strong); }
@@ -25,9 +25,10 @@
 .bar.ours { background: linear-gradient(90deg, var(--gold-400), var(--ember-500) 55%, var(--fire-500));
             box-shadow: 0 4px 18px rgba(242,100,27,.35); }
 .bar.them { background: linear-gradient(90deg, var(--bark-500), var(--bark-700)); }
-.mult { position: absolute; right: -14px; top: 50%; transform: translate(100%, -50%);
-        font-family: var(--font-display); font-weight: 900; font-size: 30px; color: var(--fire-600);
-        opacity: 0; transition: opacity .5s ease 2.1s; white-space: nowrap; }
+.mult { position: absolute; right: 22px; top: 50%; transform: translateY(-50%);
+        font-family: var(--font-display); font-weight: 900; font-size: 30px; color: var(--parch-100);
+        opacity: 0; transition: opacity .5s ease 2.1s; white-space: nowrap;
+        text-shadow: 0 1px 2px rgba(39,26,15,.4); }
 .amount { font-family: var(--font-display); font-weight: 900; font-size: 56px; color: var(--text-strong);
           font-variant-numeric: tabular-nums; }
 .amount small { display: block; font-family: var(--font-mono); font-weight: 400; font-size: 18px;
@@ -43,7 +44,7 @@
   <div class="brand"><span class="flame">⛺</span> ux-writing-1</div>
   <div class="content">
     <div class="kicker">We reviewed every sampled UI string in PostHog.</div>
-    <div class="headline">The same job, three bills.</div>
+    <div class="headline">Same job. Very different bills.</div>
     <div class="subline" id="subline"></div>
     <div class="ladder" id="ladder"></div>
   </div>
@@ -89,8 +90,8 @@ function build() {
     row.innerHTML = `
       <div class="who"><div class="name">${r.name}</div><div class="tag">${r.tag}</div></div>
       <div class="track"><div class="bar ${r.ours ? "ours" : "them"}" data-w="${(r.usd / maxUsd * 100).toFixed(1)}">
-        ${r.mult ? `<div class="mult">≈${r.mult}×</div>` : ""}</div></div>
-      <div><div class="amount" data-usd="${r.usd}">$0.00<small>${fmtUSD(r.per1k)} / 1K strings · <span class="estflag">${r.flag}</span></small></div></div>`;
+        ${r.mult && r.mult >= 2 ? `<div class="mult">≈${r.mult}× the bill</div>` : ""}</div></div>
+      <div><div class="amount" data-usd="${r.usd}">$0.00<small>${fmtUSD(r.per1k)}/1K · <span class="estflag">${r.flag}</span></small></div></div>`;
     ladder.appendChild(row);
   }
 
@@ -102,12 +103,14 @@ function build() {
 }
 
 function animate() {
-  // bars
+  // bars — force-reflow trigger (rAF stalls in background tabs)
   document.querySelectorAll(".bar").forEach((b, i) => {
     b.style.transitionDelay = (i * 0.25) + "s";
     b.style.width = "0%";
-    requestAnimationFrame(() => requestAnimationFrame(() => { b.style.width = b.dataset.w + "%"; }));
+    void b.offsetWidth; // flush layout so the transition runs
+    b.style.width = b.dataset.w + "%";
   });
+  document.querySelectorAll(".mult").forEach(m => { m.style.opacity = 1; });
   // counters
   document.querySelectorAll(".amount").forEach((el, i) => {
     const target = parseFloat(el.dataset.usd);

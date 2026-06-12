@@ -135,15 +135,15 @@ function animate() {
     c.classList.remove("on");
     c.style.opacity = 0; c.style.transform = "scale(.6)";
   });
-  document.getElementById("callout").style.opacity = 0;
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    document.querySelectorAll(".cell").forEach(c => {
-      c.classList.add("on");
-      c.style.transitionDelay = (c.dataset.layer * 0.028) + "s";
-      c.style.opacity = 1; c.style.transform = "scale(1)";
-    });
-    document.getElementById("callout").style.opacity = 1;
-  }));
+  const callout = document.getElementById("callout");
+  callout.style.opacity = 0;
+  void callout.offsetWidth; // flush layout so transitions run (rAF stalls in background tabs)
+  document.querySelectorAll(".cell").forEach(c => {
+    c.classList.add("on");
+    c.style.transitionDelay = (c.dataset.layer * 0.028) + "s";
+    c.style.opacity = 1; c.style.transform = "scale(1)";
+  });
+  callout.style.opacity = 1;
 }
 
 function fit() {
