@@ -57,7 +57,7 @@
 <body>
 <div class="stage-wrap"><div class="stage" id="stage">
   <div class="stage-embers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-  <div class="replay-hint">click anywhere to replay</div>
+  <div class="replay-hint">click anywhere for four more rewrites</div>
   <div class="brand"><span class="flame">⛺</span> ux-writing-1</div>
   <div class="content">
     <div class="kicker">Straight from the PostHog run — file and line included, nothing mocked up.</div>
@@ -74,10 +74,14 @@ function esc(s) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+const HAND = 4;
+let page = 0;
+
 function build() {
   const wrap = document.getElementById("cards");
   wrap.innerHTML = "";
-  DATA.highlights.slice(0, 4).forEach((h, i) => {
+  const start = page * HAND;
+  DATA.highlights.slice(start, start + HAND).forEach((h, i) => {
     const el = document.createElement("div");
     el.className = "card";
     // stagger the strike/reveal beats per card so the page reads card by card
@@ -117,7 +121,11 @@ addEventListener("resize", fit); fit();
 
 build();
 setTimeout(animate, 600);
-addEventListener("click", () => { build(); setTimeout(animate, 120); });
+addEventListener("click", () => {
+  page = (page + 1) % Math.max(1, Math.ceil(DATA.highlights.length / HAND));
+  build();
+  setTimeout(animate, 120);
+});
 </script>
 </body>
 </html>

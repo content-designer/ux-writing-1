@@ -13,14 +13,23 @@ import json
 from pathlib import Path
 
 # (path, line) of curated rows — chosen for clear, honest, video-sized wins.
-# Template renders the first four; spares below let Chris swap without re-curating.
+# The page shows hands of four; each click deals the next four, wrapping around.
 PICKS: list[tuple[str, int]] = [
+    # hand 1
     ("products/ai_observability/frontend/settings/LLMProviderKeysSettings.tsx", 54),   # 'Invalid' -> 'Invalid API key'
     ("frontend/src/scenes/feature-flags/FeatureFlagSettings.tsx", 209),                # 'Done' -> 'Save changes'
     ("products/actions/frontend/components/ActionsTable.tsx", 172),                    # empty-state rewrite
     ("frontend/src/queries/validators.js", 12473),                                     # 'must be string' -> plain language
-    ("products/workflows/frontend/Channels/SlackSetup/SlackSetupModal.tsx", 19),       # spare: 'Connect Slack'
-    ("frontend/src/lib/components/AuthorizedUrlList/AuthorizedUrlList.tsx", 179),      # spare: 'NB...' -> direct instruction
+    # hand 2
+    ("products/workflows/frontend/Channels/SlackSetup/SlackSetupModal.tsx", 19),       # 'Connect Slack'
+    ("frontend/src/lib/components/AuthorizedUrlList/AuthorizedUrlList.tsx", 179),      # 'NB...' -> direct instruction
+    ("products/ai_observability/frontend/clusters/ClusterDetailScatterPlot.tsx", 193), # 'click to view trace' -> 'View trace'
+    ("products/conversations/frontend/browserNotificationLogic.ts", 99),               # 'Click to view...' -> 'View...'
+    # hand 3
+    ("products/workflows/frontend/Workflows/hogflows/panel/testing/hogFlowEditorTestLogic.ts", 571),  # 'Invalid JSON' -> specific
+    ("frontend/src/queries/validators.js", 11531),                                     # additionalProperties -> plain language
+    ("frontend/src/queries/nodes/InsightViz/TrendsFormula.tsx", 145),                  # consequence-bearing button label
+    ("frontend/src/queries/validators.js", 5618),                                      # descriptive key guidance
 ]
 
 AUTO_LIMIT = 12

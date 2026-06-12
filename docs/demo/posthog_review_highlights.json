@@ -49,6 +49,54 @@
       "before": "NB you need to have added posthog to the `window`",
       "after": "Make sure PostHog is on the window object before you run this.",
       "reason": "Uses a direct instruction instead of an abbreviation."
+    },
+    {
+      "path": "products/ai_observability/frontend/clusters/ClusterDetailScatterPlot.tsx",
+      "line": 193,
+      "kind": "button_or_label",
+      "before": "click to view trace",
+      "after": "View trace",
+      "reason": "Removes redundant instruction for a visible control."
+    },
+    {
+      "path": "products/conversations/frontend/browserNotificationLogic.ts",
+      "line": 99,
+      "kind": "body_copy",
+      "before": "Click to view your support tickets",
+      "after": "View your support tickets",
+      "reason": "Uses a direct action for the notification."
+    },
+    {
+      "path": "products/workflows/frontend/Workflows/hogflows/panel/testing/hogFlowEditorTestLogic.ts",
+      "line": 571,
+      "kind": "error",
+      "before": "Invalid JSON",
+      "after": "Globals must be valid JSON",
+      "reason": "Uses the field name and states the requirement."
+    },
+    {
+      "path": "frontend/src/queries/validators.js",
+      "line": 11531,
+      "kind": "body_copy",
+      "before": "must NOT have additional properties",
+      "after": "Only use the fields that are listed. Extra fields aren't allowed.",
+      "reason": "Replaces schema language with a concrete constraint."
+    },
+    {
+      "path": "frontend/src/queries/nodes/InsightViz/TrendsFormula.tsx",
+      "line": 145,
+      "kind": "button_or_label",
+      "before": "Remove formula",
+      "after": "Remove formula and disable formula mode",
+      "reason": "Explains the extra effect when it's the last formula."
+    },
+    {
+      "path": "frontend/src/queries/validators.js",
+      "line": 5618,
+      "kind": "button_or_label",
+      "before": "must be string",
+      "after": "Enter a short, descriptive key (for example, user_id).",
+      "reason": "Explains the expected input with an example."
     }
   ]
 }

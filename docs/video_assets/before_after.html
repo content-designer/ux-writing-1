@@ -176,7 +176,7 @@ html, body { background: var(--bark-900); }
 <body>
 <div class="stage-wrap"><div class="stage" id="stage">
   <div class="stage-embers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-  <div class="replay-hint">click anywhere to replay</div>
+  <div class="replay-hint">click anywhere for four more rewrites</div>
   <div class="brand"><span class="flame">⛺</span> ux-writing-1</div>
   <div class="content">
     <div class="kicker">Straight from the PostHog run — file and line included, nothing mocked up.</div>
@@ -187,16 +187,20 @@ html, body { background: var(--bark-900); }
 </div></div>
 
 <script>
-const DATA = {"source": "eval_preds/posthog_review.jsonl (gr33r/ux-writing-sft)", "note": "curated subset; picks pinned by (path, line) in scripts/pick_highlights.py", "highlights": [{"path": "products/ai_observability/frontend/settings/LLMProviderKeysSettings.tsx", "line": 54, "kind": "error", "before": "Invalid", "after": "Invalid API key", "reason": "Names the exact problem."}, {"path": "frontend/src/scenes/feature-flags/FeatureFlagSettings.tsx", "line": 209, "kind": "button_or_label", "before": "Done", "after": "Save changes", "reason": "Uses the primary verb for the action."}, {"path": "products/actions/frontend/components/ActionsTable.tsx", "line": 172, "kind": "body_copy", "before": "Empty \u2013 set this action up", "after": "No actions yet \u2014 add one to get started", "reason": "Uses a clearer empty-state prompt."}, {"path": "frontend/src/queries/validators.js", "line": 12473, "kind": "button_or_label", "before": "must be string", "after": "Enter a single line of text", "reason": "Uses plain language for a form-field constraint."}, {"path": "products/workflows/frontend/Channels/SlackSetup/SlackSetupModal.tsx", "line": 19, "kind": "button_or_label", "before": "Configure Slack integration", "after": "Connect Slack", "reason": "Uses a concrete action and platform name."}, {"path": "frontend/src/lib/components/AuthorizedUrlList/AuthorizedUrlList.tsx", "line": 179, "kind": "body_copy", "before": "NB you need to have added posthog to the `window`", "after": "Make sure PostHog is on the window object before you run this.", "reason": "Uses a direct instruction instead of an abbreviation."}]};
+const DATA = {"source": "eval_preds/posthog_review.jsonl (gr33r/ux-writing-sft)", "note": "curated subset; picks pinned by (path, line) in scripts/pick_highlights.py", "highlights": [{"path": "products/ai_observability/frontend/settings/LLMProviderKeysSettings.tsx", "line": 54, "kind": "error", "before": "Invalid", "after": "Invalid API key", "reason": "Names the exact problem."}, {"path": "frontend/src/scenes/feature-flags/FeatureFlagSettings.tsx", "line": 209, "kind": "button_or_label", "before": "Done", "after": "Save changes", "reason": "Uses the primary verb for the action."}, {"path": "products/actions/frontend/components/ActionsTable.tsx", "line": 172, "kind": "body_copy", "before": "Empty \u2013 set this action up", "after": "No actions yet \u2014 add one to get started", "reason": "Uses a clearer empty-state prompt."}, {"path": "frontend/src/queries/validators.js", "line": 12473, "kind": "button_or_label", "before": "must be string", "after": "Enter a single line of text", "reason": "Uses plain language for a form-field constraint."}, {"path": "products/workflows/frontend/Channels/SlackSetup/SlackSetupModal.tsx", "line": 19, "kind": "button_or_label", "before": "Configure Slack integration", "after": "Connect Slack", "reason": "Uses a concrete action and platform name."}, {"path": "frontend/src/lib/components/AuthorizedUrlList/AuthorizedUrlList.tsx", "line": 179, "kind": "body_copy", "before": "NB you need to have added posthog to the `window`", "after": "Make sure PostHog is on the window object before you run this.", "reason": "Uses a direct instruction instead of an abbreviation."}, {"path": "products/ai_observability/frontend/clusters/ClusterDetailScatterPlot.tsx", "line": 193, "kind": "button_or_label", "before": "click to view trace", "after": "View trace", "reason": "Removes redundant instruction for a visible control."}, {"path": "products/conversations/frontend/browserNotificationLogic.ts", "line": 99, "kind": "body_copy", "before": "Click to view your support tickets", "after": "View your support tickets", "reason": "Uses a direct action for the notification."}, {"path": "products/workflows/frontend/Workflows/hogflows/panel/testing/hogFlowEditorTestLogic.ts", "line": 571, "kind": "error", "before": "Invalid JSON", "after": "Globals must be valid JSON", "reason": "Uses the field name and states the requirement."}, {"path": "frontend/src/queries/validators.js", "line": 11531, "kind": "body_copy", "before": "must NOT have additional properties", "after": "Only use the fields that are listed. Extra fields aren't allowed.", "reason": "Replaces schema language with a concrete constraint."}, {"path": "frontend/src/queries/nodes/InsightViz/TrendsFormula.tsx", "line": 145, "kind": "button_or_label", "before": "Remove formula", "after": "Remove formula and disable formula mode", "reason": "Explains the extra effect when it's the last formula."}, {"path": "frontend/src/queries/validators.js", "line": 5618, "kind": "button_or_label", "before": "must be string", "after": "Enter a short, descriptive key (for example, user_id).", "reason": "Explains the expected input with an example."}]};
 
 function esc(s) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+const HAND = 4;
+let page = 0;
+
 function build() {
   const wrap = document.getElementById("cards");
   wrap.innerHTML = "";
-  DATA.highlights.slice(0, 4).forEach((h, i) => {
+  const start = page * HAND;
+  DATA.highlights.slice(start, start + HAND).forEach((h, i) => {
     const el = document.createElement("div");
     el.className = "card";
     // stagger the strike/reveal beats per card so the page reads card by card
@@ -236,7 +240,11 @@ addEventListener("resize", fit); fit();
 
 build();
 setTimeout(animate, 600);
-addEventListener("click", () => { build(); setTimeout(animate, 120); });
+addEventListener("click", () => {
+  page = (page + 1) % Math.max(1, Math.ceil(DATA.highlights.length / HAND));
+  build();
+  setTimeout(animate, 120);
+});
 </script>
 </body>
 </html>
