@@ -127,9 +127,10 @@ html, body { background: var(--bark-900); }
 @keyframes hintfade { 0%, 70% { opacity: .75; } 100% { opacity: 0; } }
 
 
-.content { position: absolute; left: 90px; right: 90px; top: 96px; }
+.content { position: absolute; left: 90px; right: 90px; top: 96px; z-index: 1; }
 .headline { font-size: 72px; margin-top: 10px; }
-.subline { font-family: var(--font-serif); font-style: italic; font-size: 28px; color: var(--text-muted); margin-top: 14px; }
+.maphead { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+.subline { font-family: var(--font-serif); font-style: italic; font-size: 28px; color: var(--text-muted); }
 
 .map { margin-top: 54px; display: grid; grid-template-columns: 200px 1fr; gap: 0 26px; align-items: center; }
 .mod-label { text-align: right; font-family: var(--font-mono); font-size: 19px; color: var(--bark-600);
@@ -149,10 +150,23 @@ html, body { background: var(--bark-900); }
 .axis-caption { display: grid; grid-template-columns: 200px 1fr; gap: 0 26px; margin-top: 4px; }
 .axis-caption div:last-child { font-family: var(--font-mono); font-size: 15px; color: var(--text-faint); }
 
-.legend { position: absolute; top: 118px; right: 0; display: flex; align-items: center; gap: 12px;
+.legend { display: flex; align-items: center; gap: 12px;
           font-family: var(--font-mono); font-size: 15px; color: var(--text-muted); }
 .legend .scale { width: 220px; height: 14px; border-radius: 7px;
   background: linear-gradient(90deg, #F1E7CF, #D8A94B, #EE8E1E, #F2641B, #B23F08); }
+
+/* plain-language hover card */
+#tip { position: absolute; z-index: 5; width: 460px; pointer-events: none; display: none;
+       background: #FFFDF6; border: 1px solid var(--parch-300); border-radius: 10px;
+       padding: 18px 22px 16px; box-shadow: 0 14px 34px rgba(54,38,24,.22); }
+#tip .t-head { font-family: var(--font-display); font-weight: 900; font-size: 20px;
+               color: var(--text-strong); display: flex; align-items: baseline; gap: 10px; }
+#tip .t-heat { font-family: var(--font-serif); font-style: italic; font-size: 17px; }
+#tip .t-body { font-family: var(--font-sans); font-size: 17px; line-height: 1.45;
+               color: var(--text-body); margin-top: 8px; }
+#tip .t-num  { font-family: var(--font-mono); font-size: 13px; color: var(--text-faint); margin-top: 10px; }
+.cell:not(.absent) { cursor: crosshair; }
+.cell:not(.absent):hover { outline: 2.5px solid var(--bark-800); outline-offset: 1px; }
 
 .callout { margin-top: 30px; font-family: var(--font-serif); font-style: italic; font-size: 26px;
            color: var(--bark-700); opacity: 0; transition: opacity .8s ease 2.4s; }
@@ -167,14 +181,17 @@ html, body { background: var(--bark-900); }
   <div class="content">
     <div class="kicker">27.8B parameters, frozen. One small adapter, warmed by the fire.</div>
     <div class="headline">What fine-tuning <em>actually touched.</em></div>
-    <div class="subline" id="subline"></div>
-    <div class="legend"><span>cool</span><div class="scale"></div><span>hot</span></div>
+    <div class="maphead">
+      <div class="subline" id="subline"></div>
+      <div class="legend"><span>cool</span><div class="scale"></div><span>hot</span></div>
+    </div>
     <div class="map" id="map"></div>
     <div class="axis" id="axis"></div>
     <div class="axis-caption"><div></div><div>transformer layer →&nbsp;&nbsp;(dashed: module not present — 48 of 64 blocks use linear attention)</div></div>
     <div class="callout" id="callout"></div>
   </div>
   <div class="footnote" id="footnote"></div>
+  <div id="tip"></div>
 </div></div>
 
 <script>
@@ -217,11 +234,13 @@ function build() {
       if (d) {
         cell.className = "cell" + (d.intensity > 0.8 ? " hot" : "");
         cell.style.background = heat(d.intensity);
-        cell.title = `layer ${layer} ${mod.key} ‖ΔW‖=${d.norm}`;
+        cell.dataset.norm = d.norm;
+        cell.dataset.intensity = d.intensity;
       } else {
         cell.className = "cell absent";
       }
       cell.dataset.layer = layer;
+      cell.dataset.module = mod.key;
       lane.appendChild(cell);
     }
     map.appendChild(lane);
@@ -265,6 +284,81 @@ function animate() {
   });
   callout.style.opacity = 1;
 }
+
+// ---- plain-language hover card ----
+const MODULE_PLAIN = {
+  q_proj:   ["attention · queries", "shapes what the model goes looking for in the surrounding code and copy"],
+  k_proj:   ["attention · keys", "shapes how each token advertises itself to be found by others"],
+  v_proj:   ["attention · values", "shapes what information actually gets carried once attention lands"],
+  o_proj:   ["attention · output", "shapes how everything attention gathered is mixed back into the text"],
+  gate_proj:["MLP · gate", "decides which learned features get amplified or muted — a big lever for tone and word choice"],
+  up_proj:  ["MLP · expand", "lifts the text into a wider feature space where patterns like “this is an error message” live"],
+  down_proj:["MLP · compress", "squeezes the processed features back into the running text"],
+};
+
+function heatPhrase(t) {
+  if (t > 0.8)  return ["glowing hot", "one of the biggest changes anywhere in the adapter"];
+  if (t > 0.55) return ["burning steadily", "fine-tuning leaned on this spot noticeably"];
+  if (t > 0.3)  return ["warmed", "clear but moderate adjustments"];
+  return ["barely warmed", "almost untouched — the base model's behavior passes through nearly as-is"];
+}
+
+function layerPhrase(layer, total) {
+  const p = layer / (total - 1);
+  if (p > 0.75) return "Late in the stack, where style, phrasing and final word choice take shape.";
+  if (p > 0.35) return "Mid-stack, where meaning and relationships between words are worked out.";
+  return "Early in the stack, where low-level patterns of code and text are read.";
+}
+
+const tip = document.getElementById("tip");
+const stageEl = document.getElementById("stage");
+
+function showTip(cell, e) {
+  const mod = cell.dataset.module, layer = +cell.dataset.layer;
+  const [name, role] = MODULE_PLAIN[mod] || [mod, ""];
+  if (cell.classList.contains("absent")) {
+    tip.innerHTML =
+      `<div class="t-head">Layer ${layer} · ${mod} <span class="t-heat" style="color:var(--text-faint)">not present</span></div>` +
+      `<div class="t-body">This block uses linear attention, which has no ${mod} — so there was nothing here to fine-tune. The model's 64 blocks mix 48 linear-attention and 16 full-attention layers.</div>`;
+  } else {
+    const t = +cell.dataset.intensity;
+    const [label, meaning] = heatPhrase(t);
+    const color = t > 0.55 ? "var(--fire-600)" : t > 0.3 ? "var(--gold-600)" : "var(--text-faint)";
+    tip.innerHTML =
+      `<div class="t-head">Layer ${layer} · ${name} <span class="t-heat" style="color:${color}">${label}</span></div>` +
+      `<div class="t-body">This weight ${role}. ${meaning.charAt(0).toUpperCase() + meaning.slice(1)}. ${layerPhrase(layer, DATA.layers)}</div>` +
+      `<div class="t-num">‖ΔW‖ = ${cell.dataset.norm} · ${(t * 100).toFixed(0)}% of the hottest cell</div>`;
+  }
+  tip.style.display = "block";
+  moveTip(e);
+}
+
+function moveTip(e) {
+  const rect = stageEl.getBoundingClientRect();
+  const scale = rect.width / 1920;
+  let x = (e.clientX - rect.left) / scale + 26;
+  let y = (e.clientY - rect.top) / scale + 26;
+  if (x + 480 > 1920) x = x - 480 - 52;   // flip left near the right edge
+  if (y + 230 > 1080) y = y - 230 - 52;   // flip up near the bottom
+  // hard clamp — the stage clips overflow, so never let the card leave frame
+  x = Math.max(24, Math.min(x, 1920 - 510));
+  y = Math.max(24, Math.min(y, 1080 - 250));
+  tip.style.left = x + "px";
+  tip.style.top = y + "px";
+}
+
+document.getElementById("map").addEventListener("mouseover", e => {
+  const cell = e.target.closest(".cell");
+  if (cell) showTip(cell, e);
+});
+document.getElementById("map").addEventListener("mousemove", e => {
+  if (tip.style.display === "block" && e.target.closest(".cell")) moveTip(e);
+});
+document.getElementById("map").addEventListener("mouseout", e => {
+  if (!e.relatedTarget || !e.relatedTarget.closest || !e.relatedTarget.closest(".cell")) {
+    tip.style.display = "none";
+  }
+});
 
 function fit() {
   const s = Math.min(innerWidth / 1920, innerHeight / 1080);
