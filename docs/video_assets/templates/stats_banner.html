@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Copy Campfire — trail markers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Newsreader:ital,wght@1,500&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/*__CAMPFIRE_CSS__*/
+
+.content { position: absolute; left: 90px; right: 90px; top: 150px; }
+.headline { font-size: 76px; margin-top: 12px; }
+
+.cards { margin-top: 90px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 38px; }
+.card { background: #FFFDF6; border: 1px solid var(--parch-300); border-radius: 18px;
+        padding: 44px 38px 40px; box-shadow: 0 10px 28px rgba(54,38,24,.10);
+        opacity: 0; transform: translateY(26px);
+        transition: opacity .7s ease, transform .7s cubic-bezier(.22,.9,.3,1); }
+.card.on { opacity: 1; transform: translateY(0); }
+.card .kick { font-family: var(--font-serif); font-style: italic; font-size: 24px; color: var(--text-muted); }
+.card .num  { font-family: var(--font-display); font-weight: 900; font-size: 88px; letter-spacing: -0.02em;
+              color: var(--text-strong); margin-top: 18px; font-variant-numeric: tabular-nums; }
+.card .num .unit { font-size: 40px; color: var(--bark-500); }
+.card .sub  { font-family: var(--font-sans); font-size: 21px; font-weight: 700; color: var(--text-muted); margin-top: 14px; line-height: 1.4; }
+.card:nth-child(1) .num { color: var(--fire-600); }
+.card:nth-child(2) .num { color: var(--bark-800); }
+.card:nth-child(3) .num { color: var(--pine-600); }
+.card:nth-child(4) .num { color: var(--gold-600); }
+</style>
+</head>
+<body>
+<div class="stage-wrap"><div class="stage" id="stage">
+  <div class="replay-hint">click anywhere to replay</div>
+  <div class="brand"><span class="flame">⛺</span> ux-writing-1</div>
+  <div class="content">
+    <div class="kicker">Small model. Hand-built dataset. Honest numbers.</div>
+    <div class="headline">Trail markers.</div>
+    <div class="cards" id="cards"></div>
+  </div>
+  <div class="footnote" id="footnote"></div>
+</div></div>
+
+<script>
+const DATA = /*__DATA__*/;
+
+function build() {
+  const m = DATA.measured;
+  const validPct = (m.valid_json / m.strings * 100);
+  const validStr = validPct >= 99.95 ? "100" : validPct.toFixed(1);
+  const cards = [
+    { kick: "Blind taste test", num: "83", unit: "%",
+      sub: "blinded human preference vs its own base model — 90 held-out items" },
+    { kick: "Around the fire", num: Math.round(m.strings_per_hour / 100) / 10, unit: "K/hr",
+      sub: `UI strings reviewed per hour, batched on one rented A100 — $${m.usd_per_1k_strings.toFixed(2)} per 1,000 strings` },
+    { kick: "Keeps its word", num: validStr, unit: "%",
+      sub: `valid JSON contract across all ${m.strings.toLocaleString()} PostHog strings` },
+    { kick: "Cost to train", num: "$30", unit: "",
+      sub: "two QLoRA runs on a hackathon credit — base model Apache-2.0" },
+  ];
+  const wrap = document.getElementById("cards");
+  wrap.innerHTML = "";
+  for (const c of cards) {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.innerHTML = `<div class="kick">${c.kick}</div>` +
+      `<div class="num">${c.num}<span class="unit">${c.unit}</span></div>` +
+      `<div class="sub">${c.sub}</div>`;
+    wrap.appendChild(el);
+  }
+  document.getElementById("footnote").innerHTML =
+    `<b>Sources:</b> EVAL_RESULTS.md (blinded preference) · docs/demo/posthog_cost_report.json ` +
+    `(throughput, JSON validity, cost — measured ${DATA.prices_pulled_at}) · Modal dashboard (training spend). ` +
+    `Model, adapter, GGUF, dataset recipe and eval tooling: Apache-2.0 / open on the Hub.`;
+}
+
+function animate() {
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("on"));
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelectorAll(".card").forEach((c, i) => {
+      c.style.transitionDelay = (i * 0.18) + "s";
+      c.classList.add("on");
+    });
+  }));
+}
+
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  document.getElementById("stage").style.transform = `scale(${s})`;
+}
+document.getElementById("stage").style.transformOrigin = "center";
+addEventListener("resize", fit); fit();
+
+build();
+setTimeout(animate, 600);
+addEventListener("click", () => { build(); setTimeout(animate, 120); });
+</script>
+</body>
+</html>

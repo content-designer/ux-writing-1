@@ -1,0 +1,81 @@
+/* Copy Campfire design tokens — verbatim from space/app.py — plus the 1920x1080 video stage. */
+
+:root {
+  --fire-50: #FFF2E6; --fire-100: #FFE1C6; --fire-200: #FCC596; --fire-300: #FBA968;
+  --fire-400: #F7842F; --fire-500: #F2641B; --fire-600: #DA530F; --fire-700: #B23F08;
+  --ember-500: #EE8E1E; --gold-400: #D8A94B; --gold-500: #C0892C; --gold-600: #9A6B1E;
+  --parch-50: #FCF8EF; --parch-100: #F8F1DF; --parch-200: #F1E7CF; --parch-300: #E6D6B4; --parch-400: #D6C09A;
+  --bark-400: #9B7B55; --bark-500: #7A5C3C; --bark-600: #5E4429; --bark-700: #4A3420;
+  --bark-800: #362618; --bark-900: #271A0F;
+  --pine-500: #6E7B3E; --pine-600: #5C6E33; --pine-700: #45531F;
+  --ink-blue: #2F6CB0; --bad-500: #C24A24;
+  --text-strong: var(--bark-900); --text-body: var(--bark-800); --text-muted: #6E5B43;
+  --text-faint: #927B5E; --text-accent: var(--pine-600);
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Nunito', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { background: var(--bark-900); }
+
+/* fixed 1920x1080 stage, centered and scaled to the window for preview */
+.stage-wrap {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+}
+.stage {
+  width: 1920px; height: 1080px; position: relative; overflow: hidden;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, #FFFDF6 0%, var(--parch-50) 55%, var(--parch-100) 100%);
+  color: var(--text-body); font-family: var(--font-sans);
+  box-shadow: 0 0 0 1px var(--parch-300);
+}
+.stage::after { /* parchment grain */
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35;
+  background-image: radial-gradient(var(--parch-200) 0.8px, transparent 0.8px);
+  background-size: 26px 26px;
+}
+
+.kicker {
+  font-family: var(--font-serif); font-style: italic; font-size: 30px;
+  color: var(--text-muted); letter-spacing: .01em;
+}
+.headline {
+  font-family: var(--font-display); font-weight: 900; color: var(--text-strong);
+  letter-spacing: -0.015em; line-height: 1.04;
+}
+.footnote {
+  position: absolute; left: 90px; right: 90px; bottom: 34px;
+  font-family: var(--font-mono); font-size: 17px; line-height: 1.55;
+  color: var(--text-faint); border-top: 1px solid var(--parch-300); padding-top: 16px;
+}
+.footnote b { color: var(--text-muted); font-weight: 600; }
+
+.brand {
+  position: absolute; top: 44px; right: 90px; display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-display); font-weight: 900; font-size: 26px; color: var(--bark-700);
+}
+.brand .flame { font-size: 30px; }
+
+/* ember particles */
+.ember {
+  position: absolute; bottom: -12px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--fire-200), var(--ember-500) 60%, transparent 75%);
+  opacity: 0; pointer-events: none;
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0%   { transform: translateY(0) translateX(0) scale(1);   opacity: 0; }
+  8%   { opacity: .85; }
+  60%  { opacity: .5; }
+  100% { transform: translateY(-260px) translateX(var(--drift, 24px)) scale(.45); opacity: 0; }
+}
+
+.replay-hint {
+  position: absolute; top: 48px; left: 90px;
+  font-family: var(--font-mono); font-size: 15px; color: var(--text-faint);
+  animation: hintfade 6s forwards; /* disappears before any recorded take */
+}
+@keyframes hintfade { 0%, 70% { opacity: .75; } 100% { opacity: 0; } }

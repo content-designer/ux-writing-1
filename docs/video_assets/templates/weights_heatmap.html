@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Copy Campfire — what fine-tuning actually touched</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Newsreader:ital,wght@1,500&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/*__CAMPFIRE_CSS__*/
+
+.content { position: absolute; left: 90px; right: 90px; top: 96px; }
+.headline { font-size: 72px; margin-top: 10px; }
+.subline { font-family: var(--font-serif); font-style: italic; font-size: 28px; color: var(--text-muted); margin-top: 14px; }
+
+.map { margin-top: 54px; display: grid; grid-template-columns: 200px 1fr; gap: 0 26px; align-items: center; }
+.mod-label { text-align: right; font-family: var(--font-mono); font-size: 19px; color: var(--bark-600);
+             height: 56px; display: flex; align-items: center; justify-content: flex-end; }
+.mod-label .grp { font-size: 13px; color: var(--text-faint); margin-right: 10px; letter-spacing: .06em; }
+.lane { display: grid; grid-template-columns: repeat(64, 1fr); gap: 5px; height: 56px; align-items: center; }
+.cell { height: 46px; border-radius: 5px; background: var(--parch-200);
+        opacity: 0; transform: scale(.6); }
+.cell.on { transition: opacity .45s ease, transform .45s cubic-bezier(.34,1.4,.5,1); }
+.cell.absent { background: transparent; border: 1.5px dashed var(--parch-300); height: 24px; border-radius: 4px; }
+.cell.hot { box-shadow: 0 0 14px rgba(242,100,27,.55); }
+
+.axis { display: grid; grid-template-columns: 200px 1fr; gap: 0 26px; margin-top: 10px; }
+.axis .ticks { display: grid; grid-template-columns: repeat(64, 1fr); gap: 5px;
+               font-family: var(--font-mono); font-size: 14px; color: var(--text-faint); }
+.axis .ticks span { grid-column: span 8; }
+.axis-caption { display: grid; grid-template-columns: 200px 1fr; gap: 0 26px; margin-top: 4px; }
+.axis-caption div:last-child { font-family: var(--font-mono); font-size: 15px; color: var(--text-faint); }
+
+.legend { position: absolute; top: 118px; right: 0; display: flex; align-items: center; gap: 12px;
+          font-family: var(--font-mono); font-size: 15px; color: var(--text-muted); }
+.legend .scale { width: 220px; height: 14px; border-radius: 7px;
+  background: linear-gradient(90deg, #F1E7CF, #D8A94B, #EE8E1E, #F2641B, #B23F08); }
+
+.callout { margin-top: 30px; font-family: var(--font-serif); font-style: italic; font-size: 26px;
+           color: var(--bark-700); opacity: 0; transition: opacity .8s ease 2.4s; }
+.callout b { font-family: var(--font-display); font-style: normal; font-weight: 900; color: var(--fire-600); }
+</style>
+</head>
+<body>
+<div class="stage-wrap"><div class="stage" id="stage">
+  <div class="replay-hint">click anywhere to replay</div>
+  <div class="brand"><span class="flame">⛺</span> ux-writing-1</div>
+  <div class="content">
+    <div class="kicker">27.8B parameters, frozen. One small adapter, warmed by the fire.</div>
+    <div class="headline">What fine-tuning actually touched.</div>
+    <div class="subline" id="subline"></div>
+    <div class="legend"><span>cool</span><div class="scale"></div><span>hot</span></div>
+    <div class="map" id="map"></div>
+    <div class="axis" id="axis"></div>
+    <div class="axis-caption"><div></div><div>transformer layer →&nbsp;&nbsp;(dashed: module not present — 48 of 64 blocks use linear attention)</div></div>
+    <div class="callout" id="callout"></div>
+  </div>
+  <div class="footnote" id="footnote"></div>
+</div></div>
+
+<script>
+const DATA = /*__DATA__*/;
+
+const MODULES = [
+  { key: "q_proj",   grp: "attention" }, { key: "k_proj", grp: "attention" },
+  { key: "v_proj",   grp: "attention" }, { key: "o_proj", grp: "attention" },
+  { key: "gate_proj", grp: "mlp" }, { key: "up_proj", grp: "mlp" }, { key: "down_proj", grp: "mlp" },
+];
+// parchment -> gold -> ember -> fire -> deep fire
+const STOPS = [[241,231,207],[216,169,75],[238,142,30],[242,100,27],[178,63,8]];
+
+function heat(t) {
+  const x = Math.min(Math.max(t, 0), 1) * (STOPS.length - 1);
+  const i = Math.min(Math.floor(x), STOPS.length - 2), f = x - i;
+  const c = STOPS[i].map((v, k) => Math.round(v + (STOPS[i + 1][k] - v) * f));
+  return `rgb(${c[0]},${c[1]},${c[2]})`;
+}
+
+const lookup = {};
+for (const d of DATA.deltas) lookup[d.layer + "|" + d.module] = d;
+
+function build() {
+  document.getElementById("subline").textContent =
+    `${DATA.adapter} · ${DATA.deltas.length} LoRA deltas across ${DATA.layers} layers`;
+
+  const map = document.getElementById("map");
+  map.innerHTML = "";
+  for (const mod of MODULES) {
+    const label = document.createElement("div");
+    label.className = "mod-label";
+    label.innerHTML = `<span class="grp">${mod.grp}</span>${mod.key}`;
+    map.appendChild(label);
+    const lane = document.createElement("div");
+    lane.className = "lane";
+    for (let layer = 0; layer < DATA.layers; layer++) {
+      const cell = document.createElement("div");
+      const d = lookup[layer + "|" + mod.key];
+      if (d) {
+        cell.className = "cell" + (d.intensity > 0.8 ? " hot" : "");
+        cell.style.background = heat(d.intensity);
+        cell.title = `layer ${layer} ${mod.key} ‖ΔW‖=${d.norm}`;
+      } else {
+        cell.className = "cell absent";
+      }
+      cell.dataset.layer = layer;
+      lane.appendChild(cell);
+    }
+    map.appendChild(lane);
+  }
+
+  const axis = document.getElementById("axis");
+  axis.innerHTML = "<div></div>";
+  const ticks = document.createElement("div");
+  ticks.className = "ticks";
+  for (let l = 0; l < DATA.layers; l += 8) {
+    const s = document.createElement("span");
+    s.textContent = l;
+    ticks.appendChild(s);
+  }
+  axis.appendChild(ticks);
+
+  const hottest = [...DATA.deltas].sort((a, b) => b.norm - a.norm)[0];
+  document.getElementById("callout").innerHTML =
+    `The flames concentrate late in the stack — <b>${hottest.module} · layers ` +
+    `${Math.max(0, hottest.layer - 4)}–${DATA.layers - 1}</b> burn brightest. ` +
+    `Style lives near the surface; the base model's knowledge underneath stays frozen.`;
+
+  document.getElementById("footnote").innerHTML =
+    `<b>Real data, not an illustration:</b> each cell is the Frobenius norm of the LoRA delta ` +
+    `B·A for one (layer, module) of <b>${DATA.adapter}</b> — computed from the released adapter ` +
+    `weights. Color = relative magnitude. Reproduce: scripts/adapter_heatmap.py.`;
+}
+
+function animate() {
+  document.querySelectorAll(".cell").forEach(c => {
+    c.classList.remove("on");
+    c.style.opacity = 0; c.style.transform = "scale(.6)";
+  });
+  document.getElementById("callout").style.opacity = 0;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    document.querySelectorAll(".cell").forEach(c => {
+      c.classList.add("on");
+      c.style.transitionDelay = (c.dataset.layer * 0.028) + "s";
+      c.style.opacity = 1; c.style.transform = "scale(1)";
+    });
+    document.getElementById("callout").style.opacity = 1;
+  }));
+}
+
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  document.getElementById("stage").style.transform = `scale(${s})`;
+}
+document.getElementById("stage").style.transformOrigin = "center";
+addEventListener("resize", fit); fit();
+
+build();
+setTimeout(animate, 600);
+addEventListener("click", () => { build(); setTimeout(animate, 120); });
+</script>
+</body>
+</html>

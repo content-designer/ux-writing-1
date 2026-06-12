@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Copy Campfire — the same job, three bills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Newsreader:ital,wght@1,500&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/*__CAMPFIRE_CSS__*/
+
+.content { position: absolute; left: 90px; right: 90px; top: 110px; }
+.headline { font-size: 84px; margin-top: 10px; }
+.subline { font-family: var(--font-sans); font-size: 30px; color: var(--text-muted); margin-top: 18px; }
+.subline b { color: var(--bark-700); font-weight: 800; }
+
+.ladder { margin-top: 72px; display: flex; flex-direction: column; gap: 44px; }
+.row { display: grid; grid-template-columns: 430px 1fr 300px; align-items: center; gap: 36px; }
+.row .who { text-align: right; }
+.row .who .name { font-family: var(--font-display); font-weight: 900; font-size: 34px; color: var(--text-strong); }
+.row .who .tag  { font-family: var(--font-serif); font-style: italic; font-size: 23px; color: var(--text-muted); margin-top: 4px; }
+.track { position: relative; height: 74px; background: var(--parch-200); border-radius: 14px;
+         box-shadow: inset 0 1px 3px rgba(54,38,24,.15); overflow: visible; }
+.bar { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: 14px;
+       transition: width 2.4s cubic-bezier(.22,.9,.3,1); min-width: 12px; }
+.bar.ours { background: linear-gradient(90deg, var(--gold-400), var(--ember-500) 55%, var(--fire-500));
+            box-shadow: 0 4px 18px rgba(242,100,27,.35); }
+.bar.them { background: linear-gradient(90deg, var(--bark-500), var(--bark-700)); }
+.mult { position: absolute; right: -14px; top: 50%; transform: translate(100%, -50%);
+        font-family: var(--font-display); font-weight: 900; font-size: 30px; color: var(--fire-600);
+        opacity: 0; transition: opacity .5s ease 2.1s; white-space: nowrap; }
+.amount { font-family: var(--font-display); font-weight: 900; font-size: 56px; color: var(--text-strong);
+          font-variant-numeric: tabular-nums; }
+.amount small { display: block; font-family: var(--font-mono); font-weight: 400; font-size: 18px;
+                color: var(--text-faint); margin-top: 2px; }
+.row.estimate .amount { color: var(--bark-600); }
+.estflag { font-family: var(--font-mono); font-size: 15px; letter-spacing: .08em; text-transform: uppercase;
+           color: var(--text-faint); }
+</style>
+</head>
+<body>
+<div class="stage-wrap"><div class="stage" id="stage">
+  <div class="replay-hint">click anywhere to replay</div>
+  <div class="brand"><span class="flame">⛺</span> ux-writing-1</div>
+  <div class="content">
+    <div class="kicker">We reviewed every sampled UI string in PostHog.</div>
+    <div class="headline">The same job, three bills.</div>
+    <div class="subline" id="subline"></div>
+    <div class="ladder" id="ladder"></div>
+  </div>
+  <div class="footnote" id="footnote"></div>
+</div></div>
+
+<script>
+const DATA = /*__DATA__*/;
+
+const LABELS = {
+  "gpt-5.5":        { name: "GPT-5.5",        tag: "list-price estimate, same tokens" },
+  "claude-opus-4.8":{ name: "Claude Opus 4.8", tag: "list-price estimate, same tokens" },
+  "qwen3.6-27b-deepinfra": { name: "Same base model via API", tag: "DeepInfra list price, same tokens" },
+};
+
+function fmtUSD(v) { return "$" + v.toFixed(2); }
+
+function build() {
+  const m = DATA.measured;
+  const est = DATA.estimates_same_tokens_at_list_price;
+  const rows = [
+    { name: "ux-writing-1", tag: "measured · one rented A100", usd: m.usd,
+      per1k: m.usd_per_1k_strings, ours: true, flag: "measured" },
+    ...est.map(e => ({
+      name: (LABELS[e.model] || { name: e.model }).name,
+      tag: (LABELS[e.model] || { tag: "list-price estimate" }).tag,
+      usd: e.usd, per1k: e.usd_per_1k_strings, ours: false,
+      mult: e.multiple_vs_measured, flag: "estimate" })),
+  ];
+  const maxUsd = Math.max(...rows.map(r => r.usd));
+
+  document.getElementById("subline").innerHTML =
+    `<b>${m.strings.toLocaleString()}</b> strings · ` +
+    `<b>${DATA.workload.prompt_tokens.toLocaleString()}</b> prompt + ` +
+    `<b>${DATA.workload.completion_tokens.toLocaleString()}</b> completion tokens · ` +
+    `<b>${m.wall_clock_min}</b> min wall-clock`;
+
+  const ladder = document.getElementById("ladder");
+  ladder.innerHTML = "";
+  for (const r of rows) {
+    const row = document.createElement("div");
+    row.className = "row" + (r.ours ? "" : " estimate");
+    row.innerHTML = `
+      <div class="who"><div class="name">${r.name}</div><div class="tag">${r.tag}</div></div>
+      <div class="track"><div class="bar ${r.ours ? "ours" : "them"}" data-w="${(r.usd / maxUsd * 100).toFixed(1)}">
+        ${r.mult ? `<div class="mult">≈${r.mult}×</div>` : ""}</div></div>
+      <div><div class="amount" data-usd="${r.usd}">$0.00<small>${fmtUSD(r.per1k)} / 1K strings · <span class="estflag">${r.flag}</span></small></div></div>`;
+    ladder.appendChild(row);
+  }
+
+  document.getElementById("footnote").innerHTML =
+    `<b>Honest math:</b> frontier bills = ux-writing-1's measured token counts × public list prices ` +
+    `(pulled ${DATA.prices_pulled_at}) — estimates, not measured runs; tokenizers differ ±~15%; ` +
+    `hidden reasoning tokens would raise the frontier bills. No quality comparison is claimed vs frontier ` +
+    `models — the quality claim is 83% blinded human preference vs this model's own base (EVAL_RESULTS.md).`;
+}
+
+function animate() {
+  // bars
+  document.querySelectorAll(".bar").forEach((b, i) => {
+    b.style.transitionDelay = (i * 0.25) + "s";
+    b.style.width = "0%";
+    requestAnimationFrame(() => requestAnimationFrame(() => { b.style.width = b.dataset.w + "%"; }));
+  });
+  // counters
+  document.querySelectorAll(".amount").forEach((el, i) => {
+    const target = parseFloat(el.dataset.usd);
+    const small = el.querySelector("small").outerHTML;
+    const t0 = performance.now() + i * 250, dur = 2400;
+    function tick(t) {
+      const p = Math.min(Math.max((t - t0) / dur, 0), 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.innerHTML = fmtUSD(target * eased) + small;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+  // embers above the measured bar
+  const oursTrack = document.querySelector(".bar.ours").parentElement;
+  oursTrack.querySelectorAll(".ember").forEach(e => e.remove());
+  for (let i = 0; i < 14; i++) {
+    const e = document.createElement("div");
+    e.className = "ember";
+    const s = 4 + Math.random() * 8;
+    e.style.width = e.style.height = s + "px";
+    e.style.left = (4 + Math.random() * 92) + "%";
+    e.style.setProperty("--drift", (Math.random() * 60 - 30) + "px");
+    e.style.animationDuration = (2.4 + Math.random() * 2.6) + "s";
+    e.style.animationDelay = (Math.random() * 3) + "s";
+    oursTrack.appendChild(e);
+  }
+}
+
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  document.getElementById("stage").style.transform = `scale(${s})`;
+}
+document.getElementById("stage").style.transformOrigin = "center";
+addEventListener("resize", fit); fit();
+
+build();
+setTimeout(animate, 600);
+addEventListener("click", () => { build(); setTimeout(animate, 120); });
+</script>
+</body>
+</html>
