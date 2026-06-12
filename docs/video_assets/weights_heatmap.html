@@ -27,7 +27,7 @@
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-html, body { background: var(--bark-900); }
+html, body { background: var(--parch-100); }
 
 /* fixed 1920x1080 stage, centered and scaled to the window for preview */
 .stage-wrap {
@@ -38,7 +38,8 @@ html, body { background: var(--bark-900); }
   background:
     radial-gradient(1200px 700px at 50% -10%, #FFFDF6 0%, var(--parch-50) 55%, var(--parch-100) 100%);
   color: var(--text-body); font-family: var(--font-sans);
-  box-shadow: 0 0 0 1px var(--parch-300);
+  box-shadow: 0 0 0 1px var(--parch-300), 0 26px 70px rgba(54, 38, 24, .16);
+  border-radius: 4px;
 }
 .stage::after { /* parchment grain */
   content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35;
