@@ -19,6 +19,7 @@ JOBS = {
     "cost_compare.html": "docs/demo/posthog_cost_report.json",
     "weights_heatmap.html": "docs/video_assets/adapter_deltas.json",
     "stats_banner.html": "docs/demo/posthog_cost_report.json",
+    "before_after.html": "docs/demo/posthog_review_highlights.json",
 }
 
 

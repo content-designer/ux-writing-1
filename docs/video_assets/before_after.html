@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Copy Campfire — real strings, real rewrites</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Newsreader:ital,wght@1,500&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/* Copy Campfire design tokens — verbatim from space/app.py — plus the 1920x1080 video stage. */
+
+:root {
+  --fire-50: #FFF2E6; --fire-100: #FFE1C6; --fire-200: #FCC596; --fire-300: #FBA968;
+  --fire-400: #F7842F; --fire-500: #F2641B; --fire-600: #DA530F; --fire-700: #B23F08;
+  --ember-500: #EE8E1E; --gold-400: #D8A94B; --gold-500: #C0892C; --gold-600: #9A6B1E;
+  --parch-50: #FCF8EF; --parch-100: #F8F1DF; --parch-200: #F1E7CF; --parch-300: #E6D6B4; --parch-400: #D6C09A;
+  --bark-400: #9B7B55; --bark-500: #7A5C3C; --bark-600: #5E4429; --bark-700: #4A3420;
+  --bark-800: #362618; --bark-900: #271A0F;
+  --pine-500: #6E7B3E; --pine-600: #5C6E33; --pine-700: #45531F;
+  --ink-blue: #2F6CB0; --bad-500: #C24A24;
+  --text-strong: var(--bark-900); --text-body: var(--bark-800); --text-muted: #6E5B43;
+  --text-faint: #927B5E; --text-accent: var(--pine-600);
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans: 'Nunito', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { background: var(--bark-900); }
+
+/* fixed 1920x1080 stage, centered and scaled to the window for preview */
+.stage-wrap {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+}
+.stage {
+  width: 1920px; height: 1080px; position: relative; overflow: hidden;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, #FFFDF6 0%, var(--parch-50) 55%, var(--parch-100) 100%);
+  color: var(--text-body); font-family: var(--font-sans);
+  box-shadow: 0 0 0 1px var(--parch-300);
+}
+.stage::after { /* parchment grain */
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .35;
+  background-image: radial-gradient(var(--parch-200) 0.8px, transparent 0.8px);
+  background-size: 26px 26px;
+}
+
+.kicker {
+  font-family: var(--font-serif); font-style: italic; font-size: 30px;
+  color: var(--text-muted); letter-spacing: .01em;
+}
+.headline {
+  font-family: var(--font-display); font-weight: 900; color: var(--text-strong);
+  letter-spacing: -0.015em; line-height: 1.04;
+}
+.footnote {
+  position: absolute; left: 90px; right: 90px; bottom: 34px;
+  font-family: var(--font-mono); font-size: 17px; line-height: 1.55;
+  color: var(--text-faint); border-top: 1px solid var(--parch-300); padding-top: 16px;
+}
+.footnote b { color: var(--text-muted); font-weight: 600; }
+
+.brand {
+  position: absolute; top: 44px; right: 90px; display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-display); font-weight: 900; font-size: 26px; color: var(--bark-700);
+}
+.brand .flame { font-size: 30px; }
+
+/* ember particles */
+.ember {
+  position: absolute; bottom: -12px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--fire-200), var(--ember-500) 60%, transparent 75%);
+  opacity: 0; pointer-events: none;
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0%   { transform: translateY(0) translateX(0) scale(1);   opacity: 0; }
+  8%   { opacity: .85; }
+  60%  { opacity: .5; }
+  100% { transform: translateY(-260px) translateX(var(--drift, 24px)) scale(.45); opacity: 0; }
+}
+
+.replay-hint {
+  position: absolute; top: 48px; left: 90px;
+  font-family: var(--font-mono); font-size: 15px; color: var(--text-faint);
+  animation: hintfade 6s forwards; /* disappears before any recorded take */
+}
+@keyframes hintfade { 0%, 70% { opacity: .75; } 100% { opacity: 0; } }
+
+
+.content { position: absolute; left: 90px; right: 90px; top: 100px; }
+.headline { font-size: 66px; margin-top: 8px; }
+
+.cards { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px 38px; }
+.card { background: #FFFDF6; border: 1px solid var(--parch-300); border-radius: 16px;
+        padding: 30px 34px 26px; box-shadow: 0 8px 22px rgba(54,38,24,.09);
+        opacity: 0; transform: translateY(22px);
+        transition: opacity .65s ease, transform .65s cubic-bezier(.22,.9,.3,1); }
+.card.on { opacity: 1; transform: translateY(0); }
+.card .where { font-family: var(--font-mono); font-size: 14px; color: var(--text-faint);
+               white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 16px; }
+.line { display: grid; grid-template-columns: 88px 1fr; gap: 14px; align-items: baseline; }
+.line + .line { margin-top: 12px; }
+.line .tag { font-family: var(--font-mono); font-size: 14px; letter-spacing: .08em;
+             text-transform: uppercase; }
+.line.before .tag { color: var(--bad-500); }
+.line.after  .tag { color: var(--pine-600); }
+.line .copy { font-family: var(--font-sans); font-weight: 700; font-size: 25px; line-height: 1.3; }
+.line.before .copy { color: var(--text-muted); text-decoration: line-through;
+                     text-decoration-color: rgba(194,74,36,.45); text-decoration-thickness: 2px; }
+.line.after .copy { color: var(--text-strong); }
+.card .why { margin-top: 16px; font-family: var(--font-serif); font-style: italic;
+             font-size: 20px; color: var(--text-muted); border-top: 1px dashed var(--parch-300);
+             padding-top: 14px; }
+</style>
+</head>
+<body>
+<div class="stage-wrap"><div class="stage" id="stage">
+  <div class="replay-hint">click anywhere to replay</div>
+  <div class="brand"><span class="flame">⛺</span> ux-writing-1</div>
+  <div class="content">
+    <div class="kicker">Straight from the PostHog run — no cherry-picked mockups, file and line included.</div>
+    <div class="headline">Real strings. Real rewrites.</div>
+    <div class="cards" id="cards"></div>
+  </div>
+  <div class="footnote" id="footnote"></div>
+</div></div>
+
+<script>
+const DATA = {"source": "eval_preds/posthog_review.jsonl (gr33r/ux-writing-sft)", "note": "curated subset; picks pinned by (path, line) in scripts/pick_highlights.py", "highlights": [{"path": "products/ai_observability/frontend/settings/LLMProviderKeysSettings.tsx", "line": 54, "kind": "error", "before": "Invalid", "after": "Invalid API key", "reason": "Names the exact problem."}, {"path": "frontend/src/scenes/feature-flags/FeatureFlagSettings.tsx", "line": 209, "kind": "button_or_label", "before": "Done", "after": "Save changes", "reason": "Uses the primary verb for the action."}, {"path": "products/actions/frontend/components/ActionsTable.tsx", "line": 172, "kind": "body_copy", "before": "Empty \u2013 set this action up", "after": "No actions yet \u2014 add one to get started", "reason": "Uses a clearer empty-state prompt."}, {"path": "frontend/src/queries/validators.js", "line": 12473, "kind": "button_or_label", "before": "must be string", "after": "Enter a single line of text", "reason": "Uses plain language for a form-field constraint."}, {"path": "products/workflows/frontend/Channels/SlackSetup/SlackSetupModal.tsx", "line": 19, "kind": "button_or_label", "before": "Configure Slack integration", "after": "Connect Slack", "reason": "Uses a concrete action and platform name."}, {"path": "frontend/src/lib/components/AuthorizedUrlList/AuthorizedUrlList.tsx", "line": 179, "kind": "body_copy", "before": "NB you need to have added posthog to the `window`", "after": "Make sure PostHog is on the window object before you run this.", "reason": "Uses a direct instruction instead of an abbreviation."}]};
+
+function esc(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function build() {
+  const wrap = document.getElementById("cards");
+  wrap.innerHTML = "";
+  for (const h of DATA.highlights.slice(0, 4)) {
+    const el = document.createElement("div");
+    el.className = "card";
+    el.innerHTML =
+      `<div class="where">${esc(h.path)}:${h.line}</div>` +
+      `<div class="line before"><div class="tag">shipped</div><div class="copy">${esc(h.before)}</div></div>` +
+      `<div class="line after"><div class="tag">suggested</div><div class="copy">${esc(h.after)}</div></div>` +
+      `<div class="why">${esc(h.reason)}</div>`;
+    wrap.appendChild(el);
+  }
+  document.getElementById("footnote").innerHTML =
+    `<b>Provenance:</b> cards are unedited rows from the 10,000-string PostHog review artifact ` +
+    `(${esc(DATA.source)}); selection pinned in scripts/pick_highlights.py. Suggestions are ` +
+    `review output for humans to accept or reject — never auto-applied.`;
+}
+
+function animate() {
+  const cards = document.querySelectorAll(".card");
+  cards.forEach(c => c.classList.remove("on"));
+  void document.getElementById("cards").offsetWidth; // flush layout so transitions run
+  cards.forEach((c, i) => {
+    c.style.transitionDelay = (i * 0.22) + "s";
+    c.classList.add("on");
+  });
+}
+
+function fit() {
+  const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+  document.getElementById("stage").style.transform = `scale(${s})`;
+}
+document.getElementById("stage").style.transformOrigin = "center";
+addEventListener("resize", fit); fit();
+
+build();
+setTimeout(animate, 600);
+addEventListener("click", () => { build(); setTimeout(animate, 120); });
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{
+  "source": "eval_preds/posthog_review.jsonl (gr33r/ux-writing-sft)",
+  "note": "curated subset; picks pinned by (path, line) in scripts/pick_highlights.py",
+  "highlights": [
+    {
+      "path": "products/ai_observability/frontend/settings/LLMProviderKeysSettings.tsx",
+      "line": 54,
+      "kind": "error",
+      "before": "Invalid",
+      "after": "Invalid API key",
+      "reason": "Names the exact problem."
+    },
+    {
+      "path": "frontend/src/scenes/feature-flags/FeatureFlagSettings.tsx",
+      "line": 209,
+      "kind": "button_or_label",
+      "before": "Done",
+      "after": "Save changes",
+      "reason": "Uses the primary verb for the action."
+    },
+    {
+      "path": "products/actions/frontend/components/ActionsTable.tsx",
+      "line": 172,
+      "kind": "body_copy",
+      "before": "Empty – set this action up",
+      "after": "No actions yet — add one to get started",
+      "reason": "Uses a clearer empty-state prompt."
+    },
+    {
+      "path": "frontend/src/queries/validators.js",
+      "line": 12473,
+      "kind": "button_or_label",
+      "before": "must be string",
+      "after": "Enter a single line of text",
+      "reason": "Uses plain language for a form-field constraint."
+    },
+    {
+      "path": "products/workflows/frontend/Channels/SlackSetup/SlackSetupModal.tsx",
+      "line": 19,
+      "kind": "button_or_label",
+      "before": "Configure Slack integration",
+      "after": "Connect Slack",
+      "reason": "Uses a concrete action and platform name."
+    },
+    {
+      "path": "frontend/src/lib/components/AuthorizedUrlList/AuthorizedUrlList.tsx",
+      "line": 179,
+      "kind": "body_copy",
+      "before": "NB you need to have added posthog to the `window`",
+      "after": "Make sure PostHog is on the window object before you run this.",
+      "reason": "Uses a direct instruction instead of an abbreviation."
+    }
+  ]
+}
