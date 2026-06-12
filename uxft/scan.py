@@ -21,6 +21,9 @@ SKIP_DIRS = {
     "vendor",
 }
 
+MAX_FILE_BYTES = 1_000_000  # skip generated/minified bundles (OOM guard, ported from bench)
+MAX_CONTEXT_CHARS = 2_000  # drop candidates with degenerate contexts
+
 STRING_RE = re.compile(
     r"""(?P<prefix>aria-label|title|placeholder|label|alt|text|message|description)?\s*[:=]\s*["'](?P<value>[A-Za-z][^"'\n{}<>]{1,140})["']"""
 )
@@ -55,6 +58,11 @@ def iter_files(root: Path) -> Iterable[Path]:
         if not path.is_file() or path.suffix.lower() not in UI_EXTENSIONS:
             continue
         if any(part in SKIP_DIRS for part in path.parts):
+            continue
+        try:
+            if path.stat().st_size > MAX_FILE_BYTES:
+                continue
+        except OSError:
             continue
         yield path
 
@@ -100,13 +108,16 @@ def scan_file(path: Path, root: Path) -> list[Candidate]:
                 continue
             prefix = match.groupdict().get("prefix") or match.groupdict().get("key")
             line_no = line_number(text, match.start("value"))
+            context = context_for(lines, line_no)
+            if len(context) > MAX_CONTEXT_CHARS:
+                continue
             candidates.append(
                 Candidate(
                     path=str(path.relative_to(root)),
                     line=line_no,
                     kind=classify(prefix, value, path),
                     current_copy=value,
-                    context=context_for(lines, line_no),
+                    context=context,
                 )
             )
     return candidates
