@@ -18,7 +18,16 @@ html, body { background: var(--parch-50); }
 .hub h1 em { font-family: var(--font-serif); font-style: italic; font-weight: 500; color: var(--fire-600); }
 .hub .intro { font-family: var(--font-serif); font-style: italic; font-size: 21px;
               color: var(--text-muted); margin-top: 18px; max-width: 760px; line-height: 1.55; }
-.tiles { margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 34px; }
+.live { margin-top: 48px; display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 34px; }
+.live-tile { border-top: 5px solid var(--fire-500); background:
+  linear-gradient(180deg, #FFF8EE, #FFFDF6 55%); }
+.live-tile h2 { font-size: 31px; }
+.live-tile .t-chip { display: inline-block; font-family: var(--font-mono); font-size: 12px;
+  letter-spacing: .1em; text-transform: uppercase; color: #fff; background: var(--fire-500);
+  border-radius: 999px; padding: 3px 11px; margin-bottom: 12px; }
+.section { font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: 27px;
+  color: var(--text-muted); margin-top: 64px; }
+.tiles { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 34px; }
 .tile { display: block; text-decoration: none; background: #FFFDF6; border: 1px solid var(--parch-300);
         border-radius: 14px; padding: 30px 32px 26px; box-shadow: 0 10px 26px rgba(54,38,24,.10);
         transition: transform .25s cubic-bezier(.22,.9,.3,1), box-shadow .25s ease; }
@@ -44,6 +53,26 @@ html, body { background: var(--parch-50); }
   from a measured run artifact, never hand-typed. Click any page, then click anywhere on
   it to replay its animation. Honest-math footnotes are part of each frame.</p>
 
+  <div class="live">
+    <a class="tile live-tile" href="https://huggingface.co/spaces/build-small-hackathon/copy-campfire">
+      <span class="t-chip">live demo</span>
+      <div class="t-kick">Judge the blind rewrite battle.</div>
+      <h2>⛺ Copy Campfire</h2>
+      <p>Paste your worst error message; two anonymous campers rewrite it; you vote, then
+         the reveal. Every vote becomes preference data for v2 — the arena is the flywheel.</p>
+      <div class="t-stat">hf.co/spaces/build-small-hackathon/copy-campfire</div>
+    </a>
+    <a class="tile live-tile" href="https://huggingface.co/gr33r/ux-writing-1">
+      <span class="t-chip">the model</span>
+      <div class="t-kick">Apache-2.0 — yours to run.</div>
+      <h2>🤗 ux-writing-1</h2>
+      <p>27B merged weights, the LoRA adapter, and GGUFs that run on a 24&nbsp;GB laptop.
+         Model card carries the full honest eval and the tune-it-yourself guide.</p>
+      <div class="t-stat">hf.co/gr33r/ux-writing-1</div>
+    </a>
+  </div>
+
+  <h3 class="section">The figures behind the video</h3>
   <div class="tiles">
     <a class="tile" href="before_after.html">
       <div class="t-kick">Real strings. Real rewrites.</div>
@@ -82,6 +111,10 @@ html, body { background: var(--parch-50); }
     <a href="https://huggingface.co/gr33r/ux-writing-1-GGUF">GGUF</a> ·
     <a href="https://huggingface.co/spaces/build-small-hackathon/copy-campfire">⛺ Copy Campfire arena</a> ·
     <a href="https://github.com/content-designer/ux-writing-1">code &amp; eval tooling</a>
+    <div class="note">Pairs well with the model:
+    <a href="https://content-designer.github.io/ux-writing-skill/">the UX Writing skill</a> —
+    the same craft, packaged as a skill for AI agents and assistants; use it to guide any
+    model, or alongside ux-writing-1 for review at codebase scale.</div>
     <div class="note">Figure pages are fixed 1920×1080 stages (made for screen recording) —
     best viewed on a desktop. Quality claim is 83% blinded human preference vs the model's
     own base; no quality comparison vs frontier models is claimed anywhere.</div>

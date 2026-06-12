@@ -1,8 +1,9 @@
 # Video outline — Build Small submission: ux-writing-1 + Copy Campfire
 
 *Structure + verified numbers + demo beats. You write the script — it's your craft.
-Target 2–3 minutes. Numbers marked ⏳ get filled from COST_NOTES.md / the demo artifact
-once those runs land; everything else is final.*
+Target 2–3 minutes. All numbers are now final, filled from measured artifacts
+(COST_NOTES.md + docs/demo/). Supporting assets: the hosted interactive gallery
+(https://copy-campfire-gallery.vercel.app) and the HF article draft (docs/hf_article.md).*
 
 ## Suggested beats
 
@@ -83,10 +84,11 @@ was 9,999/10,000); anything about screenshot/vision review (unreleased).
 > rented GPU. The same tokens at frontier list prices: ~$26–27.
 >
 > ⛺ Copy Campfire: paste your worst error message, judge the blind rewrite battle, and
-> your vote trains v2: [space link]
+> your vote trains v2: https://huggingface.co/spaces/build-small-hackathon/copy-campfire
 >
 > Model, data recipe, scan-your-codebase CLI, and a guide to tuning it on YOUR style
-> guide — all open: [model link] #BuildSmall @huggingface
+> guide — all open: https://huggingface.co/gr33r/ux-writing-1 #BuildSmall @huggingface
+> Interactive figures: https://copy-campfire-gallery.vercel.app
 
 ## B-roll / screen-capture checklist
 - [ ] Blinded spreadsheet scroll + the unblind tally moment
