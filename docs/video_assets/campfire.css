@@ -37,6 +37,44 @@ html, body { background: var(--bark-900); }
   background-image: radial-gradient(var(--parch-200) 0.8px, transparent 0.8px);
   background-size: 26px 26px;
 }
+.stage::before { /* campfire glow from just below frame */
+  content: ""; position: absolute; left: -240px; right: -240px; bottom: -540px; height: 900px;
+  pointer-events: none; z-index: 0;
+  background: radial-gradient(58% 100% at 50% 100%,
+    rgba(242, 100, 27, .22), rgba(238, 142, 30, .12) 42%, rgba(216, 169, 75, .06) 62%, transparent 75%);
+}
+
+/* ambient embers drifting up the whole stage — pure CSS, deterministic */
+.stage-embers { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.stage-embers i {
+  position: absolute; bottom: -16px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--fire-200), var(--ember-500) 60%, transparent 75%);
+  opacity: 0; animation: rise-far linear infinite;
+}
+@keyframes rise-far {
+  0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+  6%   { opacity: .55; }
+  55%  { opacity: .3; }
+  100% { transform: translateY(-1160px) translateX(var(--drift, 30px)) scale(.35); opacity: 0; }
+}
+.stage-embers i:nth-child(1)  { left: 6%;  width: 7px;  height: 7px;  animation-duration: 13s; animation-delay: 0s;   --drift: 44px; }
+.stage-embers i:nth-child(2)  { left: 14%; width: 5px;  height: 5px;  animation-duration: 17s; animation-delay: 4s;   --drift: -36px; }
+.stage-embers i:nth-child(3)  { left: 24%; width: 9px;  height: 9px;  animation-duration: 11s; animation-delay: 7s;   --drift: 24px; }
+.stage-embers i:nth-child(4)  { left: 33%; width: 5px;  height: 5px;  animation-duration: 19s; animation-delay: 2s;   --drift: -52px; }
+.stage-embers i:nth-child(5)  { left: 45%; width: 8px;  height: 8px;  animation-duration: 12s; animation-delay: 9s;   --drift: 38px; }
+.stage-embers i:nth-child(6)  { left: 52%; width: 6px;  height: 6px;  animation-duration: 16s; animation-delay: 1s;   --drift: -20px; }
+.stage-embers i:nth-child(7)  { left: 61%; width: 10px; height: 10px; animation-duration: 10s; animation-delay: 5s;   --drift: 56px; }
+.stage-embers i:nth-child(8)  { left: 70%; width: 5px;  height: 5px;  animation-duration: 18s; animation-delay: 11s;  --drift: -30px; }
+.stage-embers i:nth-child(9)  { left: 79%; width: 7px;  height: 7px;  animation-duration: 14s; animation-delay: 3s;   --drift: 26px; }
+.stage-embers i:nth-child(10) { left: 87%; width: 6px;  height: 6px;  animation-duration: 15s; animation-delay: 8s;   --drift: -44px; }
+.stage-embers i:nth-child(11) { left: 93%; width: 8px;  height: 8px;  animation-duration: 12s; animation-delay: 6s;   --drift: 20px; }
+.stage-embers i:nth-child(12) { left: 39%; width: 4px;  height: 4px;  animation-duration: 21s; animation-delay: 13s;  --drift: 48px; }
+
+/* italic accent word in headlines */
+.headline em {
+  font-family: var(--font-serif); font-style: italic; font-weight: 500;
+  color: var(--fire-600); letter-spacing: 0;
+}
 
 .kicker {
   font-family: var(--font-serif); font-style: italic; font-size: 30px;
