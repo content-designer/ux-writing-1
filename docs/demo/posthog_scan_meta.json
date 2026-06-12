@@ -1,0 +1,19 @@
+{
+  "repo": "https://github.com/PostHog/posthog",
+  "license": "MIT (core; scan covered frontend/ and products/ source)",
+  "commit": "e30273b52f327a3d565563d6c856e1fc90dd72a4",
+  "scanned_at": "2026-06-12",
+  "scan_roots": ["frontend/", "products/"],
+  "raw_candidates": 152713,
+  "filters": [
+    "path: test/spec/stories/mocks/fixtures/cypress/e2e files and generated *.schemas.ts excluded",
+    "copy: identifiers with underscores excluded",
+    "copy: single tokens kept only when Capitalized-word shaped",
+    "copy: strings where >=50% of tokens are CSS-class shaped (lowercase with -/digits/:/[]) excluded",
+    "dedupe on (path, line, copy)"
+  ],
+  "eligible_after_filters": 26061,
+  "sampled_for_review": 10000,
+  "sampling": "random.sample, seed 20260612",
+  "scanner": "uxft.scan @ 437af89 (this repo)"
+}
