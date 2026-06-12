@@ -1,0 +1,54 @@
+{
+  "workload": {
+    "prompt_tokens": 3590383,
+    "completion_tokens": 313293,
+    "strings": 10000
+  },
+  "measured": {
+    "model": "ux-writing-1 (batched, A100-80GB @ $2.50/h)",
+    "usd": 3.22,
+    "strings": 10000,
+    "strings_per_hour": 7865,
+    "usd_per_1k_strings": 0.32,
+    "wall_clock_min": 77.2,
+    "valid_json": 9999,
+    "changed": 994,
+    "kept": 9006
+  },
+  "estimates_same_tokens_at_list_price": [
+    {
+      "model": "qwen3.6-27b-deepinfra",
+      "usd": 2.15,
+      "usd_per_1k_strings": 0.21,
+      "multiple_vs_measured": 0.7,
+      "price_in_per_mtok": 0.32,
+      "price_out_per_mtok": 3.2,
+      "source": "https://deepinfra.com/pricing (manual check 2026-06-10; same base model served by a GPU-rental API)"
+    },
+    {
+      "model": "claude-opus-4.8",
+      "usd": 25.78,
+      "usd_per_1k_strings": 2.58,
+      "multiple_vs_measured": 8.0,
+      "price_in_per_mtok": 5.0,
+      "price_out_per_mtok": 25.0,
+      "source": "https://platform.claude.com/docs/en/docs/about-claude/pricing"
+    },
+    {
+      "model": "gpt-5.5",
+      "usd": 27.35,
+      "usd_per_1k_strings": 2.73,
+      "multiple_vs_measured": 8.5,
+      "price_in_per_mtok": 5.0,
+      "price_out_per_mtok": 30.0,
+      "source": "https://developers.openai.com/api/docs/pricing"
+    }
+  ],
+  "prices_pulled_at": "2026-06-12",
+  "caveats": [
+    "Frontier figures are list-price estimates applied to ux-writing-1's measured prompt/completion token counts for the same workload; they are not measured runs.",
+    "Token counts use the Qwen3.6 tokenizer; other providers' tokenizers differ (~\u00b115%).",
+    "Estimates assume no hidden reasoning tokens; reasoning-mode APIs bill those as output, which would raise the frontier cost.",
+    "No quality comparison vs frontier models is claimed anywhere; the model's quality claim is 83% blinded human preference vs its own base model (EVAL_RESULTS.md)."
+  ]
+}

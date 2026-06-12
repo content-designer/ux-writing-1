@@ -30,6 +30,16 @@ PICKS: list[tuple[str, int]] = [
     ("frontend/src/queries/validators.js", 11531),                                     # additionalProperties -> plain language
     ("frontend/src/queries/nodes/InsightViz/TrendsFormula.tsx", 145),                  # consequence-bearing button label
     ("frontend/src/queries/validators.js", 5618),                                      # descriptive key guidance
+    # hand 4
+    ("frontend/src/scenes/data-warehouse/scene/OverviewTab.tsx", 88),                  # 'Time when this job was created' -> 'Created at'
+    ("frontend/src/scenes/trends/mathsLogic.tsx", 380),                                # percentile jargon -> 'Median ...'
+    ("frontend/src/scenes/cohorts/CohortEdit.tsx", 283),                               # 'Delete' -> 'Delete cohort'
+    ("frontend/src/scenes/billing/BillingHero.tsx", 134),                              # 'Lucky you!' -> "You're on the YC plan"
+    # hand 5
+    ("products/workflows/frontend/Workflows/WorkflowMetrics.tsx", 42),                 # tooltip rewritten around the user
+    ("frontend/src/taxonomy/core-filter-definitions-by-group.json", 4592),             # error message in plain words
+    ("frontend/src/lib/components/CyclotronJob/integrations/integrationSetups.tsx", 50),  # 'Configure new...' -> 'Connect Databricks'
+    ("frontend/src/scenes/insights/aggregationAxisFormat.ts", 20),                     # adds an example to a label
 ]
 
 AUTO_LIMIT = 12

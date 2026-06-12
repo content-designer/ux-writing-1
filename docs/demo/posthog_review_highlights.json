@@ -97,6 +97,70 @@
       "before": "must be string",
       "after": "Enter a short, descriptive key (for example, user_id).",
       "reason": "Explains the expected input with an example."
+    },
+    {
+      "path": "frontend/src/scenes/data-warehouse/scene/OverviewTab.tsx",
+      "line": 88,
+      "kind": "body_copy",
+      "before": "Time when this job was created",
+      "after": "Created at",
+      "reason": "Uses a concise noun phrase for the column header."
+    },
+    {
+      "path": "frontend/src/scenes/trends/mathsLogic.tsx",
+      "line": 380,
+      "kind": "body_copy",
+      "before": "Event count per actor 50th percentile.",
+      "after": "Median event count per actor",
+      "reason": "Uses the familiar name instead of the percentile definition."
+    },
+    {
+      "path": "frontend/src/scenes/cohorts/CohortEdit.tsx",
+      "line": 283,
+      "kind": "button_or_label",
+      "before": "Delete",
+      "after": "Delete cohort",
+      "reason": "Adds the object so the destructive action is explicit."
+    },
+    {
+      "path": "frontend/src/scenes/billing/BillingHero.tsx",
+      "line": 134,
+      "kind": "button_or_label",
+      "before": "Lucky you!",
+      "after": "You're on the YC plan",
+      "reason": "Removes hype; states the plan plainly."
+    },
+    {
+      "path": "products/workflows/frontend/Workflows/WorkflowMetrics.tsx",
+      "line": 42,
+      "kind": "body_copy",
+      "before": "Total number of events that were triggered",
+      "after": "Events that started this workflow",
+      "reason": "Uses the metric's own terminology and ties it to the workflow."
+    },
+    {
+      "path": "frontend/src/taxonomy/core-filter-definitions-by-group.json",
+      "line": 4592,
+      "kind": "error",
+      "before": "Errors encountered while trying to process exceptions.",
+      "after": "We couldn't process all exceptions. Review the details and try again.",
+      "reason": "Uses plain language and suggests a recovery step."
+    },
+    {
+      "path": "frontend/src/lib/components/CyclotronJob/integrations/integrationSetups.tsx",
+      "line": 50,
+      "kind": "button_or_label",
+      "before": "Configure new Databricks account",
+      "after": "Connect Databricks",
+      "reason": "Uses a shorter action that fits the menu."
+    },
+    {
+      "path": "frontend/src/scenes/insights/aggregationAxisFormat.ts",
+      "line": 20,
+      "kind": "button_or_label",
+      "before": "Short Number",
+      "after": "Short number (1.5K, 2M)",
+      "reason": "Shows the compact format with examples."
     }
   ]
 }

@@ -46,15 +46,16 @@ const DATA = /*__DATA__*/;
 
 function build() {
   const m = DATA.measured;
-  const validPct = (m.valid_json / m.strings * 100);
-  const validStr = validPct >= 99.95 ? "100" : validPct.toFixed(1);
+  // never round up to 100 — 9,999/10,000 is 99.99, and it says so
+  const validPct = m.valid_json / m.strings * 100;
+  const validStr = m.valid_json === m.strings ? "100" : String(Math.floor(validPct * 100) / 100);
   const cards = [
     { kick: "Blind taste test", num: "83", unit: "%",
       sub: "blinded human preference vs its own base model — 90 held-out items" },
     { kick: "Around the fire", num: Math.round(m.strings_per_hour / 100) / 10, unit: "K/hr",
       sub: `UI strings reviewed per hour, batched on one rented A100 — $${m.usd_per_1k_strings.toFixed(2)} per 1,000 strings` },
     { kick: "Keeps its word", num: validStr, unit: "%",
-      sub: `valid JSON contract across all ${m.strings.toLocaleString()} PostHog strings` },
+      sub: `valid JSON contract — ${m.valid_json.toLocaleString()} of ${m.strings.toLocaleString()} PostHog strings` },
     { kick: "Cost to train", num: "$30", unit: "",
       sub: "two QLoRA runs on a hackathon credit — base model Apache-2.0" },
   ];
