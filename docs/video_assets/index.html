@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>⛺ ux-writing-1 — the campfire gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Newsreader:ital,wght@1,500&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="campfire.css">
+<style>
+/* the gallery hub is a normal scrolling page, not a 1920x1080 stage */
+html, body { background: var(--parch-50); }
+.hub { position: relative; max-width: 1180px; margin: 0 auto; padding: 72px 36px 80px;
+       font-family: var(--font-sans); color: var(--text-body); }
+.hub .kicker { font-size: 24px; }
+.hub h1 { font-family: var(--font-display); font-weight: 900; font-size: clamp(40px, 6vw, 72px);
+          color: var(--text-strong); letter-spacing: -0.015em; line-height: 1.05; margin-top: 10px; }
+.hub h1 em { font-family: var(--font-serif); font-style: italic; font-weight: 500; color: var(--fire-600); }
+.hub .intro { font-family: var(--font-serif); font-style: italic; font-size: 21px;
+              color: var(--text-muted); margin-top: 18px; max-width: 760px; line-height: 1.55; }
+.tiles { margin-top: 56px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 34px; }
+.tile { display: block; text-decoration: none; background: #FFFDF6; border: 1px solid var(--parch-300);
+        border-radius: 14px; padding: 30px 32px 26px; box-shadow: 0 10px 26px rgba(54,38,24,.10);
+        transition: transform .25s cubic-bezier(.22,.9,.3,1), box-shadow .25s ease; }
+.tile:hover { transform: translateY(-4px) rotate(-0.4deg); box-shadow: 0 18px 38px rgba(54,38,24,.16); }
+.tile .t-kick { font-family: var(--font-serif); font-style: italic; font-size: 18px; color: var(--text-muted); }
+.tile h2 { font-family: var(--font-display); font-weight: 900; font-size: 27px; color: var(--text-strong); margin-top: 8px; }
+.tile p { font-size: 16.5px; line-height: 1.5; color: var(--text-body); margin-top: 10px; }
+.tile .t-stat { font-family: var(--font-mono); font-size: 13.5px; color: var(--fire-600); margin-top: 14px; }
+.hub .links { margin-top: 60px; border-top: 1px solid var(--parch-300); padding-top: 22px;
+              font-family: var(--font-mono); font-size: 14.5px; line-height: 1.9; color: var(--text-faint); }
+.hub .links a { color: var(--pine-600); }
+.hub .note { font-family: var(--font-mono); font-size: 13.5px; color: var(--text-faint); margin-top: 10px; }
+.glow { position: fixed; left: -20vw; right: -20vw; bottom: -46vh; height: 70vh; pointer-events: none;
+        background: radial-gradient(58% 100% at 50% 100%, rgba(242,100,27,.16), rgba(238,142,30,.08) 45%, transparent 72%); }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="hub">
+  <div class="kicker">⛺ ux-writing-1 · Build Small hackathon</div>
+  <h1>The campfire <em>gallery.</em></h1>
+  <p class="intro">Four interactive figures behind the demo video — every number injected
+  from a measured run artifact, never hand-typed. Click any page, then click anywhere on
+  it to replay its animation. Honest-math footnotes are part of each frame.</p>
+
+  <div class="tiles">
+    <a class="tile" href="before_after.html">
+      <div class="t-kick">Real strings. Real rewrites.</div>
+      <h2>Before / after</h2>
+      <p>Unedited rewrites from a 10,000-string review of PostHog, file and line included.
+         Click to deal the next hand of four.</p>
+      <div class="t-stat">994 changed · 9,006 kept as-is</div>
+    </a>
+    <a class="tile" href="cost_compare.html">
+      <div class="t-kick">Same job. Very different bills.</div>
+      <h2>The cost ladder</h2>
+      <p>$3.22 measured on one rented A100 vs the same tokens at frontier list prices —
+         estimates labeled, sources cited.</p>
+      <div class="t-stat">10,000 strings · 77.2 min · ≈8× cheaper at list</div>
+    </a>
+    <a class="tile" href="weights_heatmap.html">
+      <div class="t-kick">What fine-tuning actually touched.</div>
+      <h2>The LoRA fingerprint</h2>
+      <p>256 measured weight deltas from the released adapter. Hover any cell — the
+         inspector explains what that weight learned, in plain words.</p>
+      <div class="t-stat">64 layers · late gate_proj burns brightest</div>
+    </a>
+    <a class="tile" href="stats_banner.html">
+      <div class="t-kick">Small model. Honest numbers.</div>
+      <h2>Trail markers</h2>
+      <p>The four headline stats: blinded preference, throughput, JSON reliability, and
+         what training actually cost.</p>
+      <div class="t-stat">83% · 7.9K/hr · 99.99% · $30</div>
+    </a>
+  </div>
+
+  <div class="links">
+    <b>The work:</b>
+    <a href="https://huggingface.co/gr33r/ux-writing-1">model</a> ·
+    <a href="https://huggingface.co/gr33r/ux-writing-1-lora">adapter</a> ·
+    <a href="https://huggingface.co/gr33r/ux-writing-1-GGUF">GGUF</a> ·
+    <a href="https://huggingface.co/spaces/build-small-hackathon/copy-campfire">⛺ Copy Campfire arena</a> ·
+    <a href="https://github.com/content-designer/ux-writing-1">code &amp; eval tooling</a>
+    <div class="note">Figure pages are fixed 1920×1080 stages (made for screen recording) —
+    best viewed on a desktop. Quality claim is 83% blinded human preference vs the model's
+    own base; no quality comparison vs frontier models is claimed anywhere.</div>
+  </div>
+</div>
+</body>
+</html>
