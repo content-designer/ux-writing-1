@@ -102,4 +102,5 @@ was 9,999/10,000); anything about screenshot/vision review (unreleased).
 
 All four asset pages are 1920×1080 stages: open locally, click anywhere to replay the
 animation between takes; numbers are injected from run artifacts by
-`scripts/build_video_assets.py` (never hand-typed).
+`scripts/build_video_assets.py` (never hand-typed). Hosted gallery (for the video
+description / social posts): https://copy-campfire-gallery.vercel.app

@@ -31,3 +31,4 @@ ux-writing-*/
 # Modal / Trackio local state
 .modal/
 trackio/
+docs/video_assets/.vercel
