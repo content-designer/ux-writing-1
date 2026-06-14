@@ -1,0 +1,22 @@
+# Clean local model for the terminal demo, so `ollama run ux-writing-1` shows a short
+# name with the review contract pre-loaded. Build once:
+#
+#   ollama pull hf.co/gr33r/ux-writing-1-GGUF:Q4_K_M      # ~16.6 GB — do this BEFORE recording
+#   ollama create ux-writing-1 -f docs/demo/Modelfile
+#   ollama run ux-writing-1
+#
+# Then paste a "Current copy: ..." line and watch it return {rewrite, reason, risk}.
+# If it reasons out loud first (Qwen3.6 is a thinking model), type `/set nothink` once,
+# or switch to the codebase demo (uxft.review_repo), whose JSON extractor strips reasoning.
+
+FROM hf.co/gr33r/ux-writing-1-GGUF:Q4_K_M
+
+PARAMETER temperature 0.1
+
+SYSTEM """You are a senior UX writer reviewing interface copy in product code.
+Rewrite the UI copy so it is purposeful, concise, conversational, clear, and accessible.
+If the current copy is already clear, accurate, and on-brand, keep it unchanged: return it verbatim as the rewrite and say so in the reason.
+Preserve product intent. Do not invent actions, facts, or product behavior that are not in the context.
+Keep locale-specific terms (for example, "Postal code" for Canadian addresses) and any {{ variables }} exactly as written.
+Never weaken safety-critical copy: destructive, payment, privacy, and security messages must keep their consequence and must not be softened.
+Return compact JSON with: rewrite, reason, and risk. Use an empty string for risk when none applies."""
