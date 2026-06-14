@@ -1,15 +1,66 @@
 # Terminal demo cheatsheet — running ux-writing-1 on camera
 
-Two beats, both 100% local (no API, no metering — the exact claim the video makes).
-**Pull the GGUF before you record** — the 16 GB download is not a camera moment.
+## Which path? (disk-aware)
+
+The local-GGUF demo needs ~20 GB free for comfort (model is 16.5 GB). If `df -h /`
+shows less than that, use the **hosted endpoint** path — same terminal visuals, nothing
+to download.
+
+| You have… | Use | Story |
+|---|---|---|
+| < ~20 GB free | **Path B — hosted endpoint** | identical demo, zero local footprint |
+| ≥ ~20 GB free | **Path A — local GGUF** | strongest: "running on my laptop, $0 marginal" |
+| no time to set up | **skip it** | Copy Campfire IS the live model; graphics carry the rest |
+
+---
+
+## Path B — hosted endpoint (no download)
+
+`uxw1-serve` is deployed on Modal (scales to zero; first request cold-starts ~30–60s).
+`uxft.review_repo` talks to it directly — identical to Path A's Beat 2, just remote.
+
+**Get the URL once (it's not in the repo — it's a Space secret):** Hugging Face → your
+`copy-campfire` Space → Settings → Variables & secrets → copy `BATTLE_URL`. The review
+endpoint is that URL with `-battle` swapped to `-chat`
+(e.g. `https://<host>--uxw1-serve-uxwriting1-chat.modal.run`). The Modal dashboard
+(modal.com → uxw1-serve → web endpoints) lists both too.
+
+**Confirm it before recording** (your token, your endpoint — safe to run yourself):
 
 ```bash
-ollama pull hf.co/gr33r/ux-writing-1-GGUF:Q4_K_M   # ~16.6 GB, one time, off-camera
+curl -s -X POST "https://<host>--uxw1-serve-uxwriting1-chat.modal.run" \
+  -H "Content-Type: application/json" \
+  -d "{\"messages\":[{\"role\":\"user\",\"content\":\"Current copy: Invalid\"}],\"_auth\":\"$(tr -d '[:space:]' < ~/.uxw1_arena_token)\"}"
+# expect: {"choices":[{"message":{"content":"{\"rewrite\": \"Invalid email address\", ...}"}}]}
+```
+
+**The on-camera beat** (scan local repo → review through the hosted model → JSONL):
+
+```bash
+python -m uxft.scan ~/code/some-oss-app --limit 60 --out /tmp/scan.jsonl
+python -m uxft.review_repo ~/code/some-oss-app \
+  --endpoint "https://<host>--uxw1-serve-uxwriting1-chat.modal.run" \
+  --api-key "$(tr -d '[:space:]' < ~/.uxw1_arena_token)" \
+  --limit 40 --out /tmp/review.jsonl
+jq -c 'select(.suggested_copy != "" and .suggested_copy != .current_copy)' /tmp/review.jsonl
+```
+
+Prints `wrote N review rows (M suggested changes)` — the restraint stat, live. This is
+the unbatched path (~$2/1K, the lazy one); the cheap $0.32/1K number is the batched A100.
+
+---
+
+## Path A — local GGUF (needs ~20 GB free)
+
+**Pull before you record** — the 16 GB download is not a camera moment.
+
+```bash
+ollama pull hf.co/gr33r/ux-writing-1-GGUF:Q4_K_M   # ~16.5 GB, one time, off-camera
 ```
 
 ---
 
-## Beat 1 — one string, live (punchy, ~15s)
+## Path A, Beat 1 — one string, live (punchy, ~15s)
 
 Build the friendly local model once, then run it:
 
@@ -38,11 +89,11 @@ It returns the contract:
 
 ---
 
-## Beat 2 — review a whole repo, fully local (the money shot, ~40s)
+## Path A, Beat 2 — review a whole repo, fully local (the money shot, ~40s)
 
 Ollama exposes an OpenAI-compatible endpoint at `localhost:11434`, and `uxft.review_repo`
-speaks it — so the entire scan → review pipeline runs on your laptop. Point it at any
-repo you have checked out:
+speaks it — so the entire scan → review pipeline runs on your laptop, no cloud at all.
+Point it at any repo you have checked out:
 
 ```bash
 # Step 1: extract candidate strings (instant, free, local)
@@ -77,9 +128,3 @@ Don't quote the 8K/hr throughput over the laptop demo — that's the A100 number
 laptop's story is *zero marginal cost and privacy*, not speed.
 
 ---
-
-## If you'd rather hit the hosted endpoint instead of the laptop
-
-The Modal app `uxw1-serve` is OpenAI-compatible too. Once you have its URL, swap into
-Beat 2: `--endpoint https://<your-modal-host>/v1/chat/completions --api-key "$(cat ~/.uxw1_arena_token)"`.
-The local path above is recommended for the video — it needs nothing but your machine.
