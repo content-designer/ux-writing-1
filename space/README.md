@@ -10,11 +10,11 @@ pinned: false
 license: apache-2.0
 short_description: UX writing arena — base model vs fine-tune. You judge.
 tags:
-  - backyard-ai
-  - best-demo
-  - tiny-titan
-  - judges-wildcard
-  - modal
+  - track:backyard
+  - sponsor:modal
+  - achievement:welltuned
+  - achievement:offbrand
+  - achievement:fieldnotes
 ---
 
 # ⛺ Copy Campfire — the UX writing arena
