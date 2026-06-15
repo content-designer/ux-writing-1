@@ -666,6 +666,35 @@ button.cc-btn-secondary:active { transform: translateY(4px); box-shadow: 0 1px 0
 .tabitem, .gap, .block { background: transparent !important; border: none !important; }
 """
 
+LINKEDIN_POST = ("https://www.linkedin.com/posts/christopher-greer_"
+                 "buildsmall-opensource-ai-ugcPost-7472300204092764161-SnJ9/")
+DEMO_HTML = f"""
+<div class="cc-kicker cc-kicker--fire" style="max-width:560px;margin:18px auto 6px;">
+  <span class="cc-kicker__rule"></span><span>Watch the demo</span><span class="cc-kicker__rule"></span>
+</div>
+<div style="text-align:center;font-family:var(--font-serif);font-style:italic;font-size:1.0625rem;
+            color:var(--text-muted);max-width:560px;margin:0 auto 18px;">
+  Two minutes by the fire — the model, the numbers, and how to make it your own.
+</div>
+<div style="max-width:540px;margin:0 auto;background:var(--parch-50);border:2px dashed var(--border-camp);
+            border-radius:var(--radius-card);padding:14px;box-shadow:var(--shadow-card);">
+  <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7472300204092764161?collapsed=1"
+          style="width:100%;height:560px;border:0;border-radius:var(--radius-md);background:#fff;"
+          allowfullscreen loading="lazy" title="Copy Campfire demo on LinkedIn"></iframe>
+</div>
+<div style="text-align:center;margin:18px auto 4px;">
+  <a href="{LINKEDIN_POST}" target="_blank" rel="noopener"
+     style="display:inline-block;font-family:var(--font-display);font-weight:900;font-size:1rem;
+            text-decoration:none;color:#fff;background:var(--fire-500);
+            border-radius:var(--radius-pill);padding:11px 24px;box-shadow:var(--shadow-card);">
+     ▶ Watch on LinkedIn
+  </a>
+</div>
+<div style="text-align:center;font-family:var(--font-mono);font-size:.72rem;color:var(--text-faint);margin-top:8px;">
+  If the embed doesn't load, the button opens the post directly.
+</div>
+"""
+
 with gr.Blocks(theme=gr.themes.Base(), css=CSS, head=FONTS_HEAD, title="⛺ Copy Campfire",
                fill_width=True) as demo:
     session_id = gr.State(lambda: uuid.uuid4().hex[:12])
@@ -708,6 +737,9 @@ with gr.Blocks(theme=gr.themes.Base(), css=CSS, head=FONTS_HEAD, title="⛺ Copy
                 vote_b = gr.Button("🅱 wins", elem_classes="cc-btn")
                 vote_tie = gr.Button("🤝 Tie", elem_classes="cc-btn-secondary")
                 vote_bad = gr.Button("🪵 Both need work", elem_classes="cc-btn-secondary")
+
+    with gr.Tab("🎬 Watch the demo"):
+        gr.HTML(DEMO_HTML)
 
     with gr.Tab("🏕️ Trail log"):
         leaderboard_md = gr.HTML(tally_md())

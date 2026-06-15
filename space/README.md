@@ -62,8 +62,8 @@ dataset, blinded vote store).
 
 ## Submission
 
-- 🎬 **Demo video:** _add the public video link here before submitting_
-- 📣 **Social post:** _add the social post link here before submitting_
+- 🎬 **Demo video:** [Watch the 2-minute demo](https://www.linkedin.com/posts/christopher-greer_buildsmall-opensource-ai-ugcPost-7472300204092764161-SnJ9/) — also embedded in the **🎬 Watch the demo** tab inside the Space.
+- 📣 **Social post:** [On LinkedIn](https://www.linkedin.com/posts/christopher-greer_buildsmall-opensource-ai-ugcPost-7472300204092764161-SnJ9/)
 
 ---
 
