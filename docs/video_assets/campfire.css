@@ -113,7 +113,7 @@ html, body { background: var(--parch-100); }
 }
 
 .replay-hint {
-  position: absolute; top: 96px; left: 92px;
+  position: absolute; top: 54px; left: 50%; transform: translateX(-50%);
   font-family: var(--font-mono); font-size: 15px; color: var(--text-faint);
   animation: hintfade 6s forwards; /* disappears before any recorded take */
 }
