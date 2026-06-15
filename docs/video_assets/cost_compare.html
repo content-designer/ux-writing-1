@@ -121,11 +121,25 @@ html, body { background: var(--parch-100); }
 }
 
 .replay-hint {
-  position: absolute; top: 48px; left: 90px;
+  position: absolute; top: 96px; left: 92px;
   font-family: var(--font-mono); font-size: 15px; color: var(--text-faint);
   animation: hintfade 6s forwards; /* disappears before any recorded take */
 }
 @keyframes hintfade { 0%, 70% { opacity: .75; } 100% { opacity: 0; } }
+
+/* home / back-to-gallery control — mirrors the brand pill, top-left. Subtle by
+   default so it stays out of clean recordings; full on hover. */
+.home-btn {
+  position: absolute; top: 40px; left: 90px; z-index: 6;
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-display); font-weight: 900; font-size: 18px;
+  color: var(--bark-700); text-decoration: none;
+  background: #FFFDF6; border: 1px solid var(--parch-300); border-radius: 999px;
+  padding: 8px 17px 8px 14px; box-shadow: 0 6px 16px rgba(54, 38, 24, .12);
+  opacity: .62; transition: opacity .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.home-btn:hover { opacity: 1; transform: translateY(-1px); box-shadow: 0 9px 22px rgba(54, 38, 24, .18); }
+.home-btn .flame { font-size: 20px; }
 
 
 .content { position: absolute; left: 90px; right: 90px; top: 110px; }
@@ -161,6 +175,7 @@ html, body { background: var(--parch-100); }
 <body>
 <div class="stage-wrap"><div class="stage" id="stage">
   <div class="stage-embers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <a class="home-btn" href="index.html" onclick="event.stopPropagation()"><span class="flame">⛺</span> Gallery</a>
   <div class="replay-hint">click anywhere to replay</div>
   <div class="brand"><span class="flame">⛺</span> ux-writing-1</div>
   <div class="content">
