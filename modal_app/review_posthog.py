@@ -75,7 +75,7 @@ def extract_contract_json(text: str):
 
 # mirrors uxft.escape_postfilter.is_contract_escape (inlined: this file must be self-contained
 # for the Modal container — cross-file imports break with ModuleNotFoundError).
-_PLACEHOLDER_RE = re.compile(r"\{\{[^{}]*\}\}")
+_PLACEHOLDER_RE = re.compile(r"\{\{\s*[\w.]+\s*\}\}")  # simple {{ var }} only (a ternary inside braces is still an escape)
 _TERNARY_RE = re.compile(r"\{[^{}]*\?[^{}]*:[^{}]*\}")
 _OPERATOR_RE = re.compile(r"===|!==|=>")
 _JSX_TAG_RE = re.compile(r"</?[a-zA-Z][^<>]*>")

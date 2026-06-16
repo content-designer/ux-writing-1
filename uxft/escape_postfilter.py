@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 
-_PLACEHOLDER = re.compile(r"\{\{[^{}]*\}\}")        # legit handlebars-style variable
+_PLACEHOLDER = re.compile(r"\{\{\s*[\w.]+\s*\}\}")   # legit handlebars var only: {{ user.name }}, NOT {{ a ? b : c }}
 _TERNARY = re.compile(r"\{[^{}]*\?[^{}]*:[^{}]*\}")  # {cond ? 'a' : 'b'}
 _OPERATOR = re.compile(r"===|!==|=>")                # js operators / arrow fns
 _JSX_TAG = re.compile(r"</?[a-zA-Z][^<>]*>")         # <strong>, </>, <Component …>
