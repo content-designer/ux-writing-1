@@ -32,6 +32,7 @@ def _ssl_context() -> ssl.SSLContext:
     except ImportError:
         return ssl.create_default_context()
 
+from uxft.escape_postfilter import is_contract_escape
 from uxft.policy import SYSTEM_PROMPT
 from uxft.scan import Candidate, scan_repo
 
@@ -128,11 +129,15 @@ def review(candidates: list[Candidate], endpoint: str | None, model: str,
             except Exception as exc:  # keep the run going; record the failure
                 prediction = {"rewrite": "", "reason": f"request failed: {exc}",
                               "risk": "endpoint_error", "confidence": 0}
+        suggested = prediction.get("rewrite", "")
+        risk = prediction.get("risk", "")
+        if suggested and is_contract_escape(suggested):
+            risk = "contract_escape"  # JSX/ternary, not copy — flag, don't count as a change
         return {
             **asdict(candidate),
-            "suggested_copy": prediction.get("rewrite", ""),
+            "suggested_copy": suggested,
             "reason": prediction.get("reason", ""),
-            "risk": prediction.get("risk", ""),
+            "risk": risk,
             "confidence": prediction.get("confidence", 0),
         }
 
@@ -159,7 +164,8 @@ def main() -> int:
     with args.out.open("w", encoding="utf-8") as handle:
         for row in rows:
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
-    changed = sum(1 for r in rows if r["suggested_copy"] and r["suggested_copy"] != r["current_copy"])
+    changed = sum(1 for r in rows if r["suggested_copy"] and r["risk"] != "contract_escape"
+                  and r["suggested_copy"] != r["current_copy"])
     print(f"wrote {len(rows)} review rows to {args.out} ({changed} suggested changes)")
     return 0
 

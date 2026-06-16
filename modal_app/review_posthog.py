@@ -7,6 +7,8 @@ results every 50 batches so a dying run still leaves an artifact.
     modal run --detach modal_app/review_posthog.py
 """
 
+import re
+
 import modal
 
 MERGED_REPO = "gr33r/ux-writing-1"
@@ -71,6 +73,24 @@ def extract_contract_json(text: str):
     return parsed
 
 
+# mirrors uxft.escape_postfilter.is_contract_escape (inlined: this file must be self-contained
+# for the Modal container — cross-file imports break with ModuleNotFoundError).
+_PLACEHOLDER_RE = re.compile(r"\{\{\s*[\w.]+\s*\}\}")  # simple {{ var }} only (a ternary inside braces is still an escape)
+_TERNARY_RE = re.compile(r"\{[^{}]*\?[^{}]*:[^{}]*\}")
+_OPERATOR_RE = re.compile(r"===|!==|=>")
+_JSX_TAG_RE = re.compile(r"</?[a-zA-Z][^<>]*>")
+
+
+def is_contract_escape(suggested: str) -> bool:
+    s = (suggested or "").strip()
+    if not s:
+        return False
+    stripped = _PLACEHOLDER_RE.sub("", s)
+    if _TERNARY_RE.search(stripped) or _OPERATOR_RE.search(stripped) or _JSX_TAG_RE.search(stripped):
+        return True
+    return bool(s.startswith("{") and s.endswith("}") and not re.fullmatch(r"\{\{[^{}]*\}\}", s))
+
+
 def _summary(n, elapsed, load_s, ptok, ctok, valid, changed, done):
     per_hour = n / elapsed * 3600 if elapsed else 0
     return {
@@ -103,7 +123,8 @@ hf_secret = modal.Secret.from_name("hf-token")
 
 @app.function(gpu="A100-80GB", volumes={MODEL_CACHE: weights_vol}, secrets=[hf_secret],
               timeout=6 * 60 * 60)
-def review():
+def review(candidates_path: str = CANDIDATES_PATH, run_path: str = RUN_JSON_PATH,
+           review_path: str = REVIEW_JSONL_PATH):
     import json
     import time
 
@@ -113,7 +134,7 @@ def review():
 
     api = HfApi()
 
-    cand_file = hf_hub_download(DATASET_REPO, CANDIDATES_PATH, repo_type="dataset",
+    cand_file = hf_hub_download(DATASET_REPO, candidates_path, repo_type="dataset",
                                 cache_dir=HF_CACHE)
     candidates = [json.loads(l) for l in open(cand_file, encoding="utf-8") if l.strip()]
     print(f"{len(candidates)} candidates")
@@ -159,21 +180,22 @@ def review():
             ok = parsed is not None
             valid += ok
             suggested = (parsed or {}).get("rewrite", "")
-            is_change = bool(suggested) and " ".join(suggested.split()) != " ".join(c["current_copy"].split())
+            escape = bool(suggested) and is_contract_escape(suggested)
+            is_change = (not escape) and bool(suggested) and " ".join(suggested.split()) != " ".join(c["current_copy"].split())
             changed += is_change
             rows.append({**c, "suggested_copy": suggested,
                          "reason": (parsed or {}).get("reason", "" if ok else raw[-300:]),
-                         "risk": (parsed or {}).get("risk", "" if ok else "non_json_output"),
+                         "risk": "contract_escape" if escape else (parsed or {}).get("risk", "" if ok else "non_json_output"),
                          "valid_json": ok, "changed": is_change})
         if (b + 1) % CHECKPOINT_EVERY == 0 or b + 1 == n_batches:
             elapsed = time.time() - t0
             summary = _summary(len(rows), elapsed, load_s, prompt_tokens,
                                completion_tokens, valid, changed, done=(b + 1 == n_batches))
             api.upload_file(path_or_fileobj=json.dumps(summary, indent=2).encode(),
-                            path_in_repo=RUN_JSON_PATH, repo_id=DATASET_REPO, repo_type="dataset")
+                            path_in_repo=run_path, repo_id=DATASET_REPO, repo_type="dataset")
             api.upload_file(
                 path_or_fileobj="\n".join(json.dumps(r, ensure_ascii=False) for r in rows).encode(),
-                path_in_repo=REVIEW_JSONL_PATH, repo_id=DATASET_REPO, repo_type="dataset")
+                path_in_repo=review_path, repo_id=DATASET_REPO, repo_type="dataset")
             print(f"batch {b + 1}/{n_batches} | {summary['strings_per_hour']}/hr | "
                   f"valid {valid}/{len(rows)} | changed {changed}")
     print(json.dumps(_summary(len(rows), time.time() - t0, load_s, prompt_tokens,
@@ -181,6 +203,8 @@ def review():
 
 
 @app.local_entrypoint()
-def main():
-    call = review.spawn()
+def main(candidates: str = CANDIDATES_PATH, run_json: str = RUN_JSON_PATH,
+         review_out: str = REVIEW_JSONL_PATH):
+    call = review.spawn(candidates, run_json, review_out)
     print(f"spawned posthog review; fc={call.object_id}")
+    print(f"  candidates={candidates} -> review={review_out}, run={run_json}")
