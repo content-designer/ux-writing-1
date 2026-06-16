@@ -14,29 +14,14 @@ from __future__ import annotations
 import argparse
 import json
 import random
-import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from uxft.ui_filter import NON_UI_PATH, looks_like_ui_copy  # noqa: E402
 
 SEED = 20260612
 SAMPLE_SIZE = 10_000
-
-NON_UI_PATH = re.compile(
-    r"(\.test\.|\.spec\.|\.stories\.|__mocks__|/test/|/tests/|cypress|/e2e/|\.cy\."
-    r"|mocks?\.tsx?$|fixtures|\.schemas?\.ts$|generated|schema\.json$)",
-    re.I,
-)
-# css-ish token: lowercase AND contains a structural char (hyphen/digit/colon/bracket/slash/dot)
-CSS_TOKEN = re.compile(r"^(?=.*[-0-9:\[\]/.%#])[a-z0-9:\[\]/.%#-]+$")
-
-
-def looks_like_ui_copy(value: str) -> bool:
-    if "_" in value:
-        return False
-    words = value.split()
-    if len(words) >= 2:
-        css_ish = sum(1 for w in words if CSS_TOKEN.fullmatch(w))
-        return css_ish / len(words) < 0.5
-    return bool(re.fullmatch(r"[A-Z][a-z]{2,}", words[0]))
 
 
 def load(path: Path, prefix: str) -> list[dict]:

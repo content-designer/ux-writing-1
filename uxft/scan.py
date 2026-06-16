@@ -9,6 +9,8 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Iterable
 
+from uxft.ui_filter import is_ui_copy
+
 UI_EXTENSIONS = {".js", ".jsx", ".ts", ".tsx", ".vue", ".svelte", ".html", ".json"}
 SKIP_DIRS = {
     ".git",
@@ -24,8 +26,12 @@ SKIP_DIRS = {
 MAX_FILE_BYTES = 1_000_000  # skip generated/minified bundles (OOM guard, ported from bench)
 MAX_CONTEXT_CHARS = 2_000  # drop candidates with degenerate contexts
 
+# Capture the opening quote and match to the MATCHING close (allowing the opposite quote
+# and escaped quotes inside) so contractions/possessives aren't truncated: the old class
+# [^"'\n{}<>] stopped at the first apostrophe, turning "Don't worry…" into "Don".
 STRING_RE = re.compile(
-    r"""(?P<prefix>aria-label|title|placeholder|label|alt|text|message|description)?\s*[:=]\s*["'](?P<value>[A-Za-z][^"'\n{}<>]{1,140})["']"""
+    r"""(?P<prefix>aria-label|title|placeholder|label|alt|text|message|description)?"""
+    r"""\s*[:=]\s*(?P<q>["'])(?P<value>[A-Za-z](?:\\.|(?!(?P=q))[^\n{}<>]){1,140})(?P=q)"""
 )
 JSX_TEXT_RE = re.compile(r">(?P<value>[A-Za-z][^<>{}\n]{2,140})<")
 JSON_VALUE_RE = re.compile(r'"(?P<key>[A-Za-z0-9_.-]+)"\s*:\s*"(?P<value>[A-Za-z][^"\n]{1,140})"')
@@ -106,8 +112,11 @@ def scan_file(path: Path, root: Path) -> list[Candidate]:
             value = " ".join(match.group("value").split())
             if not interesting_copy(value):
                 continue
-            prefix = match.groupdict().get("prefix") or match.groupdict().get("key")
             line_no = line_number(text, match.start("value"))
+            line_text = lines[line_no - 1] if 0 < line_no <= len(lines) else ""
+            if not is_ui_copy(value, line_text, str(path)):
+                continue
+            prefix = match.groupdict().get("prefix") or match.groupdict().get("key")
             context = context_for(lines, line_no)
             if len(context) > MAX_CONTEXT_CHARS:
                 continue

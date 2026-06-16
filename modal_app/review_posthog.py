@@ -7,6 +7,8 @@ results every 50 batches so a dying run still leaves an artifact.
     modal run --detach modal_app/review_posthog.py
 """
 
+import re
+
 import modal
 
 MERGED_REPO = "gr33r/ux-writing-1"
@@ -69,6 +71,24 @@ def extract_contract_json(text: str):
             parsed = obj
         index = start + max(consumed, 1)
     return parsed
+
+
+# mirrors uxft.escape_postfilter.is_contract_escape (inlined: this file must be self-contained
+# for the Modal container — cross-file imports break with ModuleNotFoundError).
+_PLACEHOLDER_RE = re.compile(r"\{\{[^{}]*\}\}")
+_TERNARY_RE = re.compile(r"\{[^{}]*\?[^{}]*:[^{}]*\}")
+_OPERATOR_RE = re.compile(r"===|!==|=>")
+_JSX_TAG_RE = re.compile(r"</?[a-zA-Z][^<>]*>")
+
+
+def is_contract_escape(suggested: str) -> bool:
+    s = (suggested or "").strip()
+    if not s:
+        return False
+    stripped = _PLACEHOLDER_RE.sub("", s)
+    if _TERNARY_RE.search(stripped) or _OPERATOR_RE.search(stripped) or _JSX_TAG_RE.search(stripped):
+        return True
+    return bool(s.startswith("{") and s.endswith("}") and not re.fullmatch(r"\{\{[^{}]*\}\}", s))
 
 
 def _summary(n, elapsed, load_s, ptok, ctok, valid, changed, done):
@@ -159,11 +179,12 @@ def review():
             ok = parsed is not None
             valid += ok
             suggested = (parsed or {}).get("rewrite", "")
-            is_change = bool(suggested) and " ".join(suggested.split()) != " ".join(c["current_copy"].split())
+            escape = bool(suggested) and is_contract_escape(suggested)
+            is_change = (not escape) and bool(suggested) and " ".join(suggested.split()) != " ".join(c["current_copy"].split())
             changed += is_change
             rows.append({**c, "suggested_copy": suggested,
                          "reason": (parsed or {}).get("reason", "" if ok else raw[-300:]),
-                         "risk": (parsed or {}).get("risk", "" if ok else "non_json_output"),
+                         "risk": "contract_escape" if escape else (parsed or {}).get("risk", "" if ok else "non_json_output"),
                          "valid_json": ok, "changed": is_change})
         if (b + 1) % CHECKPOINT_EVERY == 0 or b + 1 == n_batches:
             elapsed = time.time() - t0
