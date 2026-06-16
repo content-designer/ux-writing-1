@@ -123,7 +123,8 @@ hf_secret = modal.Secret.from_name("hf-token")
 
 @app.function(gpu="A100-80GB", volumes={MODEL_CACHE: weights_vol}, secrets=[hf_secret],
               timeout=6 * 60 * 60)
-def review():
+def review(candidates_path: str = CANDIDATES_PATH, run_path: str = RUN_JSON_PATH,
+           review_path: str = REVIEW_JSONL_PATH):
     import json
     import time
 
@@ -133,7 +134,7 @@ def review():
 
     api = HfApi()
 
-    cand_file = hf_hub_download(DATASET_REPO, CANDIDATES_PATH, repo_type="dataset",
+    cand_file = hf_hub_download(DATASET_REPO, candidates_path, repo_type="dataset",
                                 cache_dir=HF_CACHE)
     candidates = [json.loads(l) for l in open(cand_file, encoding="utf-8") if l.strip()]
     print(f"{len(candidates)} candidates")
@@ -191,10 +192,10 @@ def review():
             summary = _summary(len(rows), elapsed, load_s, prompt_tokens,
                                completion_tokens, valid, changed, done=(b + 1 == n_batches))
             api.upload_file(path_or_fileobj=json.dumps(summary, indent=2).encode(),
-                            path_in_repo=RUN_JSON_PATH, repo_id=DATASET_REPO, repo_type="dataset")
+                            path_in_repo=run_path, repo_id=DATASET_REPO, repo_type="dataset")
             api.upload_file(
                 path_or_fileobj="\n".join(json.dumps(r, ensure_ascii=False) for r in rows).encode(),
-                path_in_repo=REVIEW_JSONL_PATH, repo_id=DATASET_REPO, repo_type="dataset")
+                path_in_repo=review_path, repo_id=DATASET_REPO, repo_type="dataset")
             print(f"batch {b + 1}/{n_batches} | {summary['strings_per_hour']}/hr | "
                   f"valid {valid}/{len(rows)} | changed {changed}")
     print(json.dumps(_summary(len(rows), time.time() - t0, load_s, prompt_tokens,
@@ -202,6 +203,8 @@ def review():
 
 
 @app.local_entrypoint()
-def main():
-    call = review.spawn()
+def main(candidates: str = CANDIDATES_PATH, run_json: str = RUN_JSON_PATH,
+         review_out: str = REVIEW_JSONL_PATH):
+    call = review.spawn(candidates, run_json, review_out)
     print(f"spawned posthog review; fc={call.object_id}")
+    print(f"  candidates={candidates} -> review={review_out}, run={run_json}")
